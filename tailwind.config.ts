@@ -73,8 +73,8 @@ export default {
         },
       },
       fontFamily: {
-        display: ['Cormorant Garamond', 'serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['Cormorant', 'serif'],
+        body: ['-apple-system', 'BlinkMacSystemFont', 'SF Pro Display', 'Segoe UI', 'Roboto', 'sans-serif'],
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -98,9 +98,15 @@ export default {
           from: { opacity: "0", transform: "scale(0.95)" },
           to: { opacity: "1", transform: "scale(1)" },
         },
-        "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(35 60% 50% / 0.2)" },
-          "50%": { boxShadow: "0 0 40px hsl(35 60% 50% / 0.4)" },
+        "shake": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "10%, 30%, 50%, 70%, 90%": { transform: "translateX(-2px)" },
+          "20%, 40%, 60%, 80%": { transform: "translateX(2px)" },
+        },
+        "gentle-shake": {
+          "0%, 100%": { transform: "translateX(0) rotate(0deg)" },
+          "25%": { transform: "translateX(-1px) rotate(-0.5deg)" },
+          "75%": { transform: "translateX(1px) rotate(0.5deg)" },
         },
       },
       animation: {
@@ -108,7 +114,8 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.5s ease-out",
         "scale-in": "scale-in 0.3s ease-out",
-        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "shake": "shake 0.5s ease-in-out",
+        "gentle-shake": "gentle-shake 2s ease-in-out infinite",
       },
     },
   },

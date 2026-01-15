@@ -22,7 +22,7 @@ const ProfilePage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-background warm-pattern">
+    <div className="min-h-screen">
       <Header />
       
       <main className="relative z-10 container mx-auto px-4 py-8 md:py-12">
@@ -33,7 +33,7 @@ const ProfilePage = () => {
               <Link to="/" className="p-2 hover:bg-secondary rounded-lg transition-colors">
                 <ArrowLeft className="w-5 h-5 text-muted-foreground" />
               </Link>
-              <h1 className="text-2xl font-display font-bold text-foreground">Профиль</h1>
+              <h1 className="text-2xl font-display text-foreground">Профиль</h1>
             </div>
             <button className="p-2 hover:bg-secondary rounded-lg transition-colors">
               <History className="w-5 h-5 text-muted-foreground" />
@@ -41,9 +41,9 @@ const ProfilePage = () => {
           </div>
 
           {/* User Data Card */}
-          <div className="bg-card rounded-2xl p-6 shadow-card border border-border mb-6">
+          <div className="gradient-card rounded-2xl p-6 border border-border mb-6">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-display font-bold text-foreground">Ваши данные</h2>
+              <h2 className="text-xl font-display text-foreground">Ваши данные</h2>
               <button 
                 onClick={() => setIsEditing(!isEditing)}
                 className="p-2 hover:bg-secondary rounded-lg transition-colors"
@@ -99,7 +99,7 @@ const ProfilePage = () => {
           </div>
 
           {/* Menu Items */}
-          <div className="bg-card rounded-2xl shadow-card border border-border overflow-hidden mb-6">
+          <div className="gradient-card rounded-2xl border border-border overflow-hidden mb-6">
             {menuItems.map((item, index) => (
               <button
                 key={item.label}
@@ -117,8 +117,7 @@ const ProfilePage = () => {
           {/* Logout Button */}
           <Button
             onClick={handleTelegramClick}
-            variant="outline"
-            className="w-full h-14 border-primary text-primary font-semibold hover:bg-primary/10"
+            className="w-full h-14 btn-fill bg-primary text-primary-foreground border-2 border-primary font-semibold"
           >
             <LogOut className="w-5 h-5 mr-2" />
             Выйти

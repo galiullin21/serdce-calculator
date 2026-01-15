@@ -79,7 +79,7 @@ const CalendarPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background warm-pattern">
+    <div className="min-h-screen">
       <Header />
       
       <main className="relative z-10 container mx-auto px-4 py-8 md:py-12">
@@ -91,7 +91,7 @@ const CalendarPage = () => {
                 Выберите дату, на которую хотите посмотреть прогноз
               </h2>
               
-              <div className="bg-card rounded-2xl p-4 shadow-card border border-border inline-block">
+              <div className="gradient-card rounded-2xl p-4 border border-border inline-block">
                 <Calendar
                   mode="single"
                   selected={selectedDate}
@@ -102,7 +102,7 @@ const CalendarPage = () => {
                     months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
                     month: "space-y-4",
                     caption: "flex justify-center pt-1 relative items-center",
-                    caption_label: "text-lg font-display font-semibold text-foreground",
+                    caption_label: "text-lg font-display text-foreground",
                     nav: "space-x-1 flex items-center",
                     nav_button: "h-8 w-8 bg-transparent p-0 opacity-50 hover:opacity-100 hover:bg-secondary rounded-lg",
                     nav_button_previous: "absolute left-1",
@@ -126,14 +126,14 @@ const CalendarPage = () => {
 
             {/* Day Code Section */}
             <div>
-              <h2 className="text-2xl font-display font-bold text-foreground mb-6">
+              <h2 className="text-2xl font-display text-foreground mb-6">
                 Код дня
               </h2>
               
               {selectedDate && dayNumbers && (
                 <div className="space-y-3">
                   <Accordion type="single" collapsible defaultValue="mind">
-                    <AccordionItem value="mind" className="bg-card rounded-xl border border-border px-4 mb-3">
+                    <AccordionItem value="mind" className="gradient-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.mindNumber} — Число Ума
@@ -144,7 +144,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="action" className="bg-card rounded-xl border border-border px-4 mb-3">
+                    <AccordionItem value="action" className="gradient-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.actionNumber} — Число Действия
@@ -155,7 +155,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="realization" className="bg-card rounded-xl border border-border px-4 mb-3">
+                    <AccordionItem value="realization" className="gradient-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.realizationNumber} — Число Реализации
@@ -166,7 +166,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="total" className="bg-card rounded-xl border border-border px-4">
+                    <AccordionItem value="total" className="gradient-card rounded-xl border border-border px-4">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.totalNumber} — Число Итога

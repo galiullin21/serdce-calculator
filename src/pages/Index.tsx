@@ -74,7 +74,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background warm-pattern">
+    <div className="min-h-screen">
       <Header />
       
       <main className="relative z-10">
@@ -82,14 +82,12 @@ const Index = () => {
           <>
             {/* Hero Section */}
             <section className="relative py-16 md:py-24 overflow-hidden">
-              <div className="absolute inset-0 bg-gradient-to-b from-card/50 to-transparent" />
-              
               <div className="container mx-auto px-4 relative">
                 <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-primary mb-4 tracking-wide">
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display text-primary mb-4 tracking-wide">
                     ПУТЬ К СЕБЕ
                   </h1>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-primary/70 mb-6 tracking-wide">
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-primary/60 mb-6 tracking-wide">
                     НАЧИНАЕТСЯ С ПОНИМАНИЯ СЕБЯ
                   </h2>
                   
@@ -101,7 +99,7 @@ const Index = () => {
                   <Button
                     onClick={handleTelegramClick}
                     size="lg"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-6 text-base rounded-full shadow-elevated"
+                    className="btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground font-medium px-8 py-6 text-base rounded-full border-2 border-primary"
                   >
                     Записаться на консультацию
                     <ExternalLink className="w-4 h-4 ml-2" />
@@ -111,14 +109,14 @@ const Index = () => {
             </section>
 
             {/* Marquee */}
-            <div className="bg-primary text-primary-foreground py-3 overflow-hidden">
+            <div className="gradient-brown text-white py-3 overflow-hidden">
               <div className="flex animate-marquee whitespace-nowrap">
                 {[...Array(6)].map((_, groupIndex) => (
                   <div key={groupIndex} className="flex items-center">
                     {marqueeWords.map((word, index) => (
                       <span key={`${groupIndex}-${index}`} className="flex items-center">
                         <span className="mx-6 text-sm md:text-base font-medium">{word}</span>
-                        <span className="text-primary-foreground/50">•</span>
+                        <span className="text-white/50">•</span>
                       </span>
                     ))}
                   </div>
@@ -129,8 +127,8 @@ const Index = () => {
             {/* Calculator Section */}
             <section className="py-12 md:py-16">
               <div className="container mx-auto px-4">
-                <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated border border-border/50 mb-12 max-w-3xl mx-auto">
-                  <h2 className="text-2xl md:text-3xl font-display font-bold text-primary mb-3">
+                <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-12 max-w-3xl mx-auto">
+                  <h2 className="text-2xl md:text-3xl font-display text-primary mb-3">
                     Нумерологический расчёт
                   </h2>
                   <p className="text-muted-foreground mb-6">
@@ -151,9 +149,9 @@ const Index = () => {
                     <div
                       key={type.id}
                       className={cn(
-                        "bg-card rounded-2xl p-6 shadow-card border transition-all duration-300",
+                        "gradient-card rounded-2xl p-6 border transition-all duration-300",
                         type.available 
-                          ? "border-border hover:border-primary/30 hover:shadow-elevated cursor-pointer" 
+                          ? "border-border hover:border-primary/30 cursor-pointer" 
                           : "border-border/50 opacity-70"
                       )}
                     >
@@ -169,7 +167,7 @@ const Index = () => {
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-display font-bold text-foreground">
+                            <h3 className="text-lg font-display text-foreground">
                               {type.title}
                             </h3>
                             {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
@@ -184,14 +182,13 @@ const Index = () => {
                                 <Button
                                   variant="outline"
                                   onClick={handleTelegramClick}
-                                  className="border-primary text-primary hover:bg-primary/10"
+                                  className="btn-fill border-primary text-primary hover:text-white"
                                 >
                                   Профессиональный
                                 </Button>
                               )}
                               <Button
-                                variant="secondary"
-                                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                                className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary"
                               >
                                 Базовый
                               </Button>
