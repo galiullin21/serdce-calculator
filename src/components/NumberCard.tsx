@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { numberDescriptions, categoryDescriptions } from "@/lib/numerology";
-import { ChevronDown, ChevronUp, Star } from "lucide-react";
+import { ChevronDown, ChevronUp, Star, Heart, Briefcase, Sparkles, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface NumberCardProps {
@@ -10,7 +10,7 @@ interface NumberCardProps {
 }
 
 export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(true);
   const numberInfo = numberDescriptions[number];
   const categoryInfo = categoryDescriptions[category];
 
@@ -23,11 +23,14 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
     total: "from-primary/20 to-gold-light/20 border-primary/30",
   };
 
-  const categoryIcons = {
-    mind: "💭",
-    action: "⚡",
-    realization: "🎯",
-    total: "✨",
+  // Выбираем интерпретацию по категории
+  const getInterpretation = () => {
+    switch(category) {
+      case "mind": return numberInfo.mindInterpretation;
+      case "action": return numberInfo.actionInterpretation;
+      case "realization": return numberInfo.realizationInterpretation;
+      case "total": return numberInfo.totalInterpretation;
+    }
   };
 
   return (
@@ -55,7 +58,7 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
                 </span>
               </div>
               <span className="absolute -top-1 -right-1 text-2xl">
-                {categoryIcons[category]}
+                {categoryInfo.icon}
               </span>
             </div>
 
@@ -67,10 +70,13 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
               <h3 className="text-2xl font-display font-bold text-foreground">
                 {numberInfo.title}
               </h3>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                {categoryInfo.subtitle}
+              </p>
               <div className="flex items-center gap-2 mt-1">
                 <Star className="w-3 h-3 text-primary" />
                 <span className="text-xs text-muted-foreground">
-                  {numberInfo.planet}
+                  {numberInfo.planet} • {numberInfo.element}
                 </span>
               </div>
             </div>
@@ -94,33 +100,97 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className="px-6 pb-6 space-y-4 animate-fade-in border-t border-border/50 pt-4">
+        <div className="px-6 pb-6 space-y-6 animate-fade-in border-t border-border/50 pt-6">
           {/* Main Description */}
-          <p className="text-foreground/90 leading-relaxed">
-            {numberInfo.description}
-          </p>
+          <div className="space-y-3">
+            <h4 className="text-lg font-display font-semibold text-foreground flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-primary" />
+              Общая характеристика
+            </h4>
+            <p className="text-foreground/90 leading-relaxed">
+              {numberInfo.detailedDescription}
+            </p>
+          </div>
+
+          {/* Category-specific Interpretation */}
+          <div className="bg-card/50 rounded-xl p-5 border border-border/30">
+            <h4 className="text-base font-display font-semibold text-primary mb-3">
+              {categoryInfo.icon} {categoryInfo.title}: Ваша интерпретация
+            </h4>
+            <p className="text-foreground/90 leading-relaxed">
+              {getInterpretation()}
+            </p>
+          </div>
 
           {/* Details Grid */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-card/50 rounded-xl p-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="bg-card/50 rounded-xl p-4 text-center">
+              <p className="text-xs text-muted-foreground mb-1">Планета</p>
+              <p className="text-sm font-medium text-foreground">{numberInfo.planet}</p>
+            </div>
+            <div className="bg-card/50 rounded-xl p-4 text-center">
               <p className="text-xs text-muted-foreground mb-1">Удачный день</p>
               <p className="text-sm font-medium text-foreground">{numberInfo.day}</p>
             </div>
-            <div className="bg-card/50 rounded-xl p-4">
+            <div className="bg-card/50 rounded-xl p-4 text-center">
               <p className="text-xs text-muted-foreground mb-1">Цвет удачи</p>
-              <p className="text-sm font-medium text-foreground">{numberInfo.color}</p>
+              <p className="text-sm font-medium text-foreground">{numberInfo.color.split(',')[0]}</p>
+            </div>
+            <div className="bg-card/50 rounded-xl p-4 text-center">
+              <p className="text-xs text-muted-foreground mb-1">Камень</p>
+              <p className="text-sm font-medium text-foreground">{numberInfo.stone.split(',')[0]}</p>
             </div>
           </div>
 
-          {/* Qualities */}
+          {/* Relationships */}
           <div className="space-y-3">
+            <h4 className="text-base font-display font-semibold text-foreground flex items-center gap-2">
+              <Heart className="w-4 h-4 text-pink-400" />
+              Отношения и любовь
+            </h4>
+            <p className="text-foreground/80 leading-relaxed text-sm">
+              {numberInfo.relationships}
+            </p>
+          </div>
+
+          {/* Career */}
+          <div className="space-y-3">
+            <h4 className="text-base font-display font-semibold text-foreground flex items-center gap-2">
+              <Briefcase className="w-4 h-4 text-blue-400" />
+              Подходящие профессии
+            </h4>
+            <div className="flex flex-wrap gap-2">
+              {numberInfo.career.map((job) => (
+                <span
+                  key={job}
+                  className="px-3 py-1.5 bg-blue-500/10 text-blue-300 rounded-full text-xs border border-blue-500/20"
+                >
+                  {job}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* Health */}
+          <div className="space-y-3">
+            <h4 className="text-base font-display font-semibold text-foreground flex items-center gap-2">
+              <Activity className="w-4 h-4 text-green-400" />
+              Здоровье
+            </h4>
+            <p className="text-foreground/80 leading-relaxed text-sm">
+              {numberInfo.health}
+            </p>
+          </div>
+
+          {/* Qualities */}
+          <div className="space-y-4">
             <div>
-              <p className="text-xs text-muted-foreground mb-2">Позитивные качества</p>
+              <p className="text-xs text-muted-foreground mb-2 font-medium">✅ Позитивные качества</p>
               <div className="flex flex-wrap gap-2">
                 {numberInfo.positive.map((quality) => (
                   <span
                     key={quality}
-                    className="px-3 py-1 bg-green-500/10 text-green-400 rounded-full text-xs border border-green-500/20"
+                    className="px-3 py-1.5 bg-green-500/10 text-green-400 rounded-full text-xs border border-green-500/20"
                   >
                     {quality}
                   </span>
@@ -129,18 +199,28 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
             </div>
 
             <div>
-              <p className="text-xs text-muted-foreground mb-2">Негативные качества</p>
+              <p className="text-xs text-muted-foreground mb-2 font-medium">⚠️ Теневые качества</p>
               <div className="flex flex-wrap gap-2">
                 {numberInfo.negative.map((quality) => (
                   <span
                     key={quality}
-                    className="px-3 py-1 bg-red-500/10 text-red-400 rounded-full text-xs border border-red-500/20"
+                    className="px-3 py-1.5 bg-red-500/10 text-red-400 rounded-full text-xs border border-red-500/20"
                   >
                     {quality}
                   </span>
                 ))}
               </div>
             </div>
+          </div>
+
+          {/* Advice */}
+          <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-xl p-5 border border-primary/20">
+            <h4 className="text-base font-display font-semibold text-primary mb-2">
+              💡 Совет для развития
+            </h4>
+            <p className="text-foreground/90 leading-relaxed text-sm">
+              {numberInfo.advice}
+            </p>
           </div>
         </div>
       )}
