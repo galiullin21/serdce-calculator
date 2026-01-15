@@ -54,7 +54,7 @@ const analysisTypes = [
 const marqueeWords = ["Трансформация", "Смысл", "Гармония"];
 
 const Index = () => {
-  const [selectedMethod, setSelectedMethod] = useState("keyto");
+  const [selectedMethod, setSelectedMethod] = useState("method1");
   const [result, setResult] = useState<Result | null>(null);
   const [userName, setUserName] = useState("");
 
