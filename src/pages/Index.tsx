@@ -3,10 +3,9 @@ import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { MethodSelector } from "@/components/MethodSelector";
 import { NumerologyResult } from "@/components/NumerologyResult";
-import { StarField } from "@/components/StarField";
 import { calculateNumerology, NumerologyResult as Result } from "@/lib/numerology";
 import { Button } from "@/components/ui/button";
-import { Sparkles, Users, FileText, Building, Type, Wallet, Lock, ArrowRight } from "lucide-react";
+import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const analysisTypes = [
@@ -52,6 +51,8 @@ const analysisTypes = [
   },
 ];
 
+const marqueeWords = ["Трансформация", "Смысл", "Гармония"];
+
 const Index = () => {
   const [selectedMethod, setSelectedMethod] = useState("keyto");
   const [result, setResult] = useState<Result | null>(null);
@@ -73,120 +74,155 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <StarField />
+    <div className="min-h-screen bg-background warm-pattern">
       <Header />
       
-      <main className="relative z-10 container mx-auto px-4 py-8 md:py-12">
+      <main className="relative z-10">
         {!result ? (
           <>
             {/* Hero Section */}
-            <div className="text-center mb-10">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 rounded-full border border-primary/20 mb-6">
-                <Sparkles className="w-4 h-4 text-primary" />
-                <span className="text-sm text-primary font-medium">Нумерология KeyTo</span>
-              </div>
+            <section className="relative py-16 md:py-24 overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-b from-card/50 to-transparent" />
               
-              <h1 className="text-3xl md:text-5xl font-display font-bold text-foreground mb-4">
-                Ключ к себе — <span className="text-primary">ключ ко всему</span>
-              </h1>
-              
-              <p className="text-base text-muted-foreground max-w-2xl mx-auto">
-                Откройте тайны своей судьбы через древнее искусство нумерологии
-              </p>
-            </div>
-
-            {/* Business Analysis Hero Card */}
-            <div className="gradient-card rounded-2xl p-6 md:p-8 shadow-elevated border border-primary/30 mb-8 max-w-3xl mx-auto">
-              <h2 className="text-2xl md:text-3xl font-display font-bold text-primary mb-3">
-                Бизнес разбор
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                Профессиональный разбор для Ваших сотрудников и для Вас. Способности человека, 
-                подходящая сфера работы и наилучший путь реализации.
-              </p>
-              
-              <MethodSelector
-                selectedMethod={selectedMethod}
-                onMethodChange={setSelectedMethod}
-              />
-              <DateInput onCalculate={handleCalculate} />
-            </div>
-
-            {/* Analysis Types Grid */}
-            <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
-              {analysisTypes.map((type) => (
-                <div
-                  key={type.id}
-                  className={cn(
-                    "gradient-card rounded-2xl p-6 shadow-card border transition-all duration-300",
-                    type.available 
-                      ? "border-border/50 hover:border-primary/30 hover:shadow-elevated cursor-pointer" 
-                      : "border-border/30 opacity-70"
-                  )}
-                >
-                  <div className="flex items-start gap-4">
-                    <div className={cn(
-                      "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
-                      type.available ? "bg-primary/20" : "bg-muted"
-                    )}>
-                      <type.icon className={cn(
-                        "w-6 h-6",
-                        type.available ? "text-primary" : "text-muted-foreground"
-                      )} />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-lg font-display font-bold text-foreground">
-                          {type.title}
-                        </h3>
-                        {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
-                      </div>
-                      <p className="text-sm text-muted-foreground mb-4">
-                        {type.description}
-                      </p>
-                      
-                      {type.available ? (
-                        <div className="flex gap-3">
-                          {type.hasPro && (
-                            <Button
-                              variant="outline"
-                              onClick={handleTelegramClick}
-                              className="border-primary/50 text-primary hover:bg-primary/10"
-                            >
-                              Профессиональный
-                            </Button>
-                          )}
-                          <Button
-                            variant="secondary"
-                            className="bg-foreground text-background hover:bg-foreground/90"
-                          >
-                            Базовый
-                          </Button>
-                        </div>
-                      ) : (
-                        <div className="flex gap-3">
-                          <Button
-                            variant="outline"
-                            disabled
-                            className="border-border/50"
-                          >
-                            Скоро
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
+              <div className="container mx-auto px-4 relative">
+                <div className="max-w-3xl mx-auto text-center">
+                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display font-bold text-primary mb-4 tracking-wide">
+                    ПУТЬ К СЕБЕ
+                  </h1>
+                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-primary/70 mb-6 tracking-wide">
+                    НАЧИНАЕТСЯ С ПОНИМАНИЯ СЕБЯ
+                  </h2>
+                  
+                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+                    Пройди путь трансформации к обретению внутренней силы, осознанности и смысла своей жизни{" "}
+                    <span className="font-semibold text-foreground">в безопасном и вдохновляющем пространстве</span>
+                  </p>
+                  
+                  <Button
+                    onClick={handleTelegramClick}
+                    size="lg"
+                    className="bg-primary hover:bg-primary/90 text-primary-foreground font-medium px-8 py-6 text-base rounded-full shadow-elevated"
+                  >
+                    Записаться на консультацию
+                    <ExternalLink className="w-4 h-4 ml-2" />
+                  </Button>
                 </div>
-              ))}
+              </div>
+            </section>
+
+            {/* Marquee */}
+            <div className="bg-primary text-primary-foreground py-3 overflow-hidden">
+              <div className="flex animate-marquee whitespace-nowrap">
+                {[...Array(6)].map((_, groupIndex) => (
+                  <div key={groupIndex} className="flex items-center">
+                    {marqueeWords.map((word, index) => (
+                      <span key={`${groupIndex}-${index}`} className="flex items-center">
+                        <span className="mx-6 text-sm md:text-base font-medium">{word}</span>
+                        <span className="text-primary-foreground/50">•</span>
+                      </span>
+                    ))}
+                  </div>
+                ))}
+              </div>
             </div>
+
+            {/* Calculator Section */}
+            <section className="py-12 md:py-16">
+              <div className="container mx-auto px-4">
+                <div className="bg-card rounded-2xl p-6 md:p-8 shadow-elevated border border-border/50 mb-12 max-w-3xl mx-auto">
+                  <h2 className="text-2xl md:text-3xl font-display font-bold text-primary mb-3">
+                    Нумерологический расчёт
+                  </h2>
+                  <p className="text-muted-foreground mb-6">
+                    Узнайте свои ключевые числа и получите персональный разбор вашей личности, 
+                    способностей и жизненного пути.
+                  </p>
+                  
+                  <MethodSelector
+                    selectedMethod={selectedMethod}
+                    onMethodChange={setSelectedMethod}
+                  />
+                  <DateInput onCalculate={handleCalculate} />
+                </div>
+
+                {/* Analysis Types Grid */}
+                <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                  {analysisTypes.map((type) => (
+                    <div
+                      key={type.id}
+                      className={cn(
+                        "bg-card rounded-2xl p-6 shadow-card border transition-all duration-300",
+                        type.available 
+                          ? "border-border hover:border-primary/30 hover:shadow-elevated cursor-pointer" 
+                          : "border-border/50 opacity-70"
+                      )}
+                    >
+                      <div className="flex items-start gap-4">
+                        <div className={cn(
+                          "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
+                          type.available ? "bg-primary/10" : "bg-muted"
+                        )}>
+                          <type.icon className={cn(
+                            "w-6 h-6",
+                            type.available ? "text-primary" : "text-muted-foreground"
+                          )} />
+                        </div>
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h3 className="text-lg font-display font-bold text-foreground">
+                              {type.title}
+                            </h3>
+                            {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
+                          </div>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            {type.description}
+                          </p>
+                          
+                          {type.available ? (
+                            <div className="flex gap-3">
+                              {type.hasPro && (
+                                <Button
+                                  variant="outline"
+                                  onClick={handleTelegramClick}
+                                  className="border-primary text-primary hover:bg-primary/10"
+                                >
+                                  Профессиональный
+                                </Button>
+                              )}
+                              <Button
+                                variant="secondary"
+                                className="bg-primary text-primary-foreground hover:bg-primary/90"
+                              >
+                                Базовый
+                              </Button>
+                            </div>
+                          ) : (
+                            <div className="flex gap-3">
+                              <Button
+                                variant="outline"
+                                disabled
+                                className="border-border"
+                              >
+                                Скоро
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </section>
           </>
         ) : (
-          <NumerologyResult
-            result={result}
-            name={userName}
-            onReset={handleReset}
-          />
+          <div className="container mx-auto px-4 py-8">
+            <NumerologyResult
+              result={result}
+              name={userName}
+              onReset={handleReset}
+            />
+          </div>
         )}
       </main>
     </div>

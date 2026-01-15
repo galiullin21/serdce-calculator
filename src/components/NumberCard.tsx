@@ -17,10 +17,10 @@ export function NumberCard({ number, category, delay = 0 }: NumberCardProps) {
   if (!numberInfo) return null;
 
   const categoryColors = {
-    mind: "from-blue-500/20 to-purple-500/20 border-blue-500/30",
-    action: "from-green-500/20 to-teal-500/20 border-green-500/30",
-    realization: "from-orange-500/20 to-yellow-500/20 border-orange-500/30",
-    total: "from-primary/20 to-gold-light/20 border-primary/30",
+    mind: "from-blue-100 to-blue-50 border-blue-200 dark:from-blue-900/30 dark:to-blue-800/20 dark:border-blue-700/30",
+    action: "from-green-100 to-green-50 border-green-200 dark:from-green-900/30 dark:to-green-800/20 dark:border-green-700/30",
+    realization: "from-orange-100 to-orange-50 border-orange-200 dark:from-orange-900/30 dark:to-orange-800/20 dark:border-orange-700/30",
+    total: "from-primary/10 to-accent/10 border-primary/30",
   };
 
   // Выбираем интерпретацию по категории

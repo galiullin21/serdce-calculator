@@ -31,7 +31,7 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
           Новый расчёт
         </Button>
 
-        <div className="gradient-card rounded-2xl p-8 shadow-elevated border border-border/50">
+        <div className="bg-card rounded-2xl p-8 shadow-card border border-border">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
             {name ? `${name}, ваша нумерология` : "Ваша нумерология"}
           </h2>
