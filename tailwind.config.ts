@@ -62,9 +62,14 @@ export default {
           light: "hsl(var(--gold-light))",
           dark: "hsl(var(--gold-dark))",
         },
-        mystic: {
-          purple: "hsl(var(--mystic-purple))",
-          blue: "hsl(var(--mystic-blue))",
+        brown: {
+          DEFAULT: "hsl(var(--brown))",
+          light: "hsl(var(--brown-light))",
+          dark: "hsl(var(--brown-dark))",
+        },
+        cream: {
+          DEFAULT: "hsl(var(--cream))",
+          dark: "hsl(var(--cream-dark))",
         },
       },
       fontFamily: {
@@ -94,8 +99,8 @@ export default {
           to: { opacity: "1", transform: "scale(1)" },
         },
         "glow-pulse": {
-          "0%, 100%": { boxShadow: "0 0 20px hsl(45 70% 55% / 0.3)" },
-          "50%": { boxShadow: "0 0 40px hsl(45 70% 55% / 0.5)" },
+          "0%, 100%": { boxShadow: "0 0 20px hsl(35 60% 50% / 0.2)" },
+          "50%": { boxShadow: "0 0 40px hsl(35 60% 50% / 0.4)" },
         },
       },
       animation: {

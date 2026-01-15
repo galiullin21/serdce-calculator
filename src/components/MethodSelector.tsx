@@ -39,9 +39,9 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
               "relative p-4 rounded-xl border transition-all duration-300 text-left",
               method.available
                 ? selectedMethod === method.id
-                  ? "bg-primary/10 border-primary shadow-glow"
-                  : "bg-card/50 border-border/50 hover:border-primary/50 hover:bg-card"
-                : "bg-muted/30 border-border/30 cursor-not-allowed opacity-60"
+                  ? "bg-primary/10 border-primary shadow-warm"
+                  : "bg-card border-border hover:border-primary/50"
+                : "bg-muted border-border cursor-not-allowed opacity-60"
             )}
           >
             <div className="flex items-start gap-3">

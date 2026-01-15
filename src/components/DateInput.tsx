@@ -50,29 +50,29 @@ export function DateInput({ onCalculate }: DateInputProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="gradient-card rounded-2xl p-8 shadow-elevated border border-border/50 backdrop-blur-sm">
+      <div className="bg-card rounded-2xl p-8 shadow-card border border-border">
         <div className="space-y-6">
           {/* Name Input */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">
+            <label className="text-sm font-medium text-foreground">
               Ваше имя
             </label>
             <Input
               placeholder="Введите ваше имя"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              className="bg-background/50 border-border/50 focus:border-primary focus:ring-primary/20 h-12 text-foreground placeholder:text-muted-foreground"
+              className="bg-background border-border focus:border-primary focus:ring-primary/20 h-12 text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
           {/* Date Selects */}
           <div className="space-y-2">
-            <label className="text-sm font-medium text-muted-foreground">
+            <label className="text-sm font-medium text-foreground">
               Дата рождения
             </label>
             <div className="grid grid-cols-3 gap-3">
               <Select value={day} onValueChange={setDay}>
-                <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary h-12">
+                <SelectTrigger className="bg-background border-border focus:border-primary h-12">
                   <SelectValue placeholder="День" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
@@ -85,7 +85,7 @@ export function DateInput({ onCalculate }: DateInputProps) {
               </Select>
 
               <Select value={month} onValueChange={setMonth}>
-                <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary h-12">
+                <SelectTrigger className="bg-background border-border focus:border-primary h-12">
                   <SelectValue placeholder="Месяц" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
@@ -98,7 +98,7 @@ export function DateInput({ onCalculate }: DateInputProps) {
               </Select>
 
               <Select value={year} onValueChange={setYear}>
-                <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary h-12">
+                <SelectTrigger className="bg-background border-border focus:border-primary h-12">
                   <SelectValue placeholder="Год" />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
@@ -116,9 +116,8 @@ export function DateInput({ onCalculate }: DateInputProps) {
           <Button
             onClick={handleCalculate}
             disabled={!isValid}
-            className="w-full h-14 text-lg font-display font-semibold bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:shadow-glow"
+            className="w-full h-14 text-lg font-display font-semibold bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 rounded-full"
           >
-            <Sparkles className="w-5 h-5 mr-2" />
             Рассчитать
           </Button>
         </div>

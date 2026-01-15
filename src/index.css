@@ -4,97 +4,119 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap');
 
-/* Mystical numerology design system */
+/* Pilgrim Heart warm design system */
 
 @layer base {
   :root {
-    --background: 232 47% 8%;
-    --foreground: 45 30% 90%;
+    --background: 30 25% 96%;
+    --foreground: 20 30% 20%;
 
-    --card: 232 40% 12%;
-    --card-foreground: 45 30% 90%;
+    --card: 30 20% 92%;
+    --card-foreground: 20 30% 20%;
 
-    --popover: 232 40% 12%;
-    --popover-foreground: 45 30% 90%;
+    --popover: 30 20% 94%;
+    --popover-foreground: 20 30% 20%;
 
-    --primary: 45 70% 55%;
-    --primary-foreground: 232 47% 8%;
+    --primary: 20 50% 35%;
+    --primary-foreground: 30 25% 96%;
 
-    --secondary: 232 35% 20%;
-    --secondary-foreground: 45 30% 90%;
+    --secondary: 30 15% 85%;
+    --secondary-foreground: 20 30% 25%;
 
-    --muted: 232 30% 18%;
-    --muted-foreground: 232 20% 60%;
+    --muted: 30 15% 88%;
+    --muted-foreground: 20 15% 45%;
 
-    --accent: 270 40% 45%;
-    --accent-foreground: 45 30% 90%;
+    --accent: 35 60% 50%;
+    --accent-foreground: 20 30% 15%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 232 30% 22%;
-    --input: 232 30% 18%;
-    --ring: 45 70% 55%;
+    --border: 30 15% 82%;
+    --input: 30 15% 88%;
+    --ring: 35 60% 50%;
 
     --radius: 0.75rem;
 
-    --sidebar-background: 232 40% 10%;
-    --sidebar-foreground: 45 30% 90%;
-    --sidebar-primary: 45 70% 55%;
-    --sidebar-primary-foreground: 232 47% 8%;
-    --sidebar-accent: 232 35% 18%;
-    --sidebar-accent-foreground: 45 30% 90%;
-    --sidebar-border: 232 30% 22%;
-    --sidebar-ring: 45 70% 55%;
+    --sidebar-background: 30 20% 94%;
+    --sidebar-foreground: 20 30% 20%;
+    --sidebar-primary: 20 50% 35%;
+    --sidebar-primary-foreground: 30 25% 96%;
+    --sidebar-accent: 30 15% 88%;
+    --sidebar-accent-foreground: 20 30% 20%;
+    --sidebar-border: 30 15% 82%;
+    --sidebar-ring: 35 60% 50%;
 
     /* Custom tokens */
-    --gold: 45 70% 55%;
-    --gold-light: 45 80% 70%;
-    --gold-dark: 45 60% 40%;
-    --indigo-deep: 232 47% 8%;
-    --indigo-dark: 232 40% 12%;
-    --indigo-medium: 232 35% 20%;
-    --mystic-purple: 270 40% 45%;
-    --mystic-blue: 220 60% 50%;
-    --star-white: 45 30% 95%;
+    --gold: 35 60% 50%;
+    --gold-light: 40 70% 65%;
+    --gold-dark: 30 55% 40%;
+    --brown: 20 50% 35%;
+    --brown-light: 20 40% 45%;
+    --brown-dark: 20 55% 25%;
+    --cream: 30 25% 96%;
+    --cream-dark: 30 20% 90%;
+    --warm-gray: 20 10% 60%;
     
-    --gradient-mystic: linear-gradient(135deg, hsl(232 47% 8%) 0%, hsl(270 40% 15%) 50%, hsl(232 40% 12%) 100%);
-    --gradient-gold: linear-gradient(135deg, hsl(45 60% 40%) 0%, hsl(45 70% 55%) 50%, hsl(45 80% 70%) 100%);
-    --gradient-card: linear-gradient(145deg, hsl(232 40% 14%) 0%, hsl(232 40% 10%) 100%);
+    --gradient-warm: linear-gradient(135deg, hsl(30 25% 96%) 0%, hsl(30 20% 92%) 50%, hsl(35 30% 88%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(30 55% 40%) 0%, hsl(35 60% 50%) 50%, hsl(40 70% 60%) 100%);
+    --gradient-brown: linear-gradient(135deg, hsl(20 55% 25%) 0%, hsl(20 50% 35%) 50%, hsl(20 40% 45%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(30 20% 94%) 0%, hsl(30 20% 90%) 100%);
     
-    --shadow-glow: 0 0 40px hsl(45 70% 55% / 0.15);
-    --shadow-card: 0 8px 32px hsl(232 47% 4% / 0.4);
-    --shadow-elevated: 0 16px 48px hsl(232 47% 4% / 0.6);
+    --shadow-warm: 0 4px 20px hsl(20 30% 20% / 0.08);
+    --shadow-card: 0 8px 32px hsl(20 30% 20% / 0.1);
+    --shadow-elevated: 0 16px 48px hsl(20 30% 20% / 0.15);
+    --shadow-glow: 0 0 40px hsl(35 60% 50% / 0.2);
   }
 
   .dark {
-    --background: 232 47% 8%;
-    --foreground: 45 30% 90%;
-    --card: 232 40% 12%;
-    --card-foreground: 45 30% 90%;
-    --popover: 232 40% 12%;
-    --popover-foreground: 45 30% 90%;
-    --primary: 45 70% 55%;
-    --primary-foreground: 232 47% 8%;
-    --secondary: 232 35% 20%;
-    --secondary-foreground: 45 30% 90%;
-    --muted: 232 30% 18%;
-    --muted-foreground: 232 20% 60%;
-    --accent: 270 40% 45%;
-    --accent-foreground: 45 30% 90%;
+    --background: 20 25% 12%;
+    --foreground: 30 20% 90%;
+    --card: 20 25% 16%;
+    --card-foreground: 30 20% 90%;
+    --popover: 20 25% 16%;
+    --popover-foreground: 30 20% 90%;
+    --primary: 35 60% 55%;
+    --primary-foreground: 20 25% 12%;
+    --secondary: 20 20% 22%;
+    --secondary-foreground: 30 20% 90%;
+    --muted: 20 20% 20%;
+    --muted-foreground: 30 15% 55%;
+    --accent: 35 60% 50%;
+    --accent-foreground: 30 20% 90%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
-    --border: 232 30% 22%;
-    --input: 232 30% 18%;
-    --ring: 45 70% 55%;
-    --sidebar-background: 232 40% 10%;
-    --sidebar-foreground: 45 30% 90%;
-    --sidebar-primary: 45 70% 55%;
-    --sidebar-primary-foreground: 232 47% 8%;
-    --sidebar-accent: 232 35% 18%;
-    --sidebar-accent-foreground: 45 30% 90%;
-    --sidebar-border: 232 30% 22%;
-    --sidebar-ring: 45 70% 55%;
+    --border: 20 20% 25%;
+    --input: 20 20% 20%;
+    --ring: 35 60% 55%;
+    --sidebar-background: 20 25% 14%;
+    --sidebar-foreground: 30 20% 90%;
+    --sidebar-primary: 35 60% 55%;
+    --sidebar-primary-foreground: 20 25% 12%;
+    --sidebar-accent: 20 20% 22%;
+    --sidebar-accent-foreground: 30 20% 90%;
+    --sidebar-border: 20 20% 25%;
+    --sidebar-ring: 35 60% 55%;
+    
+    --gold: 35 60% 55%;
+    --gold-light: 40 70% 70%;
+    --gold-dark: 30 55% 45%;
+    --brown: 20 40% 55%;
+    --brown-light: 20 35% 65%;
+    --brown-dark: 20 45% 40%;
+    --cream: 30 20% 90%;
+    --cream-dark: 30 15% 80%;
+    --warm-gray: 20 10% 50%;
+    
+    --gradient-warm: linear-gradient(135deg, hsl(20 25% 12%) 0%, hsl(20 25% 16%) 50%, hsl(25 25% 18%) 100%);
+    --gradient-gold: linear-gradient(135deg, hsl(30 55% 45%) 0%, hsl(35 60% 55%) 50%, hsl(40 70% 65%) 100%);
+    --gradient-brown: linear-gradient(135deg, hsl(20 45% 40%) 0%, hsl(20 40% 55%) 50%, hsl(20 35% 65%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(20 25% 18%) 0%, hsl(20 25% 14%) 100%);
+    
+    --shadow-warm: 0 4px 20px hsl(20 30% 5% / 0.3);
+    --shadow-card: 0 8px 32px hsl(20 30% 5% / 0.4);
+    --shadow-elevated: 0 16px 48px hsl(20 30% 5% / 0.5);
+    --shadow-glow: 0 0 40px hsl(35 60% 55% / 0.25);
   }
 }
 
@@ -122,20 +144,24 @@
     font-family: 'Inter', sans-serif;
   }
 
-  .gradient-mystic {
-    background: var(--gradient-mystic);
+  .gradient-warm {
+    background: var(--gradient-warm);
   }
 
   .gradient-gold {
     background: var(--gradient-gold);
   }
 
+  .gradient-brown {
+    background: var(--gradient-brown);
+  }
+
   .gradient-card {
     background: var(--gradient-card);
   }
 
-  .shadow-glow {
-    box-shadow: var(--shadow-glow);
+  .shadow-warm {
+    box-shadow: var(--shadow-warm);
   }
 
   .shadow-card {
@@ -144,6 +170,10 @@
 
   .shadow-elevated {
     box-shadow: var(--shadow-elevated);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
   }
 
   .text-gold {
@@ -158,6 +188,14 @@
     border-color: hsl(var(--gold));
   }
 
+  .text-brown {
+    color: hsl(var(--brown));
+  }
+
+  .bg-brown {
+    background-color: hsl(var(--brown));
+  }
+
   .animate-float {
     animation: float 6s ease-in-out infinite;
   }
@@ -168,6 +206,10 @@
 
   .animate-shimmer {
     animation: shimmer 3s ease-in-out infinite;
+  }
+
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
   }
 
   @keyframes float {
@@ -185,17 +227,19 @@
     100% { background-position: 200% center; }
   }
 
-  .number-glow {
-    text-shadow: 0 0 20px hsl(45 70% 55% / 0.5), 0 0 40px hsl(45 70% 55% / 0.3);
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
   }
 
-  .stars-bg {
+  .number-glow {
+    text-shadow: 0 0 20px hsl(35 60% 50% / 0.4), 0 0 40px hsl(35 60% 50% / 0.2);
+  }
+
+  .warm-pattern {
     background-image: 
-      radial-gradient(2px 2px at 20px 30px, hsl(45 30% 90% / 0.3), transparent),
-      radial-gradient(2px 2px at 40px 70px, hsl(45 30% 90% / 0.2), transparent),
-      radial-gradient(1px 1px at 90px 40px, hsl(45 30% 90% / 0.4), transparent),
-      radial-gradient(2px 2px at 130px 80px, hsl(45 30% 90% / 0.2), transparent),
-      radial-gradient(1px 1px at 160px 30px, hsl(45 30% 90% / 0.3), transparent);
-    background-size: 200px 100px;
+      radial-gradient(circle at 20% 50%, hsl(35 60% 50% / 0.05) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(35 60% 50% / 0.03) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, hsl(20 50% 35% / 0.03) 0%, transparent 40%);
   }
 }

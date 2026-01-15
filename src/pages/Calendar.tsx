@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { Header } from "@/components/Header";
-import { StarField } from "@/components/StarField";
 import { Calendar } from "@/components/ui/calendar";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { reduceToSingleDigit, numberDescriptions } from "@/lib/numerology";
-import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 
 const CalendarPage = () => {
@@ -81,8 +79,7 @@ const CalendarPage = () => {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <StarField />
+    <div className="min-h-screen bg-background warm-pattern">
       <Header />
       
       <main className="relative z-10 container mx-auto px-4 py-8 md:py-12">
@@ -94,7 +91,7 @@ const CalendarPage = () => {
                 Выберите дату, на которую хотите посмотреть прогноз
               </h2>
               
-              <div className="gradient-card rounded-2xl p-4 shadow-card border border-border/50 inline-block">
+              <div className="bg-card rounded-2xl p-4 shadow-card border border-border inline-block">
                 <Calendar
                   mode="single"
                   selected={selectedDate}
@@ -136,7 +133,7 @@ const CalendarPage = () => {
               {selectedDate && dayNumbers && (
                 <div className="space-y-3">
                   <Accordion type="single" collapsible defaultValue="mind">
-                    <AccordionItem value="mind" className="gradient-card rounded-xl border border-border/50 px-4 mb-3">
+                    <AccordionItem value="mind" className="bg-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.mindNumber} — Число Ума
@@ -147,7 +144,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="action" className="gradient-card rounded-xl border border-border/50 px-4 mb-3">
+                    <AccordionItem value="action" className="bg-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.actionNumber} — Число Действия
@@ -158,7 +155,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="realization" className="gradient-card rounded-xl border border-border/50 px-4 mb-3">
+                    <AccordionItem value="realization" className="bg-card rounded-xl border border-border px-4 mb-3">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.realizationNumber} — Число Реализации
@@ -169,7 +166,7 @@ const CalendarPage = () => {
                       </AccordionContent>
                     </AccordionItem>
 
-                    <AccordionItem value="total" className="gradient-card rounded-xl border border-border/50 px-4">
+                    <AccordionItem value="total" className="bg-card rounded-xl border border-border px-4">
                       <AccordionTrigger className="hover:no-underline py-4">
                         <span className="text-lg font-display text-primary">
                           {dayNumbers.totalNumber} — Число Итога
