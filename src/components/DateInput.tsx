@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Sparkles } from "lucide-react";
 
 interface DateInputProps {
   onCalculate: (day: number, month: number, year: number, name: string) => void;
@@ -50,7 +49,7 @@ export function DateInput({ onCalculate }: DateInputProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="bg-card rounded-2xl p-8 shadow-card border border-border">
+      <div className="gradient-card rounded-2xl p-8 border border-border">
         <div className="space-y-6">
           {/* Name Input */}
           <div className="space-y-2">
@@ -116,7 +115,7 @@ export function DateInput({ onCalculate }: DateInputProps) {
           <Button
             onClick={handleCalculate}
             disabled={!isValid}
-            className="w-full h-14 text-lg font-display font-semibold bg-primary hover:bg-primary/90 text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 rounded-full"
+            className="w-full h-14 text-lg font-display btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:animate-none transition-all duration-300 rounded-full border-2 border-primary"
           >
             Рассчитать
           </Button>
