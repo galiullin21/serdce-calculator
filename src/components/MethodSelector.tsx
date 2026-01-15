@@ -9,15 +9,15 @@ interface MethodSelectorProps {
 export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelectorProps) {
   const methods = [
     {
-      id: "keyto",
-      name: "KeyTo",
+      id: "method1",
+      name: "Методика 1",
       description: "Классическая нумерология по дате рождения",
       available: true,
-      icon: "🔑",
+      icon: "✨",
     },
     {
-      id: "matrix",
-      name: "Матрица Судьбы",
+      id: "method2",
+      name: "Методика 2",
       description: "Расширенный анализ энергий",
       available: false,
       icon: "🔮",
