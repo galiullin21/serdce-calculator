@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { NumerologyResult as Result } from "@/lib/numerology";
 import { NumberCard } from "./NumberCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, Crown, ExternalLink } from "lucide-react";
+import { ArrowLeft, Download, Crown, ExternalLink, Loader2 } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { generateNumerologyPdf } from "@/lib/generatePdf";
 
 interface NumerologyResultProps {
   result: Result;
@@ -12,10 +14,22 @@ interface NumerologyResultProps {
 }
 
 export function NumerologyResult({ result, name, onReset }: NumerologyResultProps) {
+  const [isGeneratingPdf, setIsGeneratingPdf] = useState(false);
   const formattedDate = format(result.birthDate, "d MMMM yyyy", { locale: ru });
 
   const handleTelegramClick = () => {
     window.open("https://t.me/galiullin_ruzal", "_blank");
+  };
+
+  const handleDownloadPdf = async () => {
+    setIsGeneratingPdf(true);
+    try {
+      await generateNumerologyPdf(result, name);
+    } catch (error) {
+      console.error("Error generating PDF:", error);
+    } finally {
+      setIsGeneratingPdf(false);
+    }
   };
 
   return (
@@ -89,12 +103,16 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
                 прогнозом на год, рекомендациями по развитию и совместимости.
               </p>
               <Button
-                onClick={handleTelegramClick}
+                onClick={handleDownloadPdf}
+                disabled={isGeneratingPdf}
                 className="w-full sm:w-auto bg-primary hover:bg-primary/90 text-primary-foreground font-semibold"
               >
-                <Download className="w-4 h-4 mr-2" />
-                Получить PDF-отчёт
-                <ExternalLink className="w-3 h-3 ml-2" />
+                {isGeneratingPdf ? (
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                ) : (
+                  <Download className="w-4 h-4 mr-2" />
+                )}
+                {isGeneratingPdf ? "Генерация..." : "Скачать PDF-отчёт"}
               </Button>
             </div>
           </div>
