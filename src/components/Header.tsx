@@ -1,6 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { User } from "lucide-react";
+import { HelpCircle } from "lucide-react";
 import logo from "@/assets/logo.svg";
 
 const navItems = [
@@ -41,17 +41,17 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Profile */}
+        {/* Support */}
         <Link
-          to="/profile"
+          to="/support"
           className={cn(
             "w-10 h-10 rounded-full flex items-center justify-center transition-colors border",
-            location.pathname === "/profile"
+            location.pathname === "/support"
               ? "bg-white/20 text-white border-white/30"
               : "bg-white/10 hover:bg-white/20 text-white/80 border-white/20"
           )}
         >
-          <User className="w-5 h-5" />
+          <HelpCircle className="w-5 h-5" />
         </Link>
       </div>
 
