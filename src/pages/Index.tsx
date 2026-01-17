@@ -5,7 +5,7 @@ import { MethodSelector } from "@/components/MethodSelector";
 import { NumerologyResult } from "@/components/NumerologyResult";
 import { calculateNumerology, NumerologyResult as Result } from "@/lib/numerology";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink } from "lucide-react";
+import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const analysisTypes = [
@@ -30,6 +30,22 @@ const analysisTypes = [
     title: "Энергия договора",
     description: "Совместимость партнеров с договором (брак, бизнес и другие документы) или определенной датой.",
     icon: Building,
+    available: false,
+    hasPro: true,
+  },
+  {
+    id: "month",
+    title: "Прогноз на месяц",
+    description: "Узнайте энергии предстоящего месяца и получите рекомендации для достижения ваших целей.",
+    icon: Calendar,
+    available: false,
+    hasPro: true,
+  },
+  {
+    id: "year",
+    title: "Прогноз на год",
+    description: "Полный прогноз на год с помесячной разбивкой и ключевыми периодами для важных решений.",
+    icon: CalendarDays,
     available: false,
     hasPro: true,
   },
@@ -84,16 +100,20 @@ const Index = () => {
             <section className="relative py-16 md:py-24 overflow-hidden">
               <div className="container mx-auto px-4 relative">
                 <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-4xl md:text-6xl lg:text-7xl font-display text-primary mb-4 tracking-wide">
-                    ПУТЬ К СЕБЕ
+                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-display text-primary mb-6 tracking-wide">
+                    СЕРДЦЕ ПИЛИГРИМА
                   </h1>
-                  <h2 className="text-2xl md:text-3xl lg:text-4xl font-display text-primary/60 mb-6 tracking-wide">
-                    НАЧИНАЕТСЯ С ПОНИМАНИЯ СЕБЯ
-                  </h2>
+                  
+                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+                    «Сердце Пилигрима» — это пространство поддержки, где психология и нумерология помогают разобраться в себе и своих жизненных ситуациях.
+                  </p>
+                  
+                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+                    Здесь мы разбираем конкретные вопросы — отношения, деньги, выбор пути, внутренние конфликты.
+                  </p>
                   
                   <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-                    Пройди путь трансформации к обретению внутренней силы, осознанности и смысла своей жизни{" "}
-                    <span className="font-semibold text-foreground">в безопасном и вдохновляющем пространстве</span>
+                    Простыми словами: помогаем понять, почему в жизни происходит именно так и что с этим можно сделать дальше. Здесь вы получите полный разбор вашей ситуации и рабочий план действий. <span className="font-semibold text-foreground">Добро пожаловать!</span>
                   </p>
                   
                   <Button
@@ -128,13 +148,9 @@ const Index = () => {
             <section className="py-12 md:py-16">
               <div className="container mx-auto px-4">
                 <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-12 max-w-3xl mx-auto">
-                  <h2 className="text-2xl md:text-3xl font-display text-primary mb-3">
-                    Нумерологический расчёт
+                  <h2 className="text-2xl md:text-3xl font-display text-primary mb-6 text-center">
+                    Путь к себе начинается здесь ❤️
                   </h2>
-                  <p className="text-muted-foreground mb-6">
-                    Узнайте свои ключевые числа и получите персональный разбор вашей личности, 
-                    способностей и жизненного пути.
-                  </p>
                   
                   <MethodSelector
                     selectedMethod={selectedMethod}
