@@ -70,7 +70,7 @@ const analysisTypes = [
 const marqueeWords = ["Трансформация", "Смысл", "Гармония"];
 
 const Index = () => {
-  const [selectedMethod, setSelectedMethod] = useState("method1");
+  const [selectedMethod, setSelectedMethod] = useState("month");
   const [result, setResult] = useState<Result | null>(null);
   const [userName, setUserName] = useState("");
 
