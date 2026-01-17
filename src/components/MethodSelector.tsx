@@ -8,10 +8,10 @@ interface MethodSelectorProps {
 }
 
 export function MethodSelector({ selectedMethod, selectedMethodology, onMethodChange }: MethodSelectorProps) {
-  // Methods for Methodology 1 (KeyTo - numbers 1-9)
+  // Methods for Methodology 1 (numbers 1-9)
   const methodsMethodology1 = [
     {
-      id: "keyto-full",
+      id: "classic-full",
       name: "Полный разбор",
       description: "4 главных числа вашей судьбы",
       available: true,

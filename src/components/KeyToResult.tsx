@@ -183,7 +183,7 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
       {/* Title */}
       <div className="text-center space-y-2">
         <h1 className="text-3xl md:text-4xl font-display text-primary">
-          {name ? `${name}, ваш расчёт KeyTo` : "Ваш расчёт KeyTo"}
+          {name ? `${name}, ваш нумерологический расчёт` : "Ваш нумерологический расчёт"}
         </h1>
         <p className="text-muted-foreground">
           Дата рождения: {result.birthDate}
