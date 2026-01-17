@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Lock, Sparkles } from "lucide-react";
+import { Sparkles, Calendar, CalendarDays } from "lucide-react";
 
 interface MethodSelectorProps {
   selectedMethod: string;
@@ -9,25 +9,25 @@ interface MethodSelectorProps {
 export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelectorProps) {
   const methods = [
     {
-      id: "method1",
-      name: "Методика 1",
-      description: "Классическая нумерология по дате рождения",
+      id: "month",
+      name: "Прогноз на месяц",
+      description: "Расчёт энергий на текущий месяц",
       available: true,
-      icon: "✨",
+      icon: Calendar,
     },
     {
-      id: "method2",
-      name: "Методика 2",
-      description: "Расширенный анализ энергий",
-      available: false,
-      icon: "🔮",
+      id: "year",
+      name: "Прогноз на год",
+      description: "Полный годовой прогноз",
+      available: true,
+      icon: CalendarDays,
     },
   ];
 
   return (
     <div className="w-full max-w-xl mx-auto mb-8">
       <p className="text-sm text-muted-foreground text-center mb-4">
-        Выберите методику расчёта
+        Выберите тип расчёта
       </p>
       <div className="grid grid-cols-2 gap-4">
         {methods.map((method) => (
@@ -45,15 +45,12 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
             )}
           >
             <div className="flex items-start gap-3">
-              <span className="text-2xl">{method.icon}</span>
+              <method.icon className="w-6 h-6 text-primary mt-0.5" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
                   <h3 className="font-display font-semibold text-foreground">
                     {method.name}
                   </h3>
-                  {!method.available && (
-                    <Lock className="w-3 h-3 text-muted-foreground" />
-                  )}
                   {method.available && selectedMethod === method.id && (
                     <Sparkles className="w-3 h-3 text-primary" />
                   )}
@@ -63,11 +60,6 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
                 </p>
               </div>
             </div>
-            {!method.available && (
-              <span className="absolute top-2 right-2 text-[10px] bg-secondary px-2 py-0.5 rounded-full text-muted-foreground">
-                Скоро
-              </span>
-            )}
           </button>
         ))}
       </div>
