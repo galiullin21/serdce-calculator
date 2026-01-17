@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { MethodSelector } from "@/components/MethodSelector";
+import { MethodologySelector } from "@/components/MethodologySelector";
 import { YearForecastResult } from "@/components/YearForecastResult";
 import { MonthForecastResult } from "@/components/MonthForecastResult";
 import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
+import { KeyToResultComponent } from "@/components/KeyToResult";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -13,6 +15,7 @@ import {
   MonthForecast,
   PersonalMatrix
 } from "@/lib/calculations";
+import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -24,14 +27,6 @@ const analysisTypes = [
     description: "Описание Ваших данностей и жизненного пути. Разбор матрицы и главные рекомендации.",
     icon: FileText,
     available: true,
-    hasPro: true,
-  },
-  {
-    id: "compatibility",
-    title: "Разбор совместимости",
-    description: "Проверка общей энергии в паре или в группе людей. Главные рекомендации для вашей общей энергии.",
-    icon: Users,
-    available: false,
     hasPro: true,
   },
   {
@@ -82,12 +77,23 @@ type ResultType =
   | { type: "year"; data: YearForecast }
   | { type: "month"; data: MonthForecast }
   | { type: "purpose"; data: PersonalMatrix }
+  | { type: "keyto"; data: KeyToResult }
   | null;
 
 const Index = () => {
+  const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("2");
   const [selectedMethod, setSelectedMethod] = useState("month");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
+
+  // Reset method when methodology changes
+  useEffect(() => {
+    if (selectedMethodology === "1") {
+      setSelectedMethod("keyto-full");
+    } else {
+      setSelectedMethod("month");
+    }
+  }, [selectedMethodology]);
 
   const handleCalculate = (
     day: number, 
@@ -99,6 +105,14 @@ const Index = () => {
   ) => {
     setUserName(name);
     
+    // Methodology 1 - KeyTo
+    if (selectedMethodology === "1") {
+      const keytoResult = calculateKeyTo(day, month, year);
+      setResult({ type: "keyto", data: keytoResult });
+      return;
+    }
+    
+    // Methodology 2 - 22 Arcana
     switch (selectedMethod) {
       case "year":
         const yearForecast = calculateYearForecast(day, month, year, targetYear || new Date().getFullYear());
@@ -193,8 +207,14 @@ const Index = () => {
                     Путь к себе начинается здесь ❤️
                   </h2>
                   
+                  <MethodologySelector
+                    selectedMethodology={selectedMethodology}
+                    onMethodologyChange={setSelectedMethodology}
+                  />
+                  
                   <MethodSelector
                     selectedMethod={selectedMethod}
+                    selectedMethodology={selectedMethodology}
                     onMethodChange={setSelectedMethod}
                   />
                   <DateInput 
@@ -291,6 +311,13 @@ const Index = () => {
             {result.type === "purpose" && (
               <PersonalMatrixResult
                 matrix={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "keyto" && (
+              <KeyToResultComponent
+                result={result.data}
                 name={userName}
                 onReset={handleReset}
               />
