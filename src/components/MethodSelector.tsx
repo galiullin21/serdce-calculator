@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Sparkles, Calendar, CalendarDays } from "lucide-react";
+import { Sparkles, Calendar, CalendarDays, Compass } from "lucide-react";
 
 interface MethodSelectorProps {
   selectedMethod: string;
@@ -22,6 +22,13 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
       available: true,
       icon: CalendarDays,
     },
+    {
+      id: "purpose",
+      name: "Ваше предназначение",
+      description: "Профессии и таланты по дате рождения",
+      available: true,
+      icon: Compass,
+    },
   ];
 
   return (
@@ -29,7 +36,7 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
       <p className="text-sm text-muted-foreground text-center mb-4">
         Выберите тип расчёта
       </p>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-3">
         {methods.map((method) => (
           <button
             key={method.id}
