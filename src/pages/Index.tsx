@@ -38,7 +38,7 @@ const analysisTypes = [
     title: "Прогноз на месяц",
     description: "Узнайте энергии предстоящего месяца и получите рекомендации для достижения ваших целей.",
     icon: Calendar,
-    available: false,
+    available: true,
     hasPro: true,
   },
   {
@@ -46,7 +46,7 @@ const analysisTypes = [
     title: "Прогноз на год",
     description: "Полный прогноз на год с помесячной разбивкой и ключевыми периодами для важных решений.",
     icon: CalendarDays,
-    available: false,
+    available: true,
     hasPro: true,
   },
   {
