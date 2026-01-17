@@ -2,8 +2,17 @@ import { useState } from "react";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { MethodSelector } from "@/components/MethodSelector";
-import { NumerologyResult } from "@/components/NumerologyResult";
-import { calculateNumerology, NumerologyResult as Result } from "@/lib/numerology";
+import { YearForecastResult } from "@/components/YearForecastResult";
+import { MonthForecastResult } from "@/components/MonthForecastResult";
+import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
+import { 
+  calculateYearForecast, 
+  calculateMonthForecast, 
+  calculatePersonalMatrix,
+  YearForecast,
+  MonthForecast,
+  PersonalMatrix
+} from "@/lib/calculations";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -69,15 +78,47 @@ const analysisTypes = [
 
 const marqueeWords = ["Трансформация", "Смысл", "Гармония"];
 
+type ResultType = 
+  | { type: "year"; data: YearForecast }
+  | { type: "month"; data: MonthForecast }
+  | { type: "purpose"; data: PersonalMatrix }
+  | null;
+
 const Index = () => {
   const [selectedMethod, setSelectedMethod] = useState("month");
-  const [result, setResult] = useState<Result | null>(null);
+  const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
 
-  const handleCalculate = (day: number, month: number, year: number, name: string) => {
-    const numerologyResult = calculateNumerology(day, month, year);
-    setResult(numerologyResult);
+  const handleCalculate = (
+    day: number, 
+    month: number, 
+    year: number, 
+    name: string,
+    targetMonth?: number,
+    targetYear?: number
+  ) => {
     setUserName(name);
+    
+    switch (selectedMethod) {
+      case "year":
+        const yearForecast = calculateYearForecast(day, month, year, targetYear || new Date().getFullYear());
+        setResult({ type: "year", data: yearForecast });
+        break;
+      case "month":
+        const monthForecast = calculateMonthForecast(
+          day, 
+          month, 
+          year, 
+          targetMonth || new Date().getMonth() + 1,
+          targetYear || new Date().getFullYear()
+        );
+        setResult({ type: "month", data: monthForecast });
+        break;
+      case "purpose":
+        const personalMatrix = calculatePersonalMatrix(day, month, year);
+        setResult({ type: "purpose", data: personalMatrix });
+        break;
+    }
   };
 
   const handleReset = () => {
@@ -156,7 +197,10 @@ const Index = () => {
                     selectedMethod={selectedMethod}
                     onMethodChange={setSelectedMethod}
                   />
-                  <DateInput onCalculate={handleCalculate} />
+                  <DateInput 
+                    selectedMethod={selectedMethod}
+                    onCalculate={handleCalculate} 
+                  />
                 </div>
 
                 {/* Analysis Types Grid */}
@@ -230,11 +274,27 @@ const Index = () => {
           </>
         ) : (
           <div className="container mx-auto px-4 py-8">
-            <NumerologyResult
-              result={result}
-              name={userName}
-              onReset={handleReset}
-            />
+            {result.type === "year" && (
+              <YearForecastResult
+                forecast={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "month" && (
+              <MonthForecastResult
+                forecast={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "purpose" && (
+              <PersonalMatrixResult
+                matrix={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
           </div>
         )}
       </main>

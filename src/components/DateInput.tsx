@@ -4,7 +4,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Input } from "@/components/ui/input";
 
 interface DateInputProps {
-  onCalculate: (day: number, month: number, year: number, name: string) => void;
+  selectedMethod: string;
+  onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number) => void;
 }
 
 const months = [
@@ -28,24 +29,59 @@ const days = Array.from({ length: 31 }, (_, i) => ({
 }));
 
 const currentYear = new Date().getFullYear();
+const currentMonth = new Date().getMonth() + 1;
+
 const years = Array.from({ length: 100 }, (_, i) => ({
   value: String(currentYear - i),
   label: String(currentYear - i),
 }));
 
-export function DateInput({ onCalculate }: DateInputProps) {
+// Годы для прогноза (текущий + 5 лет вперед)
+const forecastYears = Array.from({ length: 10 }, (_, i) => ({
+  value: String(currentYear - 2 + i),
+  label: String(currentYear - 2 + i),
+}));
+
+export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
   const [name, setName] = useState("");
   const [day, setDay] = useState<string>("");
   const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
+  const [targetMonth, setTargetMonth] = useState<string>(String(currentMonth));
+  const [targetYear, setTargetYear] = useState<string>(String(currentYear));
 
   const handleCalculate = () => {
     if (day && month && year) {
-      onCalculate(parseInt(day), parseInt(month), parseInt(year), name);
+      const targetMonthNum = selectedMethod === "month" ? parseInt(targetMonth) : undefined;
+      const targetYearNum = (selectedMethod === "month" || selectedMethod === "year") 
+        ? parseInt(targetYear) 
+        : undefined;
+      
+      onCalculate(
+        parseInt(day), 
+        parseInt(month), 
+        parseInt(year), 
+        name,
+        targetMonthNum,
+        targetYearNum
+      );
     }
   };
 
   const isValid = day && month && year;
+
+  const getButtonText = () => {
+    switch (selectedMethod) {
+      case "month":
+        return "Рассчитать прогноз на месяц";
+      case "year":
+        return "Рассчитать прогноз на год";
+      case "purpose":
+        return "Узнать предназначение";
+      default:
+        return "Рассчитать";
+    }
+  };
 
   return (
     <div className="w-full max-w-xl mx-auto">
@@ -111,13 +147,51 @@ export function DateInput({ onCalculate }: DateInputProps) {
             </div>
           </div>
 
+          {/* Target Date for Forecasts */}
+          {(selectedMethod === "month" || selectedMethod === "year") && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                {selectedMethod === "month" ? "Месяц и год прогноза" : "Год прогноза"}
+              </label>
+              <div className={`grid gap-3 ${selectedMethod === "month" ? "grid-cols-2" : "grid-cols-1"}`}>
+                {selectedMethod === "month" && (
+                  <Select value={targetMonth} onValueChange={setTargetMonth}>
+                    <SelectTrigger className="bg-background border-border focus:border-primary h-12">
+                      <SelectValue placeholder="Месяц" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border max-h-60">
+                      {months.map((m) => (
+                        <SelectItem key={m.value} value={m.value} className="focus:bg-secondary">
+                          {m.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+
+                <Select value={targetYear} onValueChange={setTargetYear}>
+                  <SelectTrigger className="bg-background border-border focus:border-primary h-12">
+                    <SelectValue placeholder="Год" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-card border-border max-h-60">
+                    {forecastYears.map((y) => (
+                      <SelectItem key={y.value} value={y.value} className="focus:bg-secondary">
+                        {y.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+          )}
+
           {/* Calculate Button */}
           <Button
             onClick={handleCalculate}
             disabled={!isValid}
             className="w-full h-14 text-lg font-display btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:animate-none transition-all duration-300 rounded-full border-2 border-primary"
           >
-            Рассчитать
+            {getButtonText()}
           </Button>
         </div>
       </div>
