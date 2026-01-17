@@ -1,4 +1,4 @@
-// KeyTo numerology calculation system
+// Classic numerology calculation system
 
 export interface NumerologyResult {
   mindNumber: number;      // Число Ума - день рождения

@@ -1,5 +1,5 @@
-// KeyTo methodology - first methodology (numbers 1-9)
-// Based on the book "KeyTo. Ключ к себе. Ключ ко всему"
+// Methodology 1 - Classic numerology (numbers 1-9)
+// Based on classic numerology principles
 
 export interface KeyToResult {
   birthDate: string;

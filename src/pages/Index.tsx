@@ -89,7 +89,7 @@ const Index = () => {
   // Reset method when methodology changes
   useEffect(() => {
     if (selectedMethodology === "1") {
-      setSelectedMethod("keyto-full");
+      setSelectedMethod("classic-full");
     } else {
       setSelectedMethod("month");
     }
@@ -105,10 +105,10 @@ const Index = () => {
   ) => {
     setUserName(name);
     
-    // Methodology 1 - KeyTo
+    // Methodology 1 - Classic numerology
     if (selectedMethodology === "1") {
-      const keytoResult = calculateKeyTo(day, month, year);
-      setResult({ type: "keyto", data: keytoResult });
+      const classicResult = calculateKeyTo(day, month, year);
+      setResult({ type: "keyto", data: classicResult });
       return;
     }
     

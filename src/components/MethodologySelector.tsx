@@ -11,7 +11,7 @@ export function MethodologySelector({ selectedMethodology, onMethodologyChange }
     {
       id: "1" as const,
       name: "Методика 1",
-      subtitle: "KeyTo",
+      subtitle: "Классика",
       description: "Классическая нумерология с числами 1-9",
       features: ["Число Ума", "Число Действия", "Число Реализации", "Число Итога"],
       isRecommended: false,
