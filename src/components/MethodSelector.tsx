@@ -1,13 +1,26 @@
 import { cn } from "@/lib/utils";
-import { Sparkles, Calendar, CalendarDays, Compass } from "lucide-react";
+import { Sparkles, Calendar, CalendarDays, Compass, Brain, Zap, Target, Award } from "lucide-react";
 
 interface MethodSelectorProps {
   selectedMethod: string;
+  selectedMethodology: "1" | "2";
   onMethodChange: (method: string) => void;
 }
 
-export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelectorProps) {
-  const methods = [
+export function MethodSelector({ selectedMethod, selectedMethodology, onMethodChange }: MethodSelectorProps) {
+  // Methods for Methodology 1 (KeyTo - numbers 1-9)
+  const methodsMethodology1 = [
+    {
+      id: "keyto-full",
+      name: "Полный разбор",
+      description: "4 главных числа вашей судьбы",
+      available: true,
+      icon: Brain,
+    },
+  ];
+
+  // Methods for Methodology 2 (22 Arcana)
+  const methodsMethodology2 = [
     {
       id: "month",
       name: "Прогноз на месяц",
@@ -31,12 +44,15 @@ export function MethodSelector({ selectedMethod, onMethodChange }: MethodSelecto
     },
   ];
 
+  const methods = selectedMethodology === "1" ? methodsMethodology1 : methodsMethodology2;
+  const gridCols = selectedMethodology === "1" ? "grid-cols-1" : "grid-cols-3";
+
   return (
     <div className="w-full max-w-xl mx-auto mb-8">
       <p className="text-sm text-muted-foreground text-center mb-4">
         Выберите тип расчёта
       </p>
-      <div className="grid grid-cols-3 gap-3">
+      <div className={cn("grid gap-3", gridCols)}>
         {methods.map((method) => (
           <button
             key={method.id}
