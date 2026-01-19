@@ -26,6 +26,29 @@ export interface MonthForecast {
   position3: number; // Сумма позиций 1 и 2
 }
 
+// Совместимость двух людей
+export interface CompatibilityResult {
+  person1: {
+    name: string;
+    birthDate: { day: number; month: number; year: number };
+    destinyArcana: number; // Аркан предназначения (позиция 4)
+    soulArcana: number; // Аркан души (позиция 1)
+  };
+  person2: {
+    name: string;
+    birthDate: { day: number; month: number; year: number };
+    destinyArcana: number;
+    soulArcana: number;
+  };
+  // Арканы совместимости
+  unionArcana: number; // Аркан союза (сумма арканов предназначения)
+  karmaArcana: number; // Кармический аркан (разница арканов)
+  harmonyArcana: number; // Аркан гармонии (сумма арканов души)
+  compatibilityPercent: number; // Процент совместимости
+  strengths: string[]; // Сильные стороны союза
+  challenges: string[]; // Вызовы союза
+}
+
 // Базовые правила приведения числа к аркану (1-22)
 export function normalizeToArcana(num: number): number {
   // Правило 1: Если число > 22, вычитаем 22
@@ -224,6 +247,176 @@ export function calculateMonthForecast(
     position2,
     position3
   };
+}
+
+// Расчёт совместимости двух людей
+export function calculateCompatibility(
+  person1Day: number,
+  person1Month: number,
+  person1Year: number,
+  person1Name: string,
+  person2Day: number,
+  person2Month: number,
+  person2Year: number,
+  person2Name: string
+): CompatibilityResult {
+  // Рассчитываем матрицы обоих людей
+  const matrix1 = calculatePersonalMatrix(person1Day, person1Month, person1Year);
+  const matrix2 = calculatePersonalMatrix(person2Day, person2Month, person2Year);
+  
+  // Аркан предназначения (позиция 4) и души (позиция 1)
+  const destiny1 = matrix1.positions[3];
+  const destiny2 = matrix2.positions[3];
+  const soul1 = matrix1.positions[0];
+  const soul2 = matrix2.positions[0];
+  
+  // Аркан союза - сумма арканов предназначения
+  const unionArcana = normalizeToArcana(destiny1 + destiny2);
+  
+  // Кармический аркан - разница арканов предназначения
+  const karmaArcana = normalizeToArcana(Math.abs(destiny1 - destiny2));
+  
+  // Аркан гармонии - сумма арканов души
+  const harmonyArcana = normalizeToArcana(soul1 + soul2);
+  
+  // Расчёт процента совместимости
+  let compatibilityPercent = 50; // базовый уровень
+  
+  // Одинаковые арканы предназначения - большой плюс
+  if (destiny1 === destiny2) compatibilityPercent += 20;
+  
+  // Одинаковые арканы души - хорошо для эмоциональной связи
+  if (soul1 === soul2) compatibilityPercent += 15;
+  
+  // Гармоничные комбинации (сумма = 22 или равные)
+  if (destiny1 + destiny2 === 22) compatibilityPercent += 10;
+  if (soul1 + soul2 === 22) compatibilityPercent += 10;
+  
+  // Комплементарные арканы
+  const complementaryPairs = [[1, 22], [2, 21], [3, 20], [4, 19], [5, 18], [6, 17], [7, 16], [8, 15], [9, 14], [10, 13], [11, 12]];
+  for (const [a, b] of complementaryPairs) {
+    if ((destiny1 === a && destiny2 === b) || (destiny1 === b && destiny2 === a)) {
+      compatibilityPercent += 15;
+    }
+  }
+  
+  // Ограничиваем до 100%
+  compatibilityPercent = Math.min(100, compatibilityPercent);
+  
+  // Определяем сильные стороны и вызовы на основе арканов
+  const strengths = getCompatibilityStrengths(unionArcana, harmonyArcana, destiny1, destiny2);
+  const challenges = getCompatibilityChallenges(karmaArcana, soul1, soul2);
+  
+  return {
+    person1: {
+      name: person1Name || "Партнёр 1",
+      birthDate: { day: person1Day, month: person1Month, year: person1Year },
+      destinyArcana: destiny1,
+      soulArcana: soul1,
+    },
+    person2: {
+      name: person2Name || "Партнёр 2",
+      birthDate: { day: person2Day, month: person2Month, year: person2Year },
+      destinyArcana: destiny2,
+      soulArcana: soul2,
+    },
+    unionArcana,
+    karmaArcana,
+    harmonyArcana,
+    compatibilityPercent,
+    strengths,
+    challenges,
+  };
+}
+
+// Сильные стороны союза
+function getCompatibilityStrengths(unionArcana: number, harmonyArcana: number, destiny1: number, destiny2: number): string[] {
+  const strengths: string[] = [];
+  
+  // На основе аркана союза
+  const unionStrengths: Record<number, string> = {
+    1: "Сильное лидерство и инициатива в паре",
+    2: "Глубокая интуитивная связь",
+    3: "Творческое взаимодействие и радость общения",
+    4: "Стабильность и надёжность отношений",
+    5: "Духовный рост и мудрость в паре",
+    6: "Гармония в любви и семейных ценностях",
+    7: "Успех в совместных начинаниях",
+    8: "Справедливость и баланс в отношениях",
+    9: "Глубокая мудрость и понимание друг друга",
+    10: "Удача и позитивные перемены вместе",
+    11: "Сила и мужество преодолевать трудности",
+    12: "Духовное развитие через отношения",
+    13: "Способность к трансформации и обновлению",
+    14: "Умеренность и гармония в быту",
+    15: "Страсть и магнетизм в отношениях",
+    16: "Способность преодолевать кризисы",
+    17: "Надежда и вдохновение друг для друга",
+    18: "Интуитивное понимание без слов",
+    19: "Радость и оптимизм в отношениях",
+    20: "Духовное возрождение через любовь",
+    21: "Полнота и завершённость союза",
+    22: "Свобода и приключения вместе",
+  };
+  
+  if (unionStrengths[unionArcana]) {
+    strengths.push(unionStrengths[unionArcana]);
+  }
+  
+  // На основе аркана гармонии
+  if (harmonyArcana <= 11) {
+    strengths.push("Эмоциональная близость и взаимопонимание");
+  } else {
+    strengths.push("Глубокая духовная связь");
+  }
+  
+  // Одинаковые арканы предназначения
+  if (destiny1 === destiny2) {
+    strengths.push("Общие жизненные цели и ценности");
+  }
+  
+  return strengths;
+}
+
+// Вызовы союза
+function getCompatibilityChallenges(karmaArcana: number, soul1: number, soul2: number): string[] {
+  const challenges: string[] = [];
+  
+  const karmaChallenges: Record<number, string> = {
+    1: "Борьба за лидерство в паре",
+    2: "Сложности с принятием решений",
+    3: "Поверхностность в общении",
+    4: "Излишняя rigидность и упрямство",
+    5: "Разные духовные пути",
+    6: "Сложности с ответственностью",
+    7: "Разные направления развития",
+    8: "Споры о справедливости",
+    9: "Отстранённость и замкнутость",
+    10: "Нестабильность и перемены",
+    11: "Конфликты из-за силы характеров",
+    12: "Жертвенность одного из партнёров",
+    13: "Страх перемен в отношениях",
+    14: "Скука и рутина",
+    15: "Манипуляции и зависимости",
+    16: "Неожиданные кризисы",
+    17: "Нереалистичные ожидания",
+    18: "Иллюзии и недопонимание",
+    19: "Разный уровень энергии",
+    20: "Разные темпы личностного роста",
+    21: "Чувство незавершённости",
+    22: "Безответственность и хаос",
+  };
+  
+  if (karmaChallenges[karmaArcana]) {
+    challenges.push(karmaChallenges[karmaArcana]);
+  }
+  
+  // Большая разница в арканах души
+  if (Math.abs(soul1 - soul2) > 10) {
+    challenges.push("Разные эмоциональные потребности");
+  }
+  
+  return challenges;
 }
 
 // Получение названия месяца

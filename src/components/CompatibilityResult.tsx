@@ -1,0 +1,214 @@
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, ExternalLink } from "lucide-react";
+import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
+import { getArcana } from "@/lib/arcana";
+import { ArcanaCard } from "./ArcanaCard";
+import { cn } from "@/lib/utils";
+
+interface CompatibilityResultProps {
+  result: CompatibilityResult;
+  onReset: () => void;
+}
+
+export function CompatibilityResultComponent({ result, onReset }: CompatibilityResultProps) {
+  const { t } = useTranslation();
+
+  const unionArcana = getArcana(result.unionArcana);
+  const harmonyArcana = getArcana(result.harmonyArcana);
+  const karmaArcana = getArcana(result.karmaArcana);
+
+  const person1DestinyArcana = getArcana(result.person1.destinyArcana);
+  const person2DestinyArcana = getArcana(result.person2.destinyArcana);
+
+  const getCompatibilityColor = (percent: number) => {
+    if (percent >= 80) return "text-green-600";
+    if (percent >= 60) return "text-primary";
+    if (percent >= 40) return "text-yellow-600";
+    return "text-red-500";
+  };
+
+  const getCompatibilityLabel = (percent: number) => {
+    if (percent >= 80) return t("compatibility.excellent");
+    if (percent >= 60) return t("compatibility.good");
+    if (percent >= 40) return t("compatibility.moderate");
+    return t("compatibility.challenging");
+  };
+
+  return (
+    <div className="max-w-4xl mx-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-6">
+        <Button
+          variant="ghost"
+          onClick={onReset}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          {t("results.newCalculation")}
+        </Button>
+      </div>
+
+      {/* Title */}
+      <div className="text-center mb-8">
+        <div className="flex items-center justify-center gap-2 mb-2">
+          <Heart className="w-6 h-6 text-primary" />
+          <h1 className="text-2xl md:text-3xl font-display text-primary">
+            {t("compatibility.title")}
+          </h1>
+        </div>
+        <p className="text-muted-foreground">
+          {result.person1.name} & {result.person2.name}
+        </p>
+      </div>
+
+      {/* Compatibility Score */}
+      <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-8 text-center">
+        <div className="mb-4">
+          <span className={cn("text-5xl md:text-6xl font-display font-bold", getCompatibilityColor(result.compatibilityPercent))}>
+            {result.compatibilityPercent}%
+          </span>
+        </div>
+        <p className={cn("text-lg font-medium", getCompatibilityColor(result.compatibilityPercent))}>
+          {getCompatibilityLabel(result.compatibilityPercent)}
+        </p>
+      </div>
+
+      {/* Partners Info */}
+      <div className="grid md:grid-cols-2 gap-4 mb-8">
+        <div className="gradient-card rounded-xl p-5 border border-border">
+          <div className="flex items-center gap-2 mb-3">
+            <Users className="w-5 h-5 text-primary" />
+            <h3 className="font-display font-semibold text-foreground">{result.person1.name}</h3>
+          </div>
+          <p className="text-sm text-muted-foreground mb-2">
+            {formatBirthDate(result.person1.birthDate.day, result.person1.birthDate.month, result.person1.birthDate.year)}
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">{t("compatibility.destinyArcana")}:</span>
+            <span className="px-2 py-1 bg-primary/10 rounded text-sm font-medium text-primary">
+              {result.person1.destinyArcana} - {person1DestinyArcana?.name}
+            </span>
+          </div>
+        </div>
+
+        <div className="gradient-card rounded-xl p-5 border border-border">
+          <div className="flex items-center gap-2 mb-3">
+            <Users className="w-5 h-5 text-primary" />
+            <h3 className="font-display font-semibold text-foreground">{result.person2.name}</h3>
+          </div>
+          <p className="text-sm text-muted-foreground mb-2">
+            {formatBirthDate(result.person2.birthDate.day, result.person2.birthDate.month, result.person2.birthDate.year)}
+          </p>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">{t("compatibility.destinyArcana")}:</span>
+            <span className="px-2 py-1 bg-primary/10 rounded text-sm font-medium text-primary">
+              {result.person2.destinyArcana} - {person2DestinyArcana?.name}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Union Arcana */}
+      <div className="mb-8">
+        <h2 className="text-xl font-display text-primary mb-4 flex items-center gap-2">
+          <Heart className="w-5 h-5" />
+          {t("compatibility.unionArcana")}
+        </h2>
+        <ArcanaCard
+          number={result.unionArcana}
+          showYearForecast={false}
+        />
+      </div>
+
+      {/* Harmony & Karma */}
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div>
+          <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            {t("compatibility.harmonyArcana")}
+          </h3>
+          <div className="gradient-card rounded-xl p-5 border border-border">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <span className="text-xl font-display font-bold text-primary">{result.harmonyArcana}</span>
+              </div>
+              <div>
+                <p className="font-medium text-foreground">{harmonyArcana?.name}</p>
+                <p className="text-xs text-muted-foreground">{t("compatibility.emotionalConnection")}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            {t("compatibility.karmaArcana")}
+          </h3>
+          <div className="gradient-card rounded-xl p-5 border border-border">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
+                <span className="text-xl font-display font-bold text-accent">{result.karmaArcana}</span>
+              </div>
+              <div>
+                <p className="font-medium text-foreground">{karmaArcana?.name}</p>
+                <p className="text-xs text-muted-foreground">{t("compatibility.karmicLesson")}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Strengths & Challenges */}
+      <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="gradient-card rounded-xl p-5 border border-border">
+          <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
+            <Sparkles className="w-4 h-4" />
+            {t("compatibility.strengths")}
+          </h3>
+          <ul className="space-y-2">
+            {result.strengths.map((strength, index) => (
+              <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <span className="text-primary mt-0.5">✓</span>
+                {strength}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="gradient-card rounded-xl p-5 border border-border">
+          <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" />
+            {t("compatibility.challenges")}
+          </h3>
+          <ul className="space-y-2">
+            {result.challenges.map((challenge, index) => (
+              <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
+                <span className="text-accent mt-0.5">!</span>
+                {challenge}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
+      {/* CTA */}
+      <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border text-center">
+        <h3 className="text-xl font-display text-primary mb-2">
+          {t("compatibility.wantDeepAnalysis")}
+        </h3>
+        <p className="text-muted-foreground mb-4 text-sm">
+          {t("compatibility.deepAnalysisDesc")}
+        </p>
+        <Button
+          onClick={() => window.open("https://t.me/galiullin_ruzal", "_blank")}
+          className="btn-fill bg-primary text-primary-foreground border-2 border-primary"
+        >
+          {t("results.bookConsultation")}
+          <ExternalLink className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
+    </div>
+  );
+}

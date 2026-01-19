@@ -166,6 +166,28 @@
     "practicesDesc": "Meditations for restoring focus and peace.",
     "learnMore": "Learn more"
   },
+  "compatibility": {
+    "title": "Compatibility Analysis",
+    "person1": "First Partner",
+    "person2": "Second Partner",
+    "namePlaceholder1": "First partner's name",
+    "namePlaceholder2": "Second partner's name",
+    "calculate": "Calculate Compatibility",
+    "excellent": "Excellent Compatibility",
+    "good": "Good Compatibility",
+    "moderate": "Moderate Compatibility",
+    "challenging": "Challenging Compatibility",
+    "destinyArcana": "Destiny Arcana",
+    "unionArcana": "Union Arcana",
+    "harmonyArcana": "Harmony Arcana",
+    "karmaArcana": "Karmic Arcana",
+    "emotionalConnection": "Emotional connection",
+    "karmicLesson": "Karmic lesson",
+    "strengths": "Union Strengths",
+    "challenges": "Challenges & Growth Points",
+    "wantDeepAnalysis": "Want a deep relationship analysis?",
+    "deepAnalysisDesc": "Get a professional consultation with detailed compatibility analysis, personalized recommendations and answers to your questions."
+  },
   "calendar": {
     "title": "Calendar",
     "subtitle": "Day Codes",
