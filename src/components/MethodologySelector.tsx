@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Sparkles, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface MethodologySelectorProps {
   selectedMethodology: "1" | "2";
@@ -7,21 +8,33 @@ interface MethodologySelectorProps {
 }
 
 export function MethodologySelector({ selectedMethodology, onMethodologyChange }: MethodologySelectorProps) {
+  const { t } = useTranslation();
+
   const methodologies = [
     {
       id: "2" as const,
-      name: "Методика 1",
-      subtitle: "22 Аркана",
-      description: "Расширенная система с 22 арканами",
-      features: ["Предназначение", "Совместимость", "Прогнозы", "Периоды жизни"],
+      name: t("methodology.methodology1"),
+      subtitle: t("methodology.arcana22"),
+      description: t("methodology.arcanaDescription"),
+      features: [
+        t("methodology.features.purpose"),
+        t("methodology.features.compatibility"),
+        t("methodology.features.forecasts"),
+        t("methodology.features.lifePeriods"),
+      ],
       isRecommended: true,
     },
     {
       id: "1" as const,
-      name: "Методика 2",
-      subtitle: "Классика",
-      description: "Классическая нумерология с числами 1-9",
-      features: ["Число Ума", "Число Действия", "Число Реализации", "Число Итога"],
+      name: t("methodology.methodology2"),
+      subtitle: t("methodology.classic"),
+      description: t("methodology.classicDescription"),
+      features: [
+        t("methodology.features.mindNumber"),
+        t("methodology.features.actionNumber"),
+        t("methodology.features.realizationNumber"),
+        t("methodology.features.outcomeNumber"),
+      ],
       isRecommended: false,
     },
   ];
@@ -29,7 +42,7 @@ export function MethodologySelector({ selectedMethodology, onMethodologyChange }
   return (
     <div className="w-full max-w-3xl mx-auto mb-8">
       <p className="text-sm text-muted-foreground text-center mb-4">
-        Выберите методику расчёта
+        {t("calculator.selectMethodology")}
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {methodologies.map((m) => (
@@ -46,7 +59,7 @@ export function MethodologySelector({ selectedMethodology, onMethodologyChange }
             {m.isRecommended && (
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center gap-1">
                 <Sparkles className="w-3 h-3" />
-                Более точная
+                {t("methodology.moreAccurate")}
               </div>
             )}
             

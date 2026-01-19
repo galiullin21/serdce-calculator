@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { MethodSelector } from "@/components/MethodSelector";
