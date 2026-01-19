@@ -21,58 +21,65 @@ import { Button } from "@/components/ui/button";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const analysisTypes = [
-  {
-    id: "full",
-    title: "Полный разбор",
-    description: "Описание Ваших данностей и жизненного пути. Разбор матрицы и главные рекомендации.",
-    icon: FileText,
-    available: true,
-    hasPro: true,
-  },
-  {
-    id: "contract",
-    title: "Энергия договора",
-    description: "Совместимость партнеров с договором (брак, бизнес и другие документы) или определенной датой.",
-    icon: Building,
-    available: false,
-    hasPro: true,
-  },
-  {
-    id: "month",
-    title: "Прогноз на месяц",
-    description: "Узнайте энергии предстоящего месяца и получите рекомендации для достижения ваших целей.",
-    icon: Calendar,
-    available: true,
-    hasPro: true,
-  },
-  {
-    id: "year",
-    title: "Прогноз на год",
-    description: "Полный прогноз на год с помесячной разбивкой и ключевыми периодами для важных решений.",
-    icon: CalendarDays,
-    available: true,
-    hasPro: true,
-  },
-  {
-    id: "name",
-    title: "Энергия названия",
-    description: "Проверьте энергию названия вашего продукта или компании. Выберите лучшее название!",
-    icon: Type,
-    available: false,
-    hasPro: false,
-  },
-  {
-    id: "finance",
-    title: "Финансовый код",
-    description: "Узнайте свой финансовый потенциал и лучшие способы заработка по вашей дате рождения.",
-    icon: Wallet,
-    available: false,
-    hasPro: false,
-  },
-];
+const Index = () => {
+  const { t } = useTranslation();
+  
+  const analysisTypes = [
+    {
+      id: "full",
+      titleKey: "analysisTypes.fullAnalysis",
+      descKey: "analysisTypes.fullAnalysisDesc",
+      icon: FileText,
+      available: true,
+      hasPro: true,
+    },
+    {
+      id: "contract",
+      titleKey: "analysisTypes.contractEnergy",
+      descKey: "analysisTypes.contractEnergyDesc",
+      icon: Building,
+      available: false,
+      hasPro: true,
+    },
+    {
+      id: "month",
+      titleKey: "analysisTypes.monthForecast",
+      descKey: "analysisTypes.monthForecastDesc",
+      icon: Calendar,
+      available: true,
+      hasPro: true,
+    },
+    {
+      id: "year",
+      titleKey: "analysisTypes.yearForecast",
+      descKey: "analysisTypes.yearForecastDesc",
+      icon: CalendarDays,
+      available: true,
+      hasPro: true,
+    },
+    {
+      id: "name",
+      titleKey: "analysisTypes.nameEnergy",
+      descKey: "analysisTypes.nameEnergyDesc",
+      icon: Type,
+      available: false,
+      hasPro: false,
+    },
+    {
+      id: "finance",
+      titleKey: "analysisTypes.financialCode",
+      descKey: "analysisTypes.financialCodeDesc",
+      icon: Wallet,
+      available: false,
+      hasPro: false,
+    },
+  ];
 
-const marqueeWords = ["Трансформация", "Смысл", "Гармония"];
+  const marqueeWords = [
+    t("marquee.transformation"),
+    t("marquee.meaning"),
+    t("marquee.harmony")
+  ];
 
 type ResultType = 
   | { type: "year"; data: YearForecast }
@@ -81,7 +88,6 @@ type ResultType =
   | { type: "keyto"; data: KeyToResult }
   | null;
 
-const Index = () => {
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("2");
   const [selectedMethod, setSelectedMethod] = useState("purpose");
   const [result, setResult] = useState<ResultType>(null);
@@ -157,19 +163,19 @@ const Index = () => {
               <div className="container mx-auto px-4 relative">
                 <div className="max-w-3xl mx-auto text-center">
                   <h1 className="text-3xl md:text-5xl lg:text-6xl font-display text-primary mb-6 tracking-wide">
-                    СЕРДЦЕ ПИЛИГРИМА
+                    {t("hero.title")}
                   </h1>
                   
                   <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-                    «Сердце Пилигрима» — это пространство поддержки, где психология и нумерология помогают разобраться в себе и своих жизненных ситуациях.
+                    {t("hero.description1")}
                   </p>
                   
                   <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
-                    Здесь мы разбираем конкретные вопросы — отношения, деньги, выбор пути, внутренние конфликты.
+                    {t("hero.description2")}
                   </p>
                   
                   <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
-                    Простыми словами: помогаем понять, почему в жизни происходит именно так и что с этим можно сделать дальше. Здесь вы получите полный разбор вашей ситуации и рабочий план действий. <span className="font-semibold text-foreground">Добро пожаловать!</span>
+                    {t("hero.description3")} <span className="font-semibold text-foreground">{t("hero.welcome")}</span>
                   </p>
                   
                   <Button
@@ -177,7 +183,7 @@ const Index = () => {
                     size="lg"
                     className="btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground font-medium px-8 py-6 text-base rounded-full border-2 border-primary"
                   >
-                    Записаться на консультацию
+                    {t("hero.bookConsultation")}
                     <ExternalLink className="w-4 h-4 ml-2" />
                   </Button>
                 </div>
@@ -205,7 +211,7 @@ const Index = () => {
               <div className="container mx-auto px-4">
                 <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-12 max-w-3xl mx-auto">
                   <h2 className="text-2xl md:text-3xl font-display text-primary mb-6 text-center">
-                    Путь к себе начинается здесь ❤️
+                    {t("calculator.title")}
                   </h2>
                   
                   <MethodologySelector
@@ -249,12 +255,12 @@ const Index = () => {
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
                             <h3 className="text-lg font-display text-foreground">
-                              {type.title}
+                              {t(type.titleKey)}
                             </h3>
                             {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
                           </div>
                           <p className="text-sm text-muted-foreground mb-4">
-                            {type.description}
+                            {t(type.descKey)}
                           </p>
                           
                           {type.available ? (
@@ -265,13 +271,13 @@ const Index = () => {
                                   onClick={handleTelegramClick}
                                   className="btn-fill border-primary text-primary hover:text-white"
                                 >
-                                  Профессиональный
+                                  {t("analysisTypes.professional")}
                                 </Button>
                               )}
                               <Button
                                 className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary"
                               >
-                                Базовый
+                                {t("analysisTypes.basic")}
                               </Button>
                             </div>
                           ) : (
@@ -281,7 +287,7 @@ const Index = () => {
                                 disabled
                                 className="border-border"
                               >
-                                Скоро
+                                {t("analysisTypes.soon")}
                               </Button>
                             </div>
                           )}

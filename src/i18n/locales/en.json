@@ -153,30 +153,100 @@
     }
   },
   "products": {
-    "title": "Products",
+    "title": "Products & Services",
     "subtitle": "Our areas of work",
     "psychology": "Psychology",
-    "psychologyDesc": "Individual consultations and therapy",
+    "psychologyDesc": "Consultations that restore inner stability and support.",
     "digitalPsychology": "Digital Psychology",
-    "digitalPsychologyDesc": "Numerological calculations and analysis",
+    "digitalPsychologyDesc": "Analysis of numbers and behavior patterns. Awareness through structure.",
     "esoterics": "Esoterics",
-    "esotericsDesc": "Tarot, astrology and other practices",
-    "practices": "Practices",
-    "practicesDesc": "Meditations, breathing techniques"
+    "esotericsDesc": "Esoterics for life: awareness, energy, power of choice.",
+    "practices": "Practices & Meditations",
+    "practicesDesc": "Meditations for restoring focus and peace.",
+    "learnMore": "Learn more"
   },
   "calendar": {
     "title": "Calendar",
     "subtitle": "Day Codes",
     "selectDate": "Select date",
-    "dayEnergy": "Day Energy"
+    "selectDatePrompt": "Select a date to view the forecast",
+    "dayCode": "Day Code",
+    "dayEnergy": "Day Energy",
+    "mindNumber": "Mind Number",
+    "actionNumber": "Action Number",
+    "realizationNumber": "Realization Number",
+    "outcomeNumber": "Outcome Number",
+    "interpretations": {
+      "mind": {
+        "1": "Today is a day for leadership and initiative. Show determination, start new projects. Time to act independently.",
+        "2": "Day for cooperation and diplomacy. Pay attention to partnerships, listen to intuition. Good for negotiations.",
+        "3": "Creative day! Express yourself, communicate, share ideas. Great time for presentations and learning.",
+        "4": "Day for practical matters and organization. Plan ahead, structure tasks. Build foundations.",
+        "5": "Day of changes and adventures! Be flexible, explore new things. Great time for travel and communication.",
+        "6": "Day for family and care. Pay attention to loved ones, create harmony. Good for creativity and beauty.",
+        "7": "Day for reflection and analysis. Retreat, study, meditate. Listen to your intuition.",
+        "8": "Discipline, control and willpower. Put things in order, finances. Time to materialize desires.",
+        "9": "Day of completions and wisdom. Help others, share experience. Let go of the old, prepare for the new."
+      },
+      "action": {
+        "1": "Act decisively and independently. Take responsibility.",
+        "2": "Act through cooperation. Seek partners and allies.",
+        "3": "Act creatively. Use communication as a tool.",
+        "4": "Act methodically. Step by step towards the goal.",
+        "5": "Act flexibly. Adapt to circumstances.",
+        "6": "Act with care. Create harmony around you.",
+        "7": "Act thoughtfully. Analyze before deciding.",
+        "8": "Act with power. Exercise authority and control.",
+        "9": "Act with wisdom. Serve higher purposes."
+      },
+      "realization": {
+        "1": "Realization through leadership and innovation.",
+        "2": "Realization through partnership and support.",
+        "3": "Realization through creativity and communication.",
+        "4": "Realization through work and organization.",
+        "5": "Realization through changes and communication.",
+        "6": "Realization through service and beauty.",
+        "7": "Realization through knowledge and spirituality.",
+        "8": "Realization through business and material success.",
+        "9": "Realization through wisdom and helping others."
+      },
+      "total": {
+        "1": "The day's outcome is directed towards independence and new beginnings.",
+        "2": "The day's outcome is directed towards harmony and balance.",
+        "3": "The day's outcome is directed towards joy and self-expression.",
+        "4": "The day's outcome is directed towards stability and order.",
+        "5": "The day's outcome is directed towards freedom and experience.",
+        "6": "The day's outcome is directed towards love and responsibility.",
+        "7": "The day's outcome is directed towards understanding and introspection.",
+        "8": "The day's outcome is directed towards achievements and power.",
+        "9": "The day's outcome is directed towards completion and letting go."
+      }
+    }
   },
   "support": {
     "title": "Support",
     "contactUs": "Contact us",
+    "contactDesc": "If you have questions or suggestions, you can contact us via Telegram.",
+    "writeToTelegram": "Write to Telegram",
     "telegram": "Telegram",
     "email": "Email",
     "privacyPolicy": "Privacy Policy",
-    "termsOfUse": "Terms of Use"
+    "privacyIntro": "We respect your privacy and are committed to protecting your personal data.",
+    "dataCollection": "Data Collection",
+    "dataCollectionDesc": "We collect only the data you voluntarily provide when using our service (name, birth date for calculations).",
+    "dataUsage": "Data Usage",
+    "dataUsageDesc": "The provided data is used exclusively for numerological calculations and is not shared with third parties.",
+    "dataStorage": "Data Storage",
+    "dataStorageDesc": "Data is processed locally and is not stored on servers without your explicit consent.",
+    "termsOfUse": "Terms of Use",
+    "generalProvisions": "General Provisions",
+    "generalProvisionsDesc": "By using this service, you agree to these terms of use. The service is provided \"as is\".",
+    "informationalNature": "Informational Nature",
+    "informationalNatureDesc": "All calculations and interpretations are informational in nature and do not constitute professional psychological or medical advice.",
+    "responsibility": "Responsibility",
+    "responsibilityDesc": "The user independently makes decisions based on the information received. The service is not responsible for actions taken based on the calculations.",
+    "termsChanges": "Changes to Terms",
+    "termsChangesDesc": "We reserve the right to change these terms. Continued use of the service after changes means acceptance of the new terms."
   },
   "common": {
     "loading": "Loading...",
