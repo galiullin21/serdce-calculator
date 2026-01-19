@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
@@ -7,21 +8,6 @@ interface DateInputProps {
   selectedMethod: string;
   onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number) => void;
 }
-
-const months = [
-  { value: "1", label: "Январь" },
-  { value: "2", label: "Февраль" },
-  { value: "3", label: "Март" },
-  { value: "4", label: "Апрель" },
-  { value: "5", label: "Май" },
-  { value: "6", label: "Июнь" },
-  { value: "7", label: "Июль" },
-  { value: "8", label: "Август" },
-  { value: "9", label: "Сентябрь" },
-  { value: "10", label: "Октябрь" },
-  { value: "11", label: "Ноябрь" },
-  { value: "12", label: "Декабрь" },
-];
 
 const days = Array.from({ length: 31 }, (_, i) => ({
   value: String(i + 1),
@@ -36,19 +22,24 @@ const years = Array.from({ length: 100 }, (_, i) => ({
   label: String(currentYear - i),
 }));
 
-// Годы для прогноза (текущий + 5 лет вперед)
 const forecastYears = Array.from({ length: 10 }, (_, i) => ({
   value: String(currentYear - 2 + i),
   label: String(currentYear - 2 + i),
 }));
 
 export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
+  const { t } = useTranslation();
   const [name, setName] = useState("");
   const [day, setDay] = useState<string>("");
   const [month, setMonth] = useState<string>("");
   const [year, setYear] = useState<string>("");
   const [targetMonth, setTargetMonth] = useState<string>(String(currentMonth));
   const [targetYear, setTargetYear] = useState<string>(String(currentYear));
+
+  const months = Array.from({ length: 12 }, (_, i) => ({
+    value: String(i + 1),
+    label: t(`forecast.months.${i + 1}`),
+  }));
 
   const handleCalculate = () => {
     if (day && month && year) {
@@ -73,13 +64,13 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
   const getButtonText = () => {
     switch (selectedMethod) {
       case "month":
-        return "Рассчитать прогноз на месяц";
+        return t("calculator.calculateMonth");
       case "year":
-        return "Рассчитать прогноз на год";
+        return t("calculator.calculateYear");
       case "purpose":
-        return "Узнать предназначение";
+        return t("calculator.calculatePurpose");
       default:
-        return "Рассчитать";
+        return t("calculator.calculate");
     }
   };
 
@@ -87,28 +78,26 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
     <div className="w-full max-w-xl mx-auto">
       <div className="gradient-card rounded-2xl p-8 border border-border">
         <div className="space-y-6">
-          {/* Name Input */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
-              Ваше имя
+              {t("calculator.yourName")}
             </label>
             <Input
-              placeholder="Введите ваше имя"
+              placeholder={t("calculator.namePlaceholder")}
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="bg-background border-border focus:border-primary focus:ring-primary/20 h-12 text-foreground placeholder:text-muted-foreground"
             />
           </div>
 
-          {/* Date Selects */}
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
-              Дата рождения
+              {t("calculator.birthDate")}
             </label>
             <div className="grid grid-cols-3 gap-3">
               <Select value={day} onValueChange={setDay}>
                 <SelectTrigger className="bg-background border-border focus:border-primary h-12">
-                  <SelectValue placeholder="День" />
+                  <SelectValue placeholder={t("calculator.day")} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
                   {days.map((d) => (
@@ -121,7 +110,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
               <Select value={month} onValueChange={setMonth}>
                 <SelectTrigger className="bg-background border-border focus:border-primary h-12">
-                  <SelectValue placeholder="Месяц" />
+                  <SelectValue placeholder={t("calculator.month")} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
                   {months.map((m) => (
@@ -134,7 +123,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
               <Select value={year} onValueChange={setYear}>
                 <SelectTrigger className="bg-background border-border focus:border-primary h-12">
-                  <SelectValue placeholder="Год" />
+                  <SelectValue placeholder={t("calculator.year")} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border max-h-60">
                   {years.map((y) => (
@@ -147,17 +136,16 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
             </div>
           </div>
 
-          {/* Target Date for Forecasts */}
           {(selectedMethod === "month" || selectedMethod === "year") && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                {selectedMethod === "month" ? "Месяц и год прогноза" : "Год прогноза"}
+                {selectedMethod === "month" ? t("calculator.forecastMonthYear") : t("calculator.forecastYear")}
               </label>
               <div className={`grid gap-3 ${selectedMethod === "month" ? "grid-cols-2" : "grid-cols-1"}`}>
                 {selectedMethod === "month" && (
                   <Select value={targetMonth} onValueChange={setTargetMonth}>
                     <SelectTrigger className="bg-background border-border focus:border-primary h-12">
-                      <SelectValue placeholder="Месяц" />
+                      <SelectValue placeholder={t("calculator.month")} />
                     </SelectTrigger>
                     <SelectContent className="bg-card border-border max-h-60">
                       {months.map((m) => (
@@ -171,7 +159,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
                 <Select value={targetYear} onValueChange={setTargetYear}>
                   <SelectTrigger className="bg-background border-border focus:border-primary h-12">
-                    <SelectValue placeholder="Год" />
+                    <SelectValue placeholder={t("calculator.year")} />
                   </SelectTrigger>
                   <SelectContent className="bg-card border-border max-h-60">
                     {forecastYears.map((y) => (
@@ -185,7 +173,6 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
             </div>
           )}
 
-          {/* Calculate Button */}
           <Button
             onClick={handleCalculate}
             disabled={!isValid}
