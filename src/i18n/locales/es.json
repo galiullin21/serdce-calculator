@@ -153,30 +153,100 @@
     }
   },
   "products": {
-    "title": "Productos",
+    "title": "Productos y Servicios",
     "subtitle": "Nuestras áreas de trabajo",
     "psychology": "Psicología",
-    "psychologyDesc": "Consultas individuales y terapia",
+    "psychologyDesc": "Consultas que restauran la estabilidad interior y el apoyo.",
     "digitalPsychology": "Psicología Digital",
-    "digitalPsychologyDesc": "Cálculos numerológicos y análisis",
+    "digitalPsychologyDesc": "Análisis de números y patrones de comportamiento. Conciencia a través de la estructura.",
     "esoterics": "Esoterismo",
-    "esotericsDesc": "Tarot, astrología y otras prácticas",
-    "practices": "Prácticas",
-    "practicesDesc": "Meditaciones, técnicas de respiración"
+    "esotericsDesc": "Esoterismo para la vida: conciencia, energía, poder de elección.",
+    "practices": "Prácticas y Meditaciones",
+    "practicesDesc": "Meditaciones para restaurar el enfoque y la paz.",
+    "learnMore": "Saber más"
   },
   "calendar": {
     "title": "Calendario",
     "subtitle": "Códigos del Día",
     "selectDate": "Seleccionar fecha",
-    "dayEnergy": "Energía del Día"
+    "selectDatePrompt": "Selecciona una fecha para ver el pronóstico",
+    "dayCode": "Código del Día",
+    "dayEnergy": "Energía del Día",
+    "mindNumber": "Número de la Mente",
+    "actionNumber": "Número de Acción",
+    "realizationNumber": "Número de Realización",
+    "outcomeNumber": "Número del Resultado",
+    "interpretations": {
+      "mind": {
+        "1": "Hoy es un día para el liderazgo y la iniciativa. Muestra determinación, inicia nuevos proyectos. Es hora de actuar de forma independiente.",
+        "2": "Día para la cooperación y la diplomacia. Presta atención a las alianzas, escucha la intuición. Bueno para negociaciones.",
+        "3": "¡Día creativo! Exprésate, comunica, comparte ideas. Gran momento para presentaciones y aprendizaje.",
+        "4": "Día para asuntos prácticos y organización. Planifica, estructura tareas. Construye cimientos.",
+        "5": "¡Día de cambios y aventuras! Sé flexible, explora cosas nuevas. Gran momento para viajes y comunicación.",
+        "6": "Día para la familia y el cuidado. Presta atención a los seres queridos, crea armonía. Bueno para la creatividad y la belleza.",
+        "7": "Día para la reflexión y el análisis. Retírate, estudia, medita. Escucha tu intuición.",
+        "8": "Disciplina, control y fuerza de voluntad. Pon las cosas en orden, las finanzas. Tiempo para materializar deseos.",
+        "9": "Día de conclusiones y sabiduría. Ayuda a otros, comparte experiencia. Suelta lo viejo, prepárate para lo nuevo."
+      },
+      "action": {
+        "1": "Actúa con decisión e independencia. Asume la responsabilidad.",
+        "2": "Actúa a través de la cooperación. Busca socios y aliados.",
+        "3": "Actúa creativamente. Usa la comunicación como herramienta.",
+        "4": "Actúa metódicamente. Paso a paso hacia la meta.",
+        "5": "Actúa con flexibilidad. Adáptate a las circunstancias.",
+        "6": "Actúa con cuidado. Crea armonía a tu alrededor.",
+        "7": "Actúa con reflexión. Analiza antes de decidir.",
+        "8": "Actúa con poder. Ejerce autoridad y control.",
+        "9": "Actúa con sabiduría. Sirve a propósitos superiores."
+      },
+      "realization": {
+        "1": "Realización a través del liderazgo y la innovación.",
+        "2": "Realización a través de la asociación y el apoyo.",
+        "3": "Realización a través de la creatividad y la comunicación.",
+        "4": "Realización a través del trabajo y la organización.",
+        "5": "Realización a través de cambios y comunicación.",
+        "6": "Realización a través del servicio y la belleza.",
+        "7": "Realización a través del conocimiento y la espiritualidad.",
+        "8": "Realización a través de negocios y éxito material.",
+        "9": "Realización a través de la sabiduría y ayudar a otros."
+      },
+      "total": {
+        "1": "El resultado del día se dirige hacia la independencia y los nuevos comienzos.",
+        "2": "El resultado del día se dirige hacia la armonía y el equilibrio.",
+        "3": "El resultado del día se dirige hacia la alegría y la autoexpresión.",
+        "4": "El resultado del día se dirige hacia la estabilidad y el orden.",
+        "5": "El resultado del día se dirige hacia la libertad y la experiencia.",
+        "6": "El resultado del día se dirige hacia el amor y la responsabilidad.",
+        "7": "El resultado del día se dirige hacia la comprensión y la introspección.",
+        "8": "El resultado del día se dirige hacia los logros y el poder.",
+        "9": "El resultado del día se dirige hacia la finalización y el dejar ir."
+      }
+    }
   },
   "support": {
     "title": "Soporte",
     "contactUs": "Contáctanos",
+    "contactDesc": "Si tienes preguntas o sugerencias, puedes contactarnos a través de Telegram.",
+    "writeToTelegram": "Escribir a Telegram",
     "telegram": "Telegram",
     "email": "Email",
     "privacyPolicy": "Política de Privacidad",
-    "termsOfUse": "Términos de Uso"
+    "privacyIntro": "Respetamos tu privacidad y nos comprometemos a proteger tus datos personales.",
+    "dataCollection": "Recopilación de Datos",
+    "dataCollectionDesc": "Solo recopilamos los datos que proporcionas voluntariamente al usar nuestro servicio (nombre, fecha de nacimiento para cálculos).",
+    "dataUsage": "Uso de Datos",
+    "dataUsageDesc": "Los datos proporcionados se utilizan exclusivamente para cálculos numerológicos y no se comparten con terceros.",
+    "dataStorage": "Almacenamiento de Datos",
+    "dataStorageDesc": "Los datos se procesan localmente y no se almacenan en servidores sin tu consentimiento explícito.",
+    "termsOfUse": "Términos de Uso",
+    "generalProvisions": "Disposiciones Generales",
+    "generalProvisionsDesc": "Al usar este servicio, aceptas estos términos de uso. El servicio se proporciona \"tal cual\".",
+    "informationalNature": "Naturaleza Informativa",
+    "informationalNatureDesc": "Todos los cálculos e interpretaciones son de naturaleza informativa y no constituyen asesoramiento psicológico o médico profesional.",
+    "responsibility": "Responsabilidad",
+    "responsibilityDesc": "El usuario toma decisiones de forma independiente basándose en la información recibida. El servicio no es responsable de las acciones tomadas en base a los cálculos.",
+    "termsChanges": "Cambios en los Términos",
+    "termsChangesDesc": "Nos reservamos el derecho de cambiar estos términos. El uso continuado del servicio después de los cambios significa aceptación de los nuevos términos."
   },
   "common": {
     "loading": "Cargando...",
