@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils";
-import { Sparkles, Calendar, CalendarDays, Compass, Brain, Zap, Target, Award } from "lucide-react";
+import { Sparkles, Calendar, CalendarDays, Compass, Brain, Users, Clock } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 interface MethodSelectorProps {
   selectedMethod: string;
@@ -8,38 +9,40 @@ interface MethodSelectorProps {
 }
 
 export function MethodSelector({ selectedMethod, selectedMethodology, onMethodChange }: MethodSelectorProps) {
+  const { t } = useTranslation();
+
   // Methods for Methodology 2 (22 Arcana) - now shown first
   const methodsMethodology2 = [
     // Row 1
     {
       id: "purpose",
-      name: "Предназначение",
-      description: "Профессии и таланты по дате рождения",
+      name: t("methods.purpose"),
+      description: t("methods.purposeDesc"),
       available: true,
       icon: Compass,
       row: 1,
     },
     {
       id: "compatibility",
-      name: "Совместимость",
-      description: "Анализ совместимости с партнёром",
+      name: t("methods.compatibility"),
+      description: t("methods.compatibilityDesc"),
       available: false,
-      icon: Brain,
+      icon: Users,
       row: 1,
     },
     // Row 2
     {
       id: "year",
-      name: "Прогноз на год",
-      description: "Полный годовой прогноз",
+      name: t("methods.yearForecast"),
+      description: t("methods.yearForecastDesc"),
       available: true,
       icon: CalendarDays,
       row: 2,
     },
     {
       id: "month",
-      name: "Прогноз на месяц",
-      description: "Расчёт энергий на текущий месяц",
+      name: t("methods.monthForecast"),
+      description: t("methods.monthForecastDesc"),
       available: true,
       icon: Calendar,
       row: 2,
@@ -47,16 +50,16 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
     // Row 3
     {
       id: "day",
-      name: "Прогноз на день",
-      description: "Энергия и рекомендации на день",
+      name: t("methods.dayForecast"),
+      description: t("methods.dayForecastDesc"),
       available: false,
-      icon: Calendar,
+      icon: Clock,
       row: 3,
     },
     {
       id: "ancestral",
-      name: "Родовые программы",
-      description: "Анализ родовых программ",
+      name: t("methods.ancestral"),
+      description: t("methods.ancestralDesc"),
       available: false,
       icon: Brain,
       row: 3,
@@ -67,8 +70,8 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
   const methodsMethodology1 = [
     {
       id: "classic-full",
-      name: "Полный разбор",
-      description: "4 главных числа вашей судьбы",
+      name: t("methods.fullAnalysis"),
+      description: t("methods.fullAnalysisDesc"),
       available: true,
       icon: Brain,
     },
@@ -107,7 +110,7 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
               <Sparkles className="w-3 h-3 text-primary" />
             )}
             {!method.available && (
-              <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded">Скоро</span>
+              <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded">{t("methods.soon")}</span>
             )}
           </div>
           <p className="text-xs text-muted-foreground mt-1">
@@ -121,7 +124,7 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
   return (
     <div className="w-full max-w-2xl mx-auto mb-8">
       <p className="text-sm text-muted-foreground text-center mb-4">
-        Выберите тип расчёта
+        {t("calculator.selectType")}
       </p>
       
       {isArcana ? (
