@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
-import { MethodSelector } from "@/components/MethodSelector";
-import { MethodologySelector } from "@/components/MethodologySelector";
 import { YearForecastResult } from "@/components/YearForecastResult";
 import { MonthForecastResult } from "@/components/MonthForecastResult";
 import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
@@ -18,7 +16,7 @@ import {
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays } from "lucide-react";
+import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Index = () => {
@@ -81,6 +79,52 @@ const Index = () => {
     t("marquee.harmony")
   ];
 
+  // Methods for Methodology 1 (22 Arcana)
+  const arcanaMethodsList = [
+    {
+      id: "purpose",
+      name: t("methods.purpose"),
+      description: t("methods.purposeDesc"),
+      available: true,
+      icon: Compass,
+    },
+    {
+      id: "compatibility",
+      name: t("methods.compatibility"),
+      description: t("methods.compatibilityDesc"),
+      available: false,
+      icon: Users,
+    },
+    {
+      id: "year",
+      name: t("methods.yearForecast"),
+      description: t("methods.yearForecastDesc"),
+      available: true,
+      icon: CalendarDays,
+    },
+    {
+      id: "month",
+      name: t("methods.monthForecast"),
+      description: t("methods.monthForecastDesc"),
+      available: true,
+      icon: Calendar,
+    },
+    {
+      id: "day",
+      name: t("methods.dayForecast"),
+      description: t("methods.dayForecastDesc"),
+      available: false,
+      icon: Clock,
+    },
+    {
+      id: "ancestral",
+      name: t("methods.ancestral"),
+      description: t("methods.ancestralDesc"),
+      available: false,
+      icon: Brain,
+    },
+  ];
+
 type ResultType = 
   | { type: "year"; data: YearForecast }
   | { type: "month"; data: MonthForecast }
@@ -88,14 +132,14 @@ type ResultType =
   | { type: "keyto"; data: KeyToResult }
   | null;
 
-  const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("2");
+  const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
   const [selectedMethod, setSelectedMethod] = useState("purpose");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
 
   // Reset method when methodology changes
   useEffect(() => {
-    if (selectedMethodology === "1") {
+    if (selectedMethodology === "2") {
       setSelectedMethod("classic-full");
     } else {
       setSelectedMethod("purpose");
@@ -112,14 +156,14 @@ type ResultType =
   ) => {
     setUserName(name);
     
-    // Methodology 1 - Classic numerology
-    if (selectedMethodology === "1") {
+    // Methodology 2 - Classic numerology
+    if (selectedMethodology === "2") {
       const classicResult = calculateKeyTo(day, month, year);
       setResult({ type: "keyto", data: classicResult });
       return;
     }
     
-    // Methodology 2 - 22 Arcana
+    // Methodology 1 - 22 Arcana
     switch (selectedMethod) {
       case "year":
         const yearForecast = calculateYearForecast(day, month, year, targetYear || new Date().getFullYear());
@@ -136,6 +180,7 @@ type ResultType =
         setResult({ type: "month", data: monthForecast });
         break;
       case "purpose":
+      default:
         const personalMatrix = calculatePersonalMatrix(day, month, year);
         setResult({ type: "purpose", data: personalMatrix });
         break;
@@ -151,6 +196,10 @@ type ResultType =
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleMethodSelect = (methodId: string) => {
+    setSelectedMethod(methodId);
+  };
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -159,29 +208,29 @@ type ResultType =
         {!result ? (
           <>
             {/* Hero Section */}
-            <section className="relative py-16 md:py-24 overflow-hidden">
+            <section className="relative py-8 md:py-16 lg:py-24 overflow-hidden">
               <div className="container mx-auto px-4 relative">
                 <div className="max-w-3xl mx-auto text-center">
-                  <h1 className="text-3xl md:text-5xl lg:text-6xl font-display text-primary mb-6 tracking-wide">
+                  <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display text-primary mb-4 md:mb-6 tracking-wide">
                     {t("hero.title")}
                   </h1>
                   
-                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-3 md:mb-4 leading-relaxed">
                     {t("hero.description1")}
                   </p>
                   
-                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-4 leading-relaxed">
+                  <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-3 md:mb-4 leading-relaxed">
                     {t("hero.description2")}
                   </p>
                   
-                  <p className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto mb-8 leading-relaxed">
+                  <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed">
                     {t("hero.description3")} <span className="font-semibold text-foreground">{t("hero.welcome")}</span>
                   </p>
                   
                   <Button
                     onClick={handleTelegramClick}
                     size="lg"
-                    className="btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground font-medium px-8 py-6 text-base rounded-full border-2 border-primary"
+                    className="btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground font-medium px-6 md:px-8 py-4 md:py-6 text-sm md:text-base rounded-full border-2 border-primary"
                   >
                     {t("hero.bookConsultation")}
                     <ExternalLink className="w-4 h-4 ml-2" />
@@ -191,13 +240,13 @@ type ResultType =
             </section>
 
             {/* Marquee */}
-            <div className="gradient-brown text-white py-3 overflow-hidden">
+            <div className="gradient-brown text-white py-2 md:py-3 overflow-hidden">
               <div className="flex animate-marquee whitespace-nowrap">
                 {[...Array(6)].map((_, groupIndex) => (
                   <div key={groupIndex} className="flex items-center">
                     {marqueeWords.map((word, index) => (
                       <span key={`${groupIndex}-${index}`} className="flex items-center">
-                        <span className="mx-6 text-sm md:text-base font-medium">{word}</span>
+                        <span className="mx-4 md:mx-6 text-xs md:text-sm lg:text-base font-medium">{word}</span>
                         <span className="text-white/50">•</span>
                       </span>
                     ))}
@@ -207,75 +256,230 @@ type ResultType =
             </div>
 
             {/* Calculator Section */}
-            <section className="py-12 md:py-16">
+            <section className="py-8 md:py-12 lg:py-16">
               <div className="container mx-auto px-4">
-                <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-12 max-w-3xl mx-auto">
-                  <h2 className="text-2xl md:text-3xl font-display text-primary mb-6 text-center">
+                <div className="max-w-4xl mx-auto">
+                  <h2 className="text-xl sm:text-2xl md:text-3xl font-display text-primary mb-6 md:mb-8 text-center">
                     {t("calculator.title")}
                   </h2>
                   
-                  <MethodologySelector
-                    selectedMethodology={selectedMethodology}
-                    onMethodologyChange={setSelectedMethodology}
-                  />
-                  
-                  <MethodSelector
-                    selectedMethod={selectedMethod}
-                    selectedMethodology={selectedMethodology}
-                    onMethodChange={setSelectedMethod}
-                  />
+                  <p className="text-sm text-muted-foreground text-center mb-4 md:mb-6">
+                    {t("calculator.selectMethodology")}
+                  </p>
+
+                  {/* Methodology 1 - 22 Arcana */}
+                  <div className="mb-4 md:mb-6">
+                    <button
+                      onClick={() => setSelectedMethodology("1")}
+                      className={cn(
+                        "relative w-full p-4 md:p-5 rounded-xl border-2 transition-all duration-300 text-left",
+                        selectedMethodology === "1"
+                          ? "bg-primary/5 border-primary shadow-warm"
+                          : "bg-card border-border hover:border-primary/50"
+                      )}
+                    >
+                      <div className="absolute -top-3 left-4 md:left-1/2 md:-translate-x-1/2 px-2 md:px-3 py-1 bg-primary text-primary-foreground text-xs font-medium rounded-full flex items-center gap-1">
+                        <Sparkles className="w-3 h-3" />
+                        {t("methodology.moreAccurate")}
+                      </div>
+                      
+                      <div className="flex items-start gap-3">
+                        <div className={cn(
+                          "w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5",
+                          selectedMethodology === "1"
+                            ? "border-primary bg-primary"
+                            : "border-muted-foreground/30"
+                        )}>
+                          {selectedMethodology === "1" && (
+                            <Check className="w-3 h-3 md:w-4 md:h-4 text-primary-foreground" />
+                          )}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <h3 className="font-display font-semibold text-foreground text-base md:text-lg">
+                              {t("methodology.methodology1")}
+                            </h3>
+                            <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded">
+                              {t("methodology.arcana22")}
+                            </span>
+                          </div>
+                          
+                          <p className="text-xs md:text-sm text-muted-foreground mb-3">
+                            {t("methodology.arcanaDescription")}
+                          </p>
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {[
+                              t("methodology.features.purpose"),
+                              t("methodology.features.compatibility"),
+                              t("methodology.features.forecasts"),
+                              t("methodology.features.lifePeriods"),
+                            ].map((feature, i) => (
+                              <span 
+                                key={i}
+                                className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground"
+                              >
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+
+                    {/* Methods grid - shown when Methodology 1 is selected */}
+                    {selectedMethodology === "1" && (
+                      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+                        {arcanaMethodsList.map((method) => (
+                          <button
+                            key={method.id}
+                            onClick={() => method.available && handleMethodSelect(method.id)}
+                            disabled={!method.available}
+                            className={cn(
+                              "relative p-3 md:p-4 rounded-xl border transition-all duration-300 text-left",
+                              method.available
+                                ? selectedMethod === method.id
+                                  ? "bg-primary/10 border-primary shadow-warm"
+                                  : "bg-card border-border hover:border-primary/50"
+                                : "bg-muted border-border cursor-not-allowed opacity-60"
+                            )}
+                          >
+                            <div className="flex flex-col gap-2">
+                              <div className="flex items-center gap-2">
+                                <method.icon className={cn("w-4 h-4 md:w-5 md:h-5", method.available ? "text-primary" : "text-muted-foreground")} />
+                                {selectedMethod === method.id && method.available && (
+                                  <Sparkles className="w-3 h-3 text-primary" />
+                                )}
+                                {!method.available && (
+                                  <span className="text-[10px] md:text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">{t("methods.soon")}</span>
+                                )}
+                              </div>
+                              <div>
+                                <h4 className="font-display font-semibold text-foreground text-xs md:text-sm">
+                                  {method.name}
+                                </h4>
+                                <p className="text-[10px] md:text-xs text-muted-foreground mt-0.5 line-clamp-2">
+                                  {method.description}
+                                </p>
+                              </div>
+                            </div>
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Methodology 2 - Classic */}
+                  <div className="mb-6 md:mb-8">
+                    <button
+                      onClick={() => setSelectedMethodology("2")}
+                      className={cn(
+                        "relative w-full p-4 md:p-5 rounded-xl border-2 transition-all duration-300 text-left",
+                        selectedMethodology === "2"
+                          ? "bg-primary/5 border-primary shadow-warm"
+                          : "bg-card border-border hover:border-primary/50"
+                      )}
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className={cn(
+                          "w-5 h-5 md:w-6 md:h-6 rounded-full border-2 flex items-center justify-center flex-shrink-0 mt-0.5",
+                          selectedMethodology === "2"
+                            ? "border-primary bg-primary"
+                            : "border-muted-foreground/30"
+                        )}>
+                          {selectedMethodology === "2" && (
+                            <Check className="w-3 h-3 md:w-4 md:h-4 text-primary-foreground" />
+                          )}
+                        </div>
+                        
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1 flex-wrap">
+                            <h3 className="font-display font-semibold text-foreground text-base md:text-lg">
+                              {t("methodology.methodology2")}
+                            </h3>
+                            <span className="text-xs text-muted-foreground bg-secondary px-2 py-0.5 rounded">
+                              {t("methodology.classic")}
+                            </span>
+                          </div>
+                          
+                          <p className="text-xs md:text-sm text-muted-foreground mb-3">
+                            {t("methodology.classicDescription")}
+                          </p>
+                          
+                          <div className="flex flex-wrap gap-1">
+                            {[
+                              t("methodology.features.mindNumber"),
+                              t("methodology.features.actionNumber"),
+                              t("methodology.features.realizationNumber"),
+                              t("methodology.features.outcomeNumber"),
+                            ].map((feature, i) => (
+                              <span 
+                                key={i}
+                                className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground"
+                              >
+                                {feature}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  </div>
+
+                  {/* Date Input Form */}
                   <DateInput 
-                    selectedMethod={selectedMethod}
+                    selectedMethod={selectedMethodology === "1" ? selectedMethod : "classic-full"}
                     onCalculate={handleCalculate} 
                   />
                 </div>
 
                 {/* Analysis Types Grid */}
-                <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-12">
                   {analysisTypes.map((type) => (
                     <div
                       key={type.id}
                       className={cn(
-                        "gradient-card rounded-2xl p-6 border transition-all duration-300",
+                        "gradient-card rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all duration-300",
                         type.available 
                           ? "border-border hover:border-primary/30 cursor-pointer" 
                           : "border-border/50 opacity-70"
                       )}
                     >
-                      <div className="flex items-start gap-4">
+                      <div className="flex items-start gap-3 md:gap-4">
                         <div className={cn(
-                          "w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0",
+                          "w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0",
                           type.available ? "bg-primary/10" : "bg-muted"
                         )}>
                           <type.icon className={cn(
-                            "w-6 h-6",
+                            "w-5 h-5 md:w-6 md:h-6",
                             type.available ? "text-primary" : "text-muted-foreground"
                           )} />
                         </div>
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-lg font-display text-foreground">
+                            <h3 className="text-base md:text-lg font-display text-foreground">
                               {t(type.titleKey)}
                             </h3>
                             {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
                           </div>
-                          <p className="text-sm text-muted-foreground mb-4">
+                          <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4">
                             {t(type.descKey)}
                           </p>
                           
                           {type.available ? (
-                            <div className="flex gap-3">
+                            <div className="flex flex-wrap gap-2 md:gap-3">
                               {type.hasPro && (
                                 <Button
                                   variant="outline"
                                   onClick={handleTelegramClick}
-                                  className="btn-fill border-primary text-primary hover:text-white"
+                                  className="btn-fill border-primary text-primary hover:text-white text-xs md:text-sm px-3 py-1 h-auto"
                                 >
                                   {t("analysisTypes.professional")}
                                 </Button>
                               )}
                               <Button
-                                className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary"
+                                className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary text-xs md:text-sm px-3 py-1 h-auto"
                               >
                                 {t("analysisTypes.basic")}
                               </Button>
@@ -285,7 +489,7 @@ type ResultType =
                               <Button
                                 variant="outline"
                                 disabled
-                                className="border-border"
+                                className="border-border text-xs md:text-sm"
                               >
                                 {t("analysisTypes.soon")}
                               </Button>
@@ -300,7 +504,7 @@ type ResultType =
             </section>
           </>
         ) : (
-          <div className="container mx-auto px-4 py-8">
+          <div className="container mx-auto px-4 py-6 md:py-8">
             {result.type === "year" && (
               <YearForecastResult
                 forecast={result.data}
