@@ -21,16 +21,17 @@
   "calculator": {
     "title": "Tu viaje comienza aquí ❤️",
     "selectMethodology": "Selecciona el método de cálculo",
-    "selectType": "Selecciona el tipo de cálculo",
-    "enterData": "Ingresa los datos",
     "yourName": "Tu nombre",
     "namePlaceholder": "Ingresa tu nombre",
     "birthDate": "Fecha de nacimiento",
     "day": "Día",
     "month": "Mes",
     "year": "Año",
-    "targetMonth": "Mes objetivo",
-    "targetYear": "Año objetivo",
+    "forecastMonthYear": "Mes y año de pronóstico",
+    "forecastYear": "Año de pronóstico",
+    "calculateMonth": "Calcular pronóstico mensual",
+    "calculateYear": "Calcular pronóstico anual",
+    "calculatePurpose": "Descubre tu propósito",
     "calculate": "Calcular"
   },
   "methodology": {

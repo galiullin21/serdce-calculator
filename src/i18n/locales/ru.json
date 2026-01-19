@@ -20,6 +20,7 @@
   },
   "calculator": {
     "title": "Путь к себе начинается здесь ❤️",
+    "selectMethodology": "Выберите методику расчёта",
     "yourName": "Ваше имя",
     "namePlaceholder": "Введите ваше имя",
     "birthDate": "Дата рождения",
