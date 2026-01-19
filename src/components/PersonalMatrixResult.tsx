@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { PersonalMatrix, formatBirthDate } from "@/lib/calculations";
 import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
@@ -15,6 +16,7 @@ interface PersonalMatrixResultProps {
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
 
 export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixResultProps) {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("main");
   
   const formattedDate = formatBirthDate(
@@ -27,27 +29,24 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  // Проверка, является ли позиция зеркальной
   const isMirrorPosition = (position: number): boolean => {
     return matrix.mirrorArcana.some(m => m.positions.includes(position));
   };
 
-  // Проверка, является ли позиция перевёрнутой
   const isReversedPosition = (position: number): boolean => {
     return matrix.reversedArcana.some(r => r.positions.includes(position));
   };
 
   const tabs = [
-    { id: "main" as TabType, label: "Основной треугольник", positions: [1, 2, 3, 4, 5, 6] },
-    { id: "diagonal" as TabType, label: "Цели жизни", positions: [7, 8, 9] },
-    { id: "karmic" as TabType, label: "Карма", positions: [10, 11, 12] },
-    { id: "success" as TabType, label: "Код успеха", positions: successCodePositions },
-    { id: "periods" as TabType, label: "Периоды жизни", positions: [] },
+    { id: "main" as TabType, label: t("results.mainTriangle"), positions: [1, 2, 3, 4, 5, 6] },
+    { id: "diagonal" as TabType, label: t("results.lifeGoals"), positions: [7, 8, 9] },
+    { id: "karmic" as TabType, label: t("results.karma"), positions: [10, 11, 12] },
+    { id: "success" as TabType, label: t("results.successCode"), positions: successCodePositions },
+    { id: "periods" as TabType, label: t("results.lifePeriods"), positions: [] },
   ];
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* Заголовок */}
       <div className="text-center">
         <Button
           variant="ghost"
@@ -55,11 +54,11 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Новый расчёт
+          {t("results.newCalculation")}
         </Button>
 
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
-          Ваше предназначение
+          {t("results.yourPurpose")}
         </h1>
         
         {name && (
@@ -69,22 +68,19 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
         )}
         
         <p className="text-muted-foreground">
-          Дата рождения: {formattedDate}
+          {t("results.birthDate")}: {formattedDate}
         </p>
       </div>
 
-      {/* Визуальная схема матрицы */}
       <div className="gradient-card rounded-2xl p-6 border border-primary/30">
         <div className="flex items-center gap-3 mb-6">
           <Compass className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-display text-foreground">
-            Личная матрица
+            {t("results.personalMatrix")}
           </h2>
         </div>
 
-        {/* Схема матрицы */}
         <div className="flex flex-col items-center gap-4 mb-6">
-          {/* Основной треугольник */}
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <MatrixCell 
               position={1} 
@@ -127,14 +123,12 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
             />
           </div>
 
-          {/* Диагональный ряд */}
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <MatrixCell position={7} value={matrix.positions[6]} />
             <MatrixCell position={8} value={matrix.positions[7]} />
             <MatrixCell position={9} value={matrix.positions[8]} />
           </div>
 
-          {/* Кармический треугольник */}
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <MatrixCell position={10} value={matrix.positions[9]} />
             <MatrixCell position={11} value={matrix.positions[10]} />
@@ -142,24 +136,22 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           </div>
         </div>
 
-        {/* Легенда */}
         <div className="flex flex-wrap gap-4 justify-center text-xs">
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded bg-primary/20 border border-primary" />
-            <span className="text-muted-foreground">Зеркальный (усиление)</span>
+            <span className="text-muted-foreground">{t("results.legend.mirror")}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded bg-destructive/20 border border-destructive" />
-            <span className="text-muted-foreground">Перевёрнутый (проработка)</span>
+            <span className="text-muted-foreground">{t("results.legend.reversed")}</span>
           </div>
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500" />
-            <span className="text-muted-foreground">Главная задача</span>
+            <span className="text-muted-foreground">{t("results.legend.mainTask")}</span>
           </div>
         </div>
       </div>
 
-      {/* Табы */}
       <div className="flex flex-wrap gap-2 justify-center">
         {tabs.map((tab) => (
           <button
@@ -177,13 +169,12 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
         ))}
       </div>
 
-      {/* Содержимое табов */}
       <div className="space-y-4">
         {activeTab === "main" && (
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
-              Основной треугольник
-              <span className="text-sm text-muted-foreground font-normal">(позиции 1-6)</span>
+              {t("results.mainTriangle")}
+              <span className="text-sm text-muted-foreground font-normal">({t("results.positions")} 1-6)</span>
             </h2>
             <div className="grid gap-4">
               {[1, 2, 3, 4, 5, 6].map((pos) => (
@@ -206,7 +197,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
               <Star className="w-5 h-5 text-primary" />
-              Диагональный ряд — Цели и способы достижения
+              {t("results.diagonalRow")}
             </h2>
             <div className="grid gap-4">
               {[7, 8, 9].map((pos) => (
@@ -226,11 +217,10 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
         {activeTab === "karmic" && (
           <>
             <h2 className="text-lg font-display text-foreground">
-              Кармический треугольник
+              {t("results.karmicTriangle")}
             </h2>
             <p className="text-sm text-muted-foreground mb-4">
-              Задачи и ошибки прошлых воплощений, которые влияют на эту жизнь.
-              Позиция 12 — главная кармическая задача, которую достаточно выполнить один раз.
+              {t("results.karmicTriangleDesc")}
             </p>
             <div className="grid gap-4">
               {[10, 11, 12].map((pos) => (
@@ -251,11 +241,10 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
               <Star className="w-5 h-5 text-amber-500" />
-              Код успеха
+              {t("results.successCode")}
             </h2>
             <p className="text-sm text-muted-foreground mb-4">
-              Арканы позиций 4, 5, 7 и 12 формируют ваш код успеха — жизненную программу,
-              при следовании которой вы будете чувствовать себя счастливым.
+              {t("results.successCodeDesc")}
             </p>
             
             <div className="flex justify-center gap-3 mb-6">
@@ -267,7 +256,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
                     </span>
                   </div>
                   <span className="text-xs text-muted-foreground mt-1">
-                    Поз. {successCodePositions[index]}
+                    {t("results.pos")} {successCodePositions[index]}
                   </span>
                 </div>
               ))}
@@ -292,7 +281,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
               <Clock className="w-5 h-5 text-primary" />
-              Периоды жизни
+              {t("results.lifePeriods")}
             </h2>
             <div className="grid gap-4">
               {lifePeriods.map((period, index) => (
@@ -325,20 +314,18 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
         )}
       </div>
 
-      {/* CTA для консультации */}
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
         <h3 className="text-lg font-display text-foreground mb-2">
-          Хотите глубокий разбор?
+          {t("results.wantDeepAnalysis")}
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Получите профессиональную консультацию с детальным анализом вашей матрицы,
-          персональными рекомендациями и ответами на ваши вопросы.
+          {t("results.deepAnalysisDesc")}
         </p>
         <Button
           onClick={handleTelegramClick}
           className="btn-fill bg-primary text-primary-foreground"
         >
-          Записаться на консультацию
+          {t("results.bookConsultation")}
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
       </div>
@@ -346,7 +333,6 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
   );
 }
 
-// Компонент ячейки матрицы
 function MatrixCell({ 
   position, 
   value, 

@@ -1,4 +1,5 @@
-import { MonthForecast, formatBirthDate, getMonthName } from "@/lib/calculations";
+import { useTranslation } from "react-i18next";
+import { MonthForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
@@ -11,12 +12,13 @@ interface MonthForecastResultProps {
 }
 
 export function MonthForecastResult({ forecast, name, onReset }: MonthForecastResultProps) {
+  const { t } = useTranslation();
   const formattedDate = formatBirthDate(
     forecast.birthDate.day,
     forecast.birthDate.month,
     forecast.birthDate.year
   );
-  const monthName = getMonthName(forecast.targetMonth);
+  const monthName = t(`forecast.months.${forecast.targetMonth}`);
 
   const arcana1 = getArcana(forecast.position1);
   const arcana2 = getArcana(forecast.position2);
@@ -28,7 +30,6 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Заголовок */}
       <div className="text-center">
         <Button
           variant="ghost"
@@ -36,36 +37,33 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Новый расчёт
+          {t("results.newCalculation")}
         </Button>
 
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
-          Прогноз на {monthName} {forecast.targetYear}
+          {t("forecast.monthForecast")} — {monthName} {forecast.targetYear}
         </h1>
         
         {name && (
           <p className="text-lg text-foreground mb-1">
-            для {name}
+            {t("forecast.for")} {name}
           </p>
         )}
         
         <p className="text-muted-foreground">
-          Дата рождения: {formattedDate}
+          {t("results.birthDate")}: {formattedDate}
         </p>
       </div>
 
-      {/* Треугольник месяца */}
       <div className="gradient-card rounded-2xl p-6 border border-primary/30">
         <div className="flex items-center gap-3 mb-6">
           <Calendar className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-display text-foreground">
-            Треугольник месяца
+            {t("forecast.monthTriangle")}
           </h2>
         </div>
 
-        {/* Визуальный треугольник */}
         <div className="flex flex-col items-center mb-8">
-          {/* Верхняя вершина - итоговый аркан */}
           <div className="flex flex-col items-center mb-4">
             <div className="w-20 h-20 rounded-xl bg-primary/20 flex items-center justify-center border-2 border-primary">
               <span className="text-3xl font-display font-bold text-primary">
@@ -73,18 +71,16 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
               </span>
             </div>
             <span className="text-xs text-muted-foreground mt-1">
-              Итог месяца
+              {t("forecast.monthResult")}
             </span>
           </div>
 
-          {/* Линии соединения */}
           <div className="w-32 h-8 relative">
             <div className="absolute left-1/2 top-0 w-px h-full bg-border transform -translate-x-1/2" />
             <div className="absolute left-0 bottom-0 w-1/2 h-px bg-border transform rotate-45 origin-left" />
             <div className="absolute right-0 bottom-0 w-1/2 h-px bg-border transform -rotate-45 origin-right" />
           </div>
 
-          {/* Нижние вершины */}
           <div className="flex gap-12">
             <div className="flex flex-col items-center">
               <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center border border-border">
@@ -93,7 +89,7 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
                 </span>
               </div>
               <span className="text-xs text-muted-foreground mt-1">
-                Аркан года
+                {t("forecast.yearArcana")}
               </span>
             </div>
 
@@ -104,31 +100,29 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
                 </span>
               </div>
               <span className="text-xs text-muted-foreground mt-1">
-                Месяц ({forecast.targetMonth})
+                {t("forecast.monthNum")} ({forecast.targetMonth})
               </span>
             </div>
           </div>
         </div>
 
-        {/* Расшифровка */}
         <div className="space-y-4">
           <div className="bg-muted/30 rounded-lg p-4">
             <h3 className="text-sm font-medium text-foreground mb-2">
-              Как читать треугольник:
+              {t("forecast.howToRead")}:
             </h3>
             <ul className="text-sm text-muted-foreground space-y-1">
-              <li>• <strong>{arcana1?.name}</strong> ({forecast.position1}) — энергия года, фоновое влияние</li>
-              <li>• <strong>{arcana2?.name}</strong> ({forecast.position2}) — энергия месяца</li>
-              <li>• <strong>{arcana3?.name}</strong> ({forecast.position3}) — итоговая энергия, главная тема месяца</li>
+              <li>• <strong>{arcana1?.name}</strong> ({forecast.position1}) — {t("forecast.yearEnergyBackground")}</li>
+              <li>• <strong>{arcana2?.name}</strong> ({forecast.position2}) — {t("forecast.monthEnergy")}</li>
+              <li>• <strong>{arcana3?.name}</strong> ({forecast.position3}) — {t("forecast.monthResultEnergy")}</li>
             </ul>
           </div>
         </div>
       </div>
 
-      {/* Главный аркан месяца */}
       <div className="space-y-4">
         <h2 className="text-lg font-display text-foreground">
-          Главный аркан месяца
+          {t("forecast.mainMonthArcana")}
         </h2>
         <ArcanaCard
           number={forecast.position3}
@@ -137,41 +131,38 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
         />
       </div>
 
-      {/* Дополнительные арканы */}
       <div className="space-y-4">
         <h2 className="text-lg font-display text-foreground">
-          Влияющие энергии
+          {t("forecast.influencingEnergies")}
         </h2>
         <div className="grid gap-4">
           <ArcanaCard
             number={forecast.position1}
-            positionTitle="Энергия года"
+            positionTitle={t("forecast.yearEnergyTitle")}
             showYearForecast={true}
             compact={true}
           />
           <ArcanaCard
             number={forecast.position2}
-            positionTitle={`Энергия ${monthName}`}
+            positionTitle={`${t("forecast.energyOf")} ${monthName}`}
             showYearForecast={false}
             compact={true}
           />
         </div>
       </div>
 
-      {/* CTA для консультации */}
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
         <h3 className="text-lg font-display text-foreground mb-2">
-          Хотите полный прогноз на месяц?
+          {t("forecast.wantFullMonthForecast")}
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Получите детальный разбор каждого дня месяца с благоприятными датами 
-          для важных решений и рекомендациями.
+          {t("forecast.wantFullMonthForecastDesc")}
         </p>
         <Button
           onClick={handleTelegramClick}
           className="btn-fill bg-primary text-primary-foreground"
         >
-          Записаться на консультацию
+          {t("results.bookConsultation")}
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
       </div>

@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { YearForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
@@ -11,6 +12,7 @@ interface YearForecastResultProps {
 }
 
 export function YearForecastResult({ forecast, name, onReset }: YearForecastResultProps) {
+  const { t } = useTranslation();
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(
     forecast.birthDate.day,
@@ -24,7 +26,6 @@ export function YearForecastResult({ forecast, name, onReset }: YearForecastResu
 
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      {/* Заголовок */}
       <div className="text-center">
         <Button
           variant="ghost"
@@ -32,30 +33,29 @@ export function YearForecastResult({ forecast, name, onReset }: YearForecastResu
           className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
-          Новый расчёт
+          {t("results.newCalculation")}
         </Button>
 
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
-          Прогноз на {forecast.targetYear} год
+          {t("forecast.yearForecast")} {t("forecast.forYear", { year: forecast.targetYear })}
         </h1>
         
         {name && (
           <p className="text-lg text-foreground mb-1">
-            для {name}
+            {t("forecast.for")} {name}
           </p>
         )}
         
         <p className="text-muted-foreground">
-          Дата рождения: {formattedDate}
+          {t("results.birthDate")}: {formattedDate}
         </p>
       </div>
 
-      {/* Главный аркан года */}
       <div className="gradient-card rounded-2xl p-6 border border-primary/30">
         <div className="flex items-center gap-3 mb-4">
           <Calendar className="w-6 h-6 text-primary" />
           <h2 className="text-xl font-display text-foreground">
-            Ваш аркан года: {arcana?.name}
+            {t("forecast.yourYearArcana")}: {arcana?.name}
           </h2>
         </div>
 
@@ -74,20 +74,18 @@ export function YearForecastResult({ forecast, name, onReset }: YearForecastResu
         />
       </div>
 
-      {/* CTA для консультации */}
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
         <h3 className="text-lg font-display text-foreground mb-2">
-          Хотите узнать больше?
+          {t("forecast.wantMore")}
         </h3>
         <p className="text-sm text-muted-foreground mb-4">
-          Получите профессиональный разбор с учётом всех нюансов вашей личной матрицы
-          и индивидуальные рекомендации на год.
+          {t("forecast.wantMoreDesc")}
         </p>
         <Button
           onClick={handleTelegramClick}
           className="btn-fill bg-primary text-primary-foreground"
         >
-          Записаться на консультацию
+          {t("results.bookConsultation")}
           <ExternalLink className="w-4 h-4 ml-2" />
         </Button>
       </div>
