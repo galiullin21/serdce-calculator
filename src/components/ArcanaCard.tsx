@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { ChevronDown, ChevronUp, Sparkles, AlertTriangle } from "lucide-react";
@@ -24,6 +25,7 @@ export function ArcanaCard({
   isMirror = false,
   compact = false,
 }: ArcanaCardProps) {
+  const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(!compact);
   const arcana = getArcana(number);
 
@@ -53,7 +55,6 @@ export function ArcanaCard({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">
-            {/* Номер аркана */}
             <div
               className={cn(
                 "w-12 h-12 rounded-xl flex items-center justify-center text-xl font-display font-bold",
@@ -66,14 +67,12 @@ export function ArcanaCard({
             </div>
 
             <div className="flex-1">
-              {/* Позиция */}
               {position && positionTitle && (
                 <div className="text-xs text-muted-foreground mb-0.5">
-                  Позиция {position}: {positionTitle}
+                  {t("matrix.position")} {position}: {positionTitle}
                 </div>
               )}
               
-              {/* Название аркана */}
               <div className="flex items-center gap-2">
                 <h3 className="font-display font-semibold text-foreground">
                   {arcana.name}
@@ -81,18 +80,17 @@ export function ArcanaCard({
                 {isMirror && (
                   <span className="flex items-center gap-1 text-xs text-primary bg-primary/10 px-2 py-0.5 rounded-full">
                     <Sparkles className="w-3 h-3" />
-                    Зеркальный
+                    {t("matrix.mirror")}
                   </span>
                 )}
                 {isReversed && !isMirror && (
                   <span className="flex items-center gap-1 text-xs text-destructive bg-destructive/10 px-2 py-0.5 rounded-full">
                     <AlertTriangle className="w-3 h-3" />
-                    Перевёрнутый
+                    {t("matrix.reversed")}
                   </span>
                 )}
               </div>
 
-              {/* Планета и элемент */}
               <div className="text-xs text-muted-foreground mt-0.5">
                 {arcana.planet} • {arcana.element}
               </div>
@@ -108,7 +106,6 @@ export function ArcanaCard({
           </button>
         </div>
 
-        {/* Краткое описание позиции */}
         {positionDescription && !isExpanded && (
           <p className="text-sm text-muted-foreground mt-2 line-clamp-2">
             {positionDescription}
@@ -116,13 +113,12 @@ export function ArcanaCard({
         )}
       </div>
 
-      {/* Развёрнутое содержимое */}
       {isExpanded && (
         <div className="px-4 pb-4 space-y-4">
           {positionDescription && (
             <div className="bg-muted/30 rounded-lg p-3">
               <p className="text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">Значение позиции:</span>{" "}
+                <span className="font-medium text-foreground">{t("matrix.positionMeaning")}:</span>{" "}
                 {positionDescription}
               </p>
             </div>
@@ -130,18 +126,17 @@ export function ArcanaCard({
 
           <div>
             <h4 className="text-sm font-medium text-foreground mb-2">
-              {showYearForecast ? "Прогноз на год" : isReversed ? "Перевёрнутое значение" : "Описание"}
+              {showYearForecast ? t("matrix.yearForecast") : isReversed ? t("matrix.reversedMeaning") : t("matrix.description")}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {description}
             </p>
           </div>
 
-          {/* Профессии */}
           {!showYearForecast && arcana.professions.length > 0 && (
             <div>
               <h4 className="text-sm font-medium text-foreground mb-2">
-                Подходящие профессии
+                {t("matrix.suitableProfessions")}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {arcana.professions.map((profession, index) => (
