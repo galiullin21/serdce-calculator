@@ -82,7 +82,7 @@ type ResultType =
 
 const Index = () => {
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("2");
-  const [selectedMethod, setSelectedMethod] = useState("month");
+  const [selectedMethod, setSelectedMethod] = useState("purpose");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
 
@@ -91,7 +91,7 @@ const Index = () => {
     if (selectedMethodology === "1") {
       setSelectedMethod("classic-full");
     } else {
-      setSelectedMethod("month");
+      setSelectedMethod("purpose");
     }
   }, [selectedMethodology]);
 

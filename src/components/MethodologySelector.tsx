@@ -9,20 +9,20 @@ interface MethodologySelectorProps {
 export function MethodologySelector({ selectedMethodology, onMethodologyChange }: MethodologySelectorProps) {
   const methodologies = [
     {
-      id: "1" as const,
+      id: "2" as const,
       name: "Методика 1",
+      subtitle: "22 Аркана",
+      description: "Расширенная система с 22 арканами",
+      features: ["Предназначение", "Совместимость", "Прогнозы", "Периоды жизни"],
+      isRecommended: true,
+    },
+    {
+      id: "1" as const,
+      name: "Методика 2",
       subtitle: "Классика",
       description: "Классическая нумерология с числами 1-9",
       features: ["Число Ума", "Число Действия", "Число Реализации", "Число Итога"],
       isRecommended: false,
-    },
-    {
-      id: "2" as const,
-      name: "Методика 2",
-      subtitle: "22 Аркана",
-      description: "Расширенная система с 22 арканами",
-      features: ["12 позиций матрицы", "Код успеха", "Зеркальные арканы", "Периоды жизни"],
-      isRecommended: true,
     },
   ];
 
