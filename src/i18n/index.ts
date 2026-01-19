@@ -6,7 +6,12 @@ import enTranslations from './locales/en.json';
 import esTranslations from './locales/es.json';
 
 // Get saved language from localStorage or default to Russian
-const savedLanguage = localStorage.getItem('language') || 'ru';
+const getSavedLanguage = (): string => {
+  if (typeof window !== 'undefined' && window.localStorage) {
+    return localStorage.getItem('language') || 'ru';
+  }
+  return 'ru';
+};
 
 i18n
   .use(initReactI18next)
@@ -16,7 +21,7 @@ i18n
       en: { translation: enTranslations },
       es: { translation: esTranslations },
     },
-    lng: savedLanguage,
+    lng: getSavedLanguage(),
     fallbackLng: 'ru',
     interpolation: {
       escapeValue: false,
@@ -25,7 +30,9 @@ i18n
 
 // Save language to localStorage when it changes
 i18n.on('languageChanged', (lng) => {
-  localStorage.setItem('language', lng);
+  if (typeof window !== 'undefined' && window.localStorage) {
+    localStorage.setItem('language', lng);
+  }
 });
 
 export default i18n;
