@@ -2,17 +2,21 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
+import { CompatibilityDateInput } from "@/components/CompatibilityDateInput";
 import { YearForecastResult } from "@/components/YearForecastResult";
 import { MonthForecastResult } from "@/components/MonthForecastResult";
 import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
 import { KeyToResultComponent } from "@/components/KeyToResult";
+import { CompatibilityResultComponent } from "@/components/CompatibilityResult";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
   calculatePersonalMatrix,
+  calculateCompatibility,
   YearForecast,
   MonthForecast,
-  PersonalMatrix
+  PersonalMatrix,
+  CompatibilityResult
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { Button } from "@/components/ui/button";
@@ -92,7 +96,7 @@ const Index = () => {
       id: "compatibility",
       name: t("methods.compatibility"),
       description: t("methods.compatibilityDesc"),
-      available: false,
+      available: true,
       icon: Users,
     },
     {
@@ -130,6 +134,7 @@ type ResultType =
   | { type: "month"; data: MonthForecast }
   | { type: "purpose"; data: PersonalMatrix }
   | { type: "keyto"; data: KeyToResult }
+  | { type: "compatibility"; data: CompatibilityResult }
   | null;
 
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
@@ -185,6 +190,17 @@ type ResultType =
         setResult({ type: "purpose", data: personalMatrix });
         break;
     }
+  };
+
+  const handleCompatibilityCalculate = (
+    person1Day: number, person1Month: number, person1Year: number, person1Name: string,
+    person2Day: number, person2Month: number, person2Year: number, person2Name: string
+  ) => {
+    const compatResult = calculateCompatibility(
+      person1Day, person1Month, person1Year, person1Name,
+      person2Day, person2Month, person2Year, person2Name
+    );
+    setResult({ type: "compatibility", data: compatResult });
   };
 
   const handleReset = () => {
@@ -427,11 +443,15 @@ type ResultType =
                     </button>
                   </div>
 
-                  {/* Date Input Form */}
-                  <DateInput 
-                    selectedMethod={selectedMethodology === "1" ? selectedMethod : "classic-full"}
-                    onCalculate={handleCalculate} 
-                  />
+                  {/* Date Input Form - conditional based on method */}
+                  {selectedMethodology === "1" && selectedMethod === "compatibility" ? (
+                    <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
+                  ) : (
+                    <DateInput 
+                      selectedMethod={selectedMethodology === "1" ? selectedMethod : "classic-full"}
+                      onCalculate={handleCalculate} 
+                    />
+                  )}
                 </div>
 
                 {/* Analysis Types Grid */}
@@ -530,6 +550,12 @@ type ResultType =
               <KeyToResultComponent
                 result={result.data}
                 name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "compatibility" && (
+              <CompatibilityResultComponent
+                result={result.data}
                 onReset={handleReset}
               />
             )}

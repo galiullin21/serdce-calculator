@@ -166,6 +166,28 @@
     "practicesDesc": "Meditaciones para restaurar el enfoque y la paz.",
     "learnMore": "Saber más"
   },
+  "compatibility": {
+    "title": "Análisis de Compatibilidad",
+    "person1": "Primer Compañero",
+    "person2": "Segundo Compañero",
+    "namePlaceholder1": "Nombre del primer compañero",
+    "namePlaceholder2": "Nombre del segundo compañero",
+    "calculate": "Calcular Compatibilidad",
+    "excellent": "Excelente Compatibilidad",
+    "good": "Buena Compatibilidad",
+    "moderate": "Compatibilidad Moderada",
+    "challenging": "Compatibilidad Difícil",
+    "destinyArcana": "Arcano del Destino",
+    "unionArcana": "Arcano de Unión",
+    "harmonyArcana": "Arcano de Armonía",
+    "karmaArcana": "Arcano Kármico",
+    "emotionalConnection": "Conexión emocional",
+    "karmicLesson": "Lección kármica",
+    "strengths": "Fortalezas de la Unión",
+    "challenges": "Desafíos y Puntos de Crecimiento",
+    "wantDeepAnalysis": "¿Quieres un análisis profundo de la relación?",
+    "deepAnalysisDesc": "Obtén una consulta profesional con análisis detallado de compatibilidad, recomendaciones personalizadas y respuestas a tus preguntas."
+  },
   "calendar": {
     "title": "Calendario",
     "subtitle": "Códigos del Día",
