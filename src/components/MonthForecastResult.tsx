@@ -30,34 +30,74 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
   };
 
   const handleDownloadPDF = async () => {
+    const sections = [
+      {
+        title: t("forecast.monthTriangle"),
+        content: [
+          `${arcana1?.name || forecast.position1} (${forecast.position1}) — ${t("forecast.yearEnergyBackground")}`,
+          `${arcana2?.name || forecast.position2} (${forecast.position2}) — ${t("forecast.monthEnergy")}`,
+          `${arcana3?.name || forecast.position3} (${forecast.position3}) — ${t("forecast.monthResultEnergy")}`,
+        ],
+        highlight: true,
+      },
+      {
+        title: `${t("forecast.mainMonthArcana")}: ${forecast.position3} — ${arcana3?.name}`,
+        content: [
+          arcana3 ? `${arcana3.planet} • ${arcana3.element}` : "",
+          "",
+          arcana3?.monthForecast || arcana3?.yearForecast || "",
+        ],
+      },
+    ];
+
+    // Add professions for main arcana
+    if (arcana3?.professions && arcana3.professions.length > 0) {
+      sections.push({
+        title: t("matrix.suitableProfessions"),
+        content: [arcana3.professions.join(", ")],
+      });
+    }
+
+    // Year Energy section
+    sections.push({
+      title: `${t("forecast.yearEnergyTitle")}: ${forecast.position1} — ${arcana1?.name}`,
+      content: [
+        arcana1 ? `${arcana1.planet} • ${arcana1.element}` : "",
+        "",
+        arcana1?.yearForecast || "",
+      ],
+    });
+
+    if (arcana1?.professions && arcana1.professions.length > 0) {
+      sections.push({
+        title: `${t("matrix.suitableProfessions")} (${arcana1?.name})`,
+        content: [arcana1.professions.join(", ")],
+      });
+    }
+
+    // Month Energy section
+    sections.push({
+      title: `${t("forecast.energyOf")} ${monthName}: ${forecast.position2} — ${arcana2?.name}`,
+      content: [
+        arcana2 ? `${arcana2.planet} • ${arcana2.element}` : "",
+        "",
+        arcana2?.monthForecast || arcana2?.personalDescription || "",
+      ],
+    });
+
+    if (arcana2?.professions && arcana2.professions.length > 0) {
+      sections.push({
+        title: `${t("matrix.suitableProfessions")} (${arcana2?.name})`,
+        content: [arcana2.professions.join(", ")],
+      });
+    }
+
     await generatePDF({
       title: t("forecast.monthForecast"),
       subtitle: `${monthName} ${forecast.targetYear}`,
       birthDate: formatBirthDateForPDF(forecast.birthDate.day, forecast.birthDate.month, forecast.birthDate.year),
       name: name || undefined,
-      sections: [
-        {
-          title: t("forecast.monthTriangle"),
-          content: [
-            `${arcana1?.name || forecast.position1} (${forecast.position1}) — ${t("forecast.yearEnergyBackground")}`,
-            `${arcana2?.name || forecast.position2} (${forecast.position2}) — ${t("forecast.monthEnergy")}`,
-            `${arcana3?.name || forecast.position3} (${forecast.position3}) — ${t("forecast.monthResultEnergy")}`,
-          ],
-          highlight: true,
-        },
-        {
-          title: `${t("forecast.mainMonthArcana")}: ${arcana3?.name || forecast.position3}`,
-          content: arcana3?.monthForecast || arcana3?.yearForecast || "",
-        },
-        {
-          title: t("forecast.yearEnergyTitle"),
-          content: arcana1?.yearForecast || "",
-        },
-        {
-          title: `${t("forecast.energyOf")} ${monthName}`,
-          content: arcana2?.personalDescription || "",
-        },
-      ],
+      sections,
     });
   };
   return (
