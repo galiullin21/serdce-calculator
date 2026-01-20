@@ -42,14 +42,12 @@ let cachedFontBase64: string | null = null;
 async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
   try {
     if (!cachedFontBase64) {
-      // Try multiple font sources for reliability
+      // Use TTF format - jsPDF doesn't support WOFF
       const fontSources = [
-        // Noto Sans with full Cyrillic support from jsDelivr
-        "https://cdn.jsdelivr.net/npm/@fontsource/noto-sans@5.0.6/files/noto-sans-cyrillic-400-normal.woff",
-        // PT Sans - reliable Cyrillic font
-        "https://cdn.jsdelivr.net/npm/@fontsource/pt-sans@5.0.8/files/pt-sans-cyrillic-400-normal.woff",
-        // Open Sans Cyrillic
-        "https://cdn.jsdelivr.net/npm/@fontsource/open-sans@5.0.28/files/open-sans-cyrillic-400-normal.woff",
+        // PT Sans from rawgit (TTF format)
+        "https://cdn.jsdelivr.net/gh/nickshanks/Roboto@master/Roboto-Regular.ttf",
+        // Alternative: Google Fonts direct TTF link
+        "https://fonts.gstatic.com/s/ptsans/v17/jizaRExUiTo99u79D0aEPuC5.ttf",
       ];
       
       let fontData: ArrayBuffer | null = null;
@@ -82,9 +80,9 @@ async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
       cachedFontBase64 = btoa(binary);
     }
     
-    // Add font to jsPDF
-    pdf.addFileToVFS("CyrillicFont.woff", cachedFontBase64);
-    pdf.addFont("CyrillicFont.woff", "CyrillicFont", "normal");
+    // Add font to jsPDF - must be TTF format
+    pdf.addFileToVFS("CyrillicFont.ttf", cachedFontBase64);
+    pdf.addFont("CyrillicFont.ttf", "CyrillicFont", "normal");
     pdf.setFont("CyrillicFont", "normal");
     return true;
   } catch (error) {
