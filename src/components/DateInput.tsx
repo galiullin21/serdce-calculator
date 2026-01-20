@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 interface DateInputProps {
   selectedMethod: string;
-  onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number) => void;
+  onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number, gender?: 'male' | 'female') => void;
 }
 
 const days = Array.from({ length: 31 }, (_, i) => ({
@@ -35,6 +35,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
   const [year, setYear] = useState<string>("");
   const [targetMonth, setTargetMonth] = useState<string>(String(currentMonth));
   const [targetYear, setTargetYear] = useState<string>(String(currentYear));
+  const [gender, setGender] = useState<'male' | 'female'>('female');
 
   const months = Array.from({ length: 12 }, (_, i) => ({
     value: String(i + 1),
@@ -47,6 +48,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
       const targetYearNum = (selectedMethod === "month" || selectedMethod === "year") 
         ? parseInt(targetYear) 
         : undefined;
+      const genderValue = selectedMethod === "ancestral" ? gender : undefined;
       
       onCalculate(
         parseInt(day), 
@@ -54,7 +56,8 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
         parseInt(year), 
         name,
         targetMonthNum,
-        targetYearNum
+        targetYearNum,
+        genderValue
       );
     }
   };
@@ -69,6 +72,8 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
         return t("calculator.calculateYear");
       case "purpose":
         return t("calculator.calculatePurpose");
+      case "ancestral":
+        return t("calculator.calculateAncestral");
       default:
         return t("calculator.calculate");
     }
@@ -169,6 +174,42 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
                     ))}
                   </SelectContent>
                 </Select>
+              </div>
+            </div>
+          )}
+
+          {selectedMethod === "ancestral" && (
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">
+                {t("ancestral.selectGender")}
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setGender('female')}
+                  className={`p-3 rounded-xl border-2 transition-all duration-300 ${
+                    gender === 'female' 
+                      ? 'bg-primary/10 border-primary' 
+                      : 'bg-background border-border hover:border-primary/50'
+                  }`}
+                >
+                  <span className="text-sm font-medium text-foreground">
+                    {t("ancestral.female")}
+                  </span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setGender('male')}
+                  className={`p-3 rounded-xl border-2 transition-all duration-300 ${
+                    gender === 'male' 
+                      ? 'bg-primary/10 border-primary' 
+                      : 'bg-background border-border hover:border-primary/50'
+                  }`}
+                >
+                  <span className="text-sm font-medium text-foreground">
+                    {t("ancestral.male")}
+                  </span>
+                </button>
               </div>
             </div>
           )}
