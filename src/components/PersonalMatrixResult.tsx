@@ -80,7 +80,30 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           </h2>
         </div>
 
-        <div className="flex flex-col items-center gap-4 mb-6">
+        {/* Визуальная структура матрицы по методике 22 Арканов */}
+        <div className="flex flex-col items-center gap-3 mb-6">
+          
+          {/* Кармический треугольник (вверху) */}
+          <div className="grid grid-cols-3 gap-2 md:gap-4">
+            <MatrixCell 
+              position={10} 
+              value={matrix.positions[9]} 
+            />
+            <MatrixCell 
+              position={11} 
+              value={matrix.positions[10]} 
+            />
+            <MatrixCell 
+              position={12} 
+              value={matrix.positions[11]} 
+              isHighlight 
+            />
+          </div>
+
+          {/* Разделитель */}
+          <div className="w-full h-px bg-border/50 my-2" />
+
+          {/* Вводные данные: Позиции 1, 2, 4 */}
           <div className="grid grid-cols-3 gap-2 md:gap-4">
             <MatrixCell 
               position={1} 
@@ -95,19 +118,20 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
               isReversed={isReversedPosition(2)}
             />
             <MatrixCell 
-              position={3} 
-              value={matrix.positions[2]} 
-              isMirror={isMirrorPosition(3)}
-              isReversed={isReversedPosition(3)}
-            />
-          </div>
-          
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <MatrixCell 
               position={4} 
               value={matrix.positions[3]} 
               isMirror={isMirrorPosition(4)}
               isReversed={isReversedPosition(4)}
+            />
+          </div>
+          
+          {/* Основной треугольник: Позиции 3, 5 */}
+          <div className="grid grid-cols-2 gap-2 md:gap-4">
+            <MatrixCell 
+              position={3} 
+              value={matrix.positions[2]} 
+              isMirror={isMirrorPosition(3)}
+              isReversed={isReversedPosition(3)}
             />
             <MatrixCell 
               position={5} 
@@ -115,6 +139,10 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
               isMirror={isMirrorPosition(5)}
               isReversed={isReversedPosition(5)}
             />
+          </div>
+
+          {/* Вершина основного треугольника: Позиция 6 */}
+          <div className="flex justify-center">
             <MatrixCell 
               position={6} 
               value={matrix.positions[5]} 
@@ -123,16 +151,11 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
             />
           </div>
 
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
+          {/* Диагональный ряд */}
+          <div className="grid grid-cols-3 gap-2 md:gap-4 mt-4">
             <MatrixCell position={7} value={matrix.positions[6]} />
             <MatrixCell position={8} value={matrix.positions[7]} />
             <MatrixCell position={9} value={matrix.positions[8]} />
-          </div>
-
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <MatrixCell position={10} value={matrix.positions[9]} />
-            <MatrixCell position={11} value={matrix.positions[10]} />
-            <MatrixCell position={12} value={matrix.positions[11]} isHighlight />
           </div>
         </div>
 
