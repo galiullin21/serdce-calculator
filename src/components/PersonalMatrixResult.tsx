@@ -3,11 +3,9 @@ import { PersonalMatrix, formatBirthDate } from "@/lib/calculations";
 import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Compass, Star, Clock, ExternalLink, Download, Loader2 } from "lucide-react";
-import { useState, useRef } from "react";
+import { ArrowLeft, Compass, Star, Clock, ExternalLink } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
-import { PersonalMatrixPDF } from "./pdf/PersonalMatrixPDF";
-import { generatePDF } from "@/lib/pdfGenerator";
 
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
@@ -20,8 +18,6 @@ type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
 export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixResultProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("main");
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-  const pdfRef = useRef<HTMLDivElement>(null);
   
   const formattedDate = formatBirthDate(
     matrix.birthDate.day,
@@ -31,21 +27,6 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
 
   const handleTelegramClick = () => {
     window.open("https://t.me/galiullin_ruzal", "_blank");
-  };
-
-  const handleDownloadPDF = async () => {
-    if (!pdfRef.current || isGeneratingPDF) return;
-    
-    setIsGeneratingPDF(true);
-    try {
-      await generatePDF(pdfRef.current, {
-        filename: `matrix-${name || 'result'}-${formattedDate.replace(/\./g, '-')}.pdf`
-      });
-    } catch (error) {
-      console.error('PDF generation error:', error);
-    } finally {
-      setIsGeneratingPDF(false);
-    }
   };
 
   const isMirrorPosition = (position: number): boolean => {
@@ -66,39 +47,16 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      {/* Hidden PDF component for generation */}
-      <PersonalMatrixPDF ref={pdfRef} matrix={matrix} name={name} />
-
-      <div className="flex items-center justify-between">
+      <div className="text-center">
         <Button
           variant="ghost"
           onClick={onReset}
+          className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
-        
-        <Button
-          variant="outline"
-          onClick={handleDownloadPDF}
-          disabled={isGeneratingPDF}
-          className="gap-2"
-        >
-          {isGeneratingPDF ? (
-            <>
-              <Loader2 className="w-4 h-4 animate-spin" />
-              {t("pdf.generating")}
-            </>
-          ) : (
-            <>
-              <Download className="w-4 h-4" />
-              {t("pdf.download")}
-            </>
-          )}
-        </Button>
-      </div>
 
-      <div className="text-center">
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
           {t("results.yourPurpose")}
         </h1>
