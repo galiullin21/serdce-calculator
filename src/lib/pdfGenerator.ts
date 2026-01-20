@@ -23,6 +23,24 @@ const COLORS = {
   textMuted: [102, 102, 102] as [number, number, number],
 };
 
+// Transliteration map for Cyrillic to Latin
+const cyrillicToLatin: Record<string, string> = {
+  'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
+  'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
+  'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts',
+  'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
+  'я': 'ya',
+  'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
+  'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
+  'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'Kh', 'Ц': 'Ts',
+  'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Shch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
+  'Я': 'Ya'
+};
+
+function transliterate(text: string): string {
+  return text.split('').map(char => cyrillicToLatin[char] || char).join('');
+}
+
 function drawWavyLine(pdf: jsPDF, startX: number, startY: number, width: number, amplitude: number, frequency: number) {
   const segments = 100;
   const segmentWidth = width / segments;
@@ -71,31 +89,31 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   // Star symbol in center
   pdf.setFontSize(48);
   pdf.setTextColor(...COLORS.gold);
-  pdf.text("✧", pageWidth / 2, pageHeight / 2 - 25, { align: "center" });
+  pdf.text("*", pageWidth / 2, pageHeight / 2 - 25, { align: "center" });
   
-  // Title
+  // Title (transliterated)
   pdf.setFontSize(28);
   pdf.setTextColor(...COLORS.goldDark);
-  pdf.text(options.title, pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
+  pdf.text(transliterate(options.title), pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
   
   // Subtitle
   if (options.subtitle) {
     pdf.setFontSize(14);
     pdf.setTextColor(...COLORS.textMuted);
-    pdf.text(options.subtitle, pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
+    pdf.text(transliterate(options.subtitle), pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
   }
   
   // Name
   if (options.name) {
     pdf.setFontSize(18);
     pdf.setTextColor(...COLORS.text);
-    pdf.text(options.name, pageWidth / 2, pageHeight / 2 + 65, { align: "center" });
+    pdf.text(transliterate(options.name), pageWidth / 2, pageHeight / 2 + 65, { align: "center" });
   }
   
   // Birth date
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.textMuted);
-  pdf.text(`Дата рождения: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 80, { align: "center" });
+  pdf.text(`Data rozhdeniya: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 80, { align: "center" });
   
   // Footer
   pdf.setFontSize(10);
@@ -132,7 +150,7 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
     }
     
     pdf.setFontSize(14);
-    pdf.text(section.title, margin, y + 4);
+    pdf.text(transliterate(section.title), margin, y + 4);
     y += 18;
     
     // Section content
@@ -140,8 +158,8 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
     pdf.setFontSize(11);
     
     const contentLines = Array.isArray(section.content) 
-      ? section.content 
-      : pdf.splitTextToSize(section.content, contentWidth);
+      ? section.content.map(transliterate)
+      : [transliterate(section.content)];
     
     for (const line of contentLines) {
       if (y > pageHeight - 40) {
@@ -191,8 +209,9 @@ export function generatePDF(options: PDFOptions): void {
   }
   
   // Generate filename
-  const safeName = options.name?.replace(/[^a-zA-Zа-яА-Я0-9]/g, "_") || "report";
-  const fileName = `${safeName}_${options.title.replace(/[^a-zA-Zа-яА-Я0-9]/g, "_")}.pdf`;
+  const safeName = transliterate(options.name || "report").replace(/[^a-zA-Z0-9]/g, "_");
+  const safeTitle = transliterate(options.title).replace(/[^a-zA-Z0-9]/g, "_");
+  const fileName = `${safeName}_${safeTitle}.pdf`;
   
   pdf.save(fileName);
 }
