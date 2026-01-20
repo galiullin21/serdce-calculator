@@ -4,7 +4,8 @@ import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
-
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 interface MonthForecastResultProps {
   forecast: MonthForecast;
   name: string;
@@ -28,17 +29,51 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    generatePDF({
+      title: t("forecast.monthForecast"),
+      subtitle: `${monthName} ${forecast.targetYear}`,
+      birthDate: formatBirthDateForPDF(forecast.birthDate.day, forecast.birthDate.month, forecast.birthDate.year),
+      name: name || undefined,
+      sections: [
+        {
+          title: t("forecast.monthTriangle"),
+          content: [
+            `${arcana1?.name || forecast.position1} (${forecast.position1}) — ${t("forecast.yearEnergyBackground")}`,
+            `${arcana2?.name || forecast.position2} (${forecast.position2}) — ${t("forecast.monthEnergy")}`,
+            `${arcana3?.name || forecast.position3} (${forecast.position3}) — ${t("forecast.monthResultEnergy")}`,
+          ],
+          highlight: true,
+        },
+        {
+          title: `${t("forecast.mainMonthArcana")}: ${arcana3?.name || forecast.position3}`,
+          content: arcana3?.monthForecast || arcana3?.yearForecast || "",
+        },
+        {
+          title: t("forecast.yearEnergyTitle"),
+          content: arcana1?.yearForecast || "",
+        },
+        {
+          title: `${t("forecast.energyOf")} ${monthName}`,
+          content: arcana2?.personalDescription || "",
+        },
+      ],
+    });
+  };
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="text-center">
+      <div className="flex items-center justify-between mb-4">
         <Button
           variant="ghost"
           onClick={onReset}
-          className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
+      </div>
+
+      <div className="text-center">
 
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
           {t("forecast.monthForecast")} — {monthName} {forecast.targetYear}

@@ -4,7 +4,8 @@ import { AncestralResult } from "@/lib/ancestral";
 import { KarmicStar } from "./KarmicStar";
 import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 interface AncestralResultProps {
   result: AncestralResult;
   name: string;
@@ -23,6 +24,64 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    const sections = [];
+    
+    // Working numbers
+    sections.push({
+      title: t("ancestral.workingNumbers"),
+      content: [
+        `${t("ancestral.dateRow")}: ${formatBirthDate()}`,
+        `№1: ${result.workingNumbers.first}`,
+        `№2: ${result.workingNumbers.second}`,
+        `№3: ${result.workingNumbers.third}`,
+        `№4: ${result.workingNumbers.fourth}`,
+      ],
+      highlight: true,
+    });
+    
+    // Roles
+    if (result.roles.isKeeper) {
+      sections.push({
+        title: t("ancestral.roles.keeper"),
+        content: t("ancestral.roles.keeperDesc"),
+      });
+    }
+    if (result.roles.isHealer) {
+      sections.push({
+        title: t("ancestral.roles.healer"),
+        content: t("ancestral.roles.healerDesc"),
+      });
+    }
+    if (result.roles.isLastHope) {
+      sections.push({
+        title: t("ancestral.roles.lastHope"),
+        content: t("ancestral.roles.lastHopeDesc"),
+      });
+    }
+    if (result.roles.hasCurse) {
+      sections.push({
+        title: t("ancestral.roles.curse"),
+        content: t("ancestral.roles.curseDesc"),
+      });
+    }
+    
+    // Digit interpretations
+    digitInfo.forEach((info) => {
+      sections.push({
+        title: `${t("ancestral.digit")} ${info.digit}: ${info.title} (×${info.count})`,
+        content: getDigitInterpretation(info.digit, info.count),
+      });
+    });
+    
+    generatePDF({
+      title: t("ancestral.title"),
+      subtitle: result.gender === 'female' ? t("ancestral.female") : t("ancestral.male"),
+      birthDate: formatBirthDateForPDF(result.birthDate.day, result.birthDate.month, result.birthDate.year),
+      name: name || undefined,
+      sections,
+    });
+  };
   // Интерпретации для каждой цифры
   const getDigitInterpretation = (digit: string, count: number) => {
     const key = `ancestral.interpretations.${digit}.${Math.min(count, 4)}`;
@@ -74,6 +133,7 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
       </div>
 
       {/* Title */}

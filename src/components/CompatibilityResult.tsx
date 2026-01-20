@@ -5,6 +5,8 @@ import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { cn } from "@/lib/utils";
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 
 interface CompatibilityResultProps {
   result: CompatibilityResult;
@@ -35,6 +37,57 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
     return t("compatibility.challenging");
   };
 
+  const handleDownloadPDF = () => {
+    const person1Date = formatBirthDateForPDF(result.person1.birthDate.day, result.person1.birthDate.month, result.person1.birthDate.year);
+    const person2Date = formatBirthDateForPDF(result.person2.birthDate.day, result.person2.birthDate.month, result.person2.birthDate.year);
+    
+    generatePDF({
+      title: t("compatibility.title"),
+      subtitle: `${result.person1.name} & ${result.person2.name}`,
+      birthDate: `${person1Date} / ${person2Date}`,
+      sections: [
+        {
+          title: `${t("compatibility.compatibilityScore")}: ${result.compatibilityPercent}%`,
+          content: getCompatibilityLabel(result.compatibilityPercent),
+          highlight: true,
+        },
+        {
+          title: result.person1.name,
+          content: [
+            `${t("results.birthDate")}: ${person1Date}`,
+            `${t("compatibility.destinyArcana")}: ${result.person1.destinyArcana} - ${person1DestinyArcana?.name || ""}`,
+          ],
+        },
+        {
+          title: result.person2.name,
+          content: [
+            `${t("results.birthDate")}: ${person2Date}`,
+            `${t("compatibility.destinyArcana")}: ${result.person2.destinyArcana} - ${person2DestinyArcana?.name || ""}`,
+          ],
+        },
+        {
+          title: `${t("compatibility.unionArcana")}: ${unionArcana?.name || result.unionArcana}`,
+          content: unionArcana?.personalDescription || "",
+        },
+        {
+          title: `${t("compatibility.harmonyArcana")}: ${harmonyArcana?.name || result.harmonyArcana}`,
+          content: harmonyArcana?.personalDescription || "",
+        },
+        {
+          title: `${t("compatibility.karmaArcana")}: ${karmaArcana?.name || result.karmaArcana}`,
+          content: karmaArcana?.personalDescription || "",
+        },
+        {
+          title: t("compatibility.strengths"),
+          content: result.strengths,
+        },
+        {
+          title: t("compatibility.challenges"),
+          content: result.challenges,
+        },
+      ],
+    });
+  };
   return (
     <div className="max-w-4xl mx-auto">
       {/* Header */}
@@ -47,6 +100,7 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
       </div>
 
       {/* Title */}

@@ -1,9 +1,11 @@
-import { NumerologyResult as Result } from "@/lib/numerology";
+import { NumerologyResult as Result, numberDescriptions } from "@/lib/numerology";
 import { NumberCard } from "./NumberCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Crown, ExternalLink } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF } from "@/lib/pdfGenerator";
 
 interface NumerologyResultProps {
   result: Result;
@@ -18,10 +20,34 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    const numbers = [
+      { num: result.mindNumber, title: "Ум", key: "mindInterpretation" as const },
+      { num: result.actionNumber, title: "Действие", key: "actionInterpretation" as const },
+      { num: result.realizationNumber, title: "Реализация", key: "realizationInterpretation" as const },
+      { num: result.totalNumber, title: "Итог", key: "totalInterpretation" as const },
+    ];
+    
+    const sections = numbers.map(({ num, title, key }) => {
+      const data = numberDescriptions[num];
+      return {
+        title: `${title}: ${num} - ${data?.title || ""}`,
+        content: data?.[key] || data?.description || "",
+      };
+    });
+    
+    generatePDF({
+      title: name ? `${name}, ваша нумерология` : "Ваша нумерология",
+      subtitle: "Классическая нумерология",
+      birthDate: formattedDate,
+      name: name || undefined,
+      sections,
+    });
+  };
   return (
     <div className="w-full max-w-3xl mx-auto space-y-8 animate-fade-in">
       {/* Header */}
-      <div className="text-center space-y-4">
+      <div className="flex items-center justify-between mb-4">
         <Button
           variant="ghost"
           onClick={onReset}
@@ -30,7 +56,10 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
           <ArrowLeft className="w-4 h-4 mr-2" />
           Новый расчёт
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
+      </div>
 
+      <div className="text-center space-y-4">
         <div className="bg-card rounded-2xl p-8 shadow-card border border-border">
           <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground mb-2">
             {name ? `${name}, ваша нумерология` : "Ваша нумерология"}
