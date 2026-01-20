@@ -4,7 +4,8 @@ import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
-
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 interface YearForecastResultProps {
   forecast: YearForecast;
   name: string;
@@ -24,17 +25,47 @@ export function YearForecastResult({ forecast, name, onReset }: YearForecastResu
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    generatePDF({
+      title: t("forecast.yearForecast"),
+      subtitle: `${forecast.targetYear} ${t("forecast.year")}`,
+      birthDate: formatBirthDateForPDF(forecast.birthDate.day, forecast.birthDate.month, forecast.birthDate.year),
+      name: name || undefined,
+      sections: [
+        {
+          title: `${t("forecast.yourYearArcana")}: ${arcana?.name || forecast.arcana}`,
+          content: arcana?.yearForecast || "",
+          highlight: true,
+        },
+        {
+          title: t("forecast.arcanaDetails"),
+          content: [
+            `${t("forecast.planet")}: ${arcana?.planet || "-"}`,
+            `${t("forecast.element")}: ${arcana?.element || "-"}`,
+          ],
+        },
+        {
+          title: t("forecast.recommendations"),
+          content: arcana?.personalDescription || "",
+        },
+      ],
+    });
+  };
   return (
     <div className="max-w-2xl mx-auto space-y-6">
-      <div className="text-center">
+      <div className="flex items-center justify-between mb-4">
         <Button
           variant="ghost"
           onClick={onReset}
-          className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
+      </div>
+
+      <div className="text-center">
+          {t("results.newCalculation")}
 
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
           {t("forecast.yearForecast")} {t("forecast.forYear", { year: forecast.targetYear })}

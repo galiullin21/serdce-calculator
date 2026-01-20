@@ -1,12 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { PersonalMatrix, formatBirthDate } from "@/lib/calculations";
-import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName } from "@/lib/arcana";
+import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName, getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Compass, Star, Clock, ExternalLink } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
@@ -29,6 +30,41 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    const sections = [];
+    
+    // Main positions
+    for (let pos = 1; pos <= 12; pos++) {
+      const arcana = getArcana(matrix.positions[pos - 1]);
+      const posDesc = positionDescriptions[pos];
+      sections.push({
+        title: `${t("results.position")} ${pos}: ${posDesc?.title || ""} — ${arcana?.name || matrix.positions[pos - 1]}`,
+        content: [
+          posDesc?.description || "",
+          "",
+          arcana?.personalDescription || "",
+        ],
+        highlight: pos === 12,
+      });
+    }
+    
+    // Success code
+    sections.push({
+      title: t("results.successCode"),
+      content: matrix.successCode.map((a, i) => {
+        const arcana = getArcana(a);
+        return `${t("results.pos")} ${successCodePositions[i]}: ${a} - ${arcana?.name || ""}`;
+      }),
+    });
+    
+    generatePDF({
+      title: t("results.yourPurpose"),
+      subtitle: t("results.personalMatrix"),
+      birthDate: formatBirthDateForPDF(matrix.birthDate.day, matrix.birthDate.month, matrix.birthDate.year),
+      name: name || undefined,
+      sections,
+    });
+  };
   const isMirrorPosition = (position: number): boolean => {
     return matrix.mirrorArcana.some(m => m.positions.includes(position));
   };
@@ -47,16 +83,18 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
 
   return (
     <div className="max-w-3xl mx-auto space-y-6">
-      <div className="text-center">
+      <div className="flex items-center justify-between mb-4">
         <Button
           variant="ghost"
           onClick={onReset}
-          className="mb-4"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
+      </div>
 
+      <div className="text-center">
         <h1 className="text-2xl md:text-3xl font-display text-primary mb-2">
           {t("results.yourPurpose")}
         </h1>

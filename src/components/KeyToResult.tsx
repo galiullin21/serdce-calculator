@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Brain, Zap, Target, Award, Star, Sparkles, ExternalLink } from "lucide-react";
 import { cn } from "@/lib/utils";
-
+import { PDFDownloadButton } from "./PDFDownloadButton";
+import { generatePDF } from "@/lib/pdfGenerator";
 interface KeyToResultProps {
   result: KeyToResultType;
   name: string;
@@ -171,6 +172,41 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
+  const handleDownloadPDF = () => {
+    const numbers = [
+      { num: result.mindNumber, title: t("keyto.mindNumber") },
+      { num: result.actionNumber, title: t("keyto.actionNumber") },
+      { num: result.realizationNumber, title: t("keyto.realizationNumber") },
+      { num: result.outcomeNumber, title: t("keyto.outcomeNumber") },
+    ];
+    
+    const sections = numbers.map(({ num, title }) => {
+      const data = getKeyToNumberData(num);
+      return {
+        title: `${title}: ${num} - ${data?.name || ""}`,
+        content: [
+          data?.description || "",
+          "",
+          `${t("keyto.planet")}: ${data?.planet || "-"}`,
+          `${t("keyto.luckyDay")}: ${data?.luckyDay || "-"}`,
+          `${t("keyto.stone")}: ${data?.luckyStone || "-"}`,
+          "",
+          `${t("keyto.positiveQualities")}: ${data?.positiveQualities.join(", ") || "-"}`,
+          `${t("keyto.negativeQualities")}: ${data?.negativeQualities.join(", ") || "-"}`,
+          "",
+          `${t("keyto.karmicTask")}: ${data?.karmicTask || "-"}`,
+        ],
+      };
+    });
+    
+    generatePDF({
+      title: t("keyto.yourCalculationDefault"),
+      subtitle: t("keyto.methodology1Classic"),
+      birthDate: result.birthDate,
+      name: name || undefined,
+      sections,
+    });
+  };
   return (
     <div className="max-w-4xl mx-auto space-y-8">
       <div className="flex items-center justify-between">
@@ -182,6 +218,7 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
+        <PDFDownloadButton onDownload={handleDownloadPDF} />
       </div>
 
       <div className="text-center space-y-2">
