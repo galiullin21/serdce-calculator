@@ -2,8 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { AncestralResult } from "@/lib/ancestral";
 import { KarmicStar } from "./KarmicStar";
-import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users, Download, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useState, useRef } from "react";
+import { AncestralPDF } from "./pdf/AncestralPDF";
+import { generatePDF } from "@/lib/pdfGenerator";
 
 interface AncestralResultProps {
   result: AncestralResult;
@@ -13,6 +16,8 @@ interface AncestralResultProps {
 
 export function AncestralResultComponent({ result, name, onReset }: AncestralResultProps) {
   const { t } = useTranslation();
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+  const pdfRef = useRef<HTMLDivElement>(null);
 
   const formatBirthDate = () => {
     const { day, month, year } = result.birthDate;
@@ -21,6 +26,21 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
 
   const handleTelegramClick = () => {
     window.open("https://t.me/galiullin_ruzal", "_blank");
+  };
+
+  const handleDownloadPDF = async () => {
+    if (!pdfRef.current || isGeneratingPDF) return;
+    
+    setIsGeneratingPDF(true);
+    try {
+      await generatePDF(pdfRef.current, {
+        filename: `ancestral-${name || 'result'}-${formatBirthDate().replace(/\./g, '-')}.pdf`
+      });
+    } catch (error) {
+      console.error('PDF generation error:', error);
+    } finally {
+      setIsGeneratingPDF(false);
+    }
   };
 
   // Интерпретации для каждой цифры
@@ -64,6 +84,9 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
+      {/* Hidden PDF component for generation */}
+      <AncestralPDF ref={pdfRef} result={result} name={name} />
+
       {/* Header */}
       <div className="flex items-center justify-between">
         <Button
