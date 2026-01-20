@@ -58,13 +58,13 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
       });
     }
 
-    // Year Energy section
+    // Year Energy section - use monthForecast for month PDF context
     sections.push({
       title: `${t("forecast.yearEnergyTitle")}: ${forecast.position1} — ${arcana1?.name}`,
       content: [
         arcana1 ? `${arcana1.planet} • ${arcana1.element}` : "",
         "",
-        arcana1?.yearForecast || "",
+        arcana1?.monthForecast || arcana1?.yearForecast || "",
       ],
     });
 
