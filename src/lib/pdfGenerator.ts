@@ -42,9 +42,9 @@ let cachedFontBase64: string | null = null;
 async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
   try {
     if (!cachedFontBase64) {
-      // Use PT Sans Cyrillic from Google Fonts - guaranteed Cyrillic support
-      // This is the full PTSans-Regular with Latin + Cyrillic
-      const fontUrl = "https://fonts.gstatic.com/s/ptsans/v17/jizaRExUiTo99u79D0-ExdGM.ttf";
+      // Load font from local assets
+      const fontModule = await import("@/assets/fonts/PTSans-Regular.ttf");
+      const fontUrl = fontModule.default;
       
       const response = await fetch(fontUrl);
       if (!response.ok) {
