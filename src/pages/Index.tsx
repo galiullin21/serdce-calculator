@@ -8,6 +8,7 @@ import { MonthForecastResult } from "@/components/MonthForecastResult";
 import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
 import { KeyToResultComponent } from "@/components/KeyToResult";
 import { CompatibilityResultComponent } from "@/components/CompatibilityResult";
+import { AncestralResultComponent } from "@/components/AncestralResult";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -19,6 +20,7 @@ import {
   CompatibilityResult
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
+import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -124,7 +126,7 @@ const Index = () => {
       id: "ancestral",
       name: t("methods.ancestral"),
       description: t("methods.ancestralDesc"),
-      available: false,
+      available: true,
       icon: Brain,
     },
   ];
@@ -135,6 +137,7 @@ type ResultType =
   | { type: "purpose"; data: PersonalMatrix }
   | { type: "keyto"; data: KeyToResult }
   | { type: "compatibility"; data: CompatibilityResult }
+  | { type: "ancestral"; data: AncestralResult }
   | null;
 
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
@@ -157,7 +160,8 @@ type ResultType =
     year: number, 
     name: string,
     targetMonth?: number,
-    targetYear?: number
+    targetYear?: number,
+    gender?: 'male' | 'female'
   ) => {
     setUserName(name);
     
@@ -183,6 +187,10 @@ type ResultType =
           targetYear || new Date().getFullYear()
         );
         setResult({ type: "month", data: monthForecast });
+        break;
+      case "ancestral":
+        const ancestralResult = calculateAncestralPrograms(day, month, year, gender || 'female');
+        setResult({ type: "ancestral", data: ancestralResult });
         break;
       case "purpose":
       default:
@@ -556,6 +564,13 @@ type ResultType =
             {result.type === "compatibility" && (
               <CompatibilityResultComponent
                 result={result.data}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "ancestral" && (
+              <AncestralResultComponent
+                result={result.data}
+                name={userName}
                 onReset={handleReset}
               />
             )}

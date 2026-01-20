@@ -32,6 +32,7 @@
     "calculateMonth": "Calculate month forecast",
     "calculateYear": "Calculate year forecast",
     "calculatePurpose": "Discover your purpose",
+    "calculateAncestral": "Discover ancestral programs",
     "calculate": "Calculate"
   },
   "methodology": {
@@ -270,6 +271,83 @@
     "responsibilityDesc": "The user independently makes decisions based on the information received. The service is not responsible for actions taken based on the calculations.",
     "termsChanges": "Changes to Terms",
     "termsChangesDesc": "We reserve the right to change these terms. Continued use of the service after changes means acceptance of the new terms."
+  },
+  "ancestral": {
+    "title": "Ancestral Numerology",
+    "subtitle": "Your function in the lineage system",
+    "gender": "Gender",
+    "selectGender": "Select gender",
+    "male": "Male",
+    "female": "Female",
+    "workingNumbers": "Working Numbers",
+    "dateRow": "Birth date",
+    "workingRow": "Working numbers",
+    "allDigits": "All digits for analysis",
+    "karmicStar": "Karmic Ancestral Star",
+    "yourRole": "Your Role in the Lineage",
+    "digit": "Digit",
+    "interpretationsTitle": "Ancestral Star Interpretation",
+    "digits": {
+      "two": "Right to Life",
+      "four": "Lineage Continuation",
+      "five": "Energy Balance",
+      "seven": "Protection & Luck",
+      "eight": "Lineage Protection",
+      "twoTitle": "Right to Life",
+      "fourTitle": "Right to Continue Lineage",
+      "fiveTitle": "Energy Balance",
+      "sevenTitle": "Protection and Luck",
+      "eightTitle": "Lineage Protection"
+    },
+    "roles": {
+      "keeper": "Lineage Keeper",
+      "keeperDesc": "You are the protector of your family. Your task is to keep the system from falling apart, to guide relatives onto the right path. You may seem tough, but this is your ancestral function. Professions related to protection are favorable: police, military, psychology, medicine.",
+      "healer": "Lineage Healer",
+      "healerDesc": "You are the white mage of your family. Your task is to heal the lineage physically and spiritually. You are naturally empathic and open. The first half of life may have been difficult — this is preparation for your mission. Helping professions are favorable.",
+      "lastHope": "Last Hope of the Lineage",
+      "lastHopeDesc": "You are the crisis manager of the lineage. The lineage sent you at a critical moment to save the family branch. You are stronger than you seem. Your task is to revive lineage traditions, pray for ancestors, preserve family memory. You cannot completely separate from your family.",
+      "curse": "Ancestral Curse or Vow",
+      "curseDesc": "The presence of a six in the second or fourth working number indicates a possible ancestral curse or vow in your lineage. Work with ancestral programs is recommended."
+    },
+    "interpretations": {
+      "2": {
+        "0": "The lineage had little energy at the moment of your conception. It's important to fill yourself with energy independently, have an energy donor in your environment. After 26 years, energy levels may drop without special practices.",
+        "1": "You are energetically self-sufficient. The lineage gave you the right to life and sufficient energy reserves.",
+        "2": "You are an energy donor. You can share energy with loved ones.",
+        "3": "Your energy has a pulsating nature. Such people are called witches or wizards — you have a special connection with the energy world.",
+        "4": "You are a very powerful energy donor. Your task is to share energy not with one person, but with many around you."
+      },
+      "4": {
+        "0": "Possible doubts or fears regarding children, difficulties during pregnancy, or long recovery after childbirth. This is not a prohibition, but an indication of features.",
+        "1": "You have the potential to continue the lineage, good health, and the ability for self-healing.",
+        "2": "Fantastic self-healing potential! You can heal yourself from any disease if you wish. Also, this is the mother program — the task of having children.",
+        "3": "Very strong potential for lineage continuation. Three fours strengthen your connection with ancestral energy.",
+        "4": "Maximum potential for lineage continuation and self-healing. You are an important link in the chain of generations."
+      },
+      "5": {
+        "0": "For women: you are the last hope of the lineage. You have an inner masculine core and the ability to withstand trials. Your task is to save and revive the lineage.",
+        "1": "Healthy balance of masculine and feminine energy in your body. Harmonious state.",
+        "2": "You are a healthy bud on the family tree. Your task is to give birth to children and continue the lineage.",
+        "3": "Serious ancestral energy failure. Possible program of rejection of love in the lineage. Work with a specialist is recommended.",
+        "4": "Critical level of ancestral failure. Deep work with ancestral programs is necessary."
+      },
+      "7": {
+        "0": "Until 26 years old, the Universe protects you. After that, you need to earn protection through good deeds and positive programs.",
+        "1": "You have a guardian angel, and they are strong enough to protect you.",
+        "2": "In addition to the guardian angel, you have an ancestral guardian — protection prayed for by ancestors.",
+        "3": "You are a luck transmitter for others! You may not use this luck yourself, but people around you receive it from you.",
+        "4": "Maximum lineage protection. You are surrounded by powerful guardian energy."
+      },
+      "8": {
+        "0": "Your task is to serve the family, even at your own expense. Take care of relatives and unite the family.",
+        "1": "Protecting the lineage is your priority. Family should come first, but there is balance with personal interests.",
+        "2": "One eight for family, the second for career. You have potential for development through society.",
+        "3": "Greatness! A great gift from the lineage. Your task is to enlighten others and bring good to the world.",
+        "4": "Maximum ancestral gift of protector and enlightener. Huge responsibility and opportunities."
+      }
+    },
+    "wantDeepAnalysis": "Want a deep analysis of ancestral programs?",
+    "deepAnalysisDesc": "Get a professional consultation with detailed analysis of ancestral programs, removal of negative patterns, and personalized recommendations."
   },
   "common": {
     "loading": "Loading...",

@@ -1,0 +1,271 @@
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { AncestralResult } from "@/lib/ancestral";
+import { KarmicStar } from "./KarmicStar";
+import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface AncestralResultProps {
+  result: AncestralResult;
+  name: string;
+  onReset: () => void;
+}
+
+export function AncestralResultComponent({ result, name, onReset }: AncestralResultProps) {
+  const { t } = useTranslation();
+
+  const formatBirthDate = () => {
+    const { day, month, year } = result.birthDate;
+    return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`;
+  };
+
+  const handleTelegramClick = () => {
+    window.open("https://t.me/galiullin_ruzal", "_blank");
+  };
+
+  // Интерпретации для каждой цифры
+  const getDigitInterpretation = (digit: string, count: number) => {
+    const key = `ancestral.interpretations.${digit}.${Math.min(count, 4)}`;
+    return t(key);
+  };
+
+  const digitInfo = [
+    { 
+      digit: "2", 
+      count: result.starCounts.twos, 
+      title: t("ancestral.digits.twoTitle"),
+      icon: Heart
+    },
+    { 
+      digit: "4", 
+      count: result.starCounts.fours, 
+      title: t("ancestral.digits.fourTitle"),
+      icon: Users
+    },
+    { 
+      digit: "8", 
+      count: result.starCounts.eights, 
+      title: t("ancestral.digits.eightTitle"),
+      icon: Shield
+    },
+    { 
+      digit: "5", 
+      count: result.starCounts.fives, 
+      title: t("ancestral.digits.fiveTitle"),
+      icon: Sparkles
+    },
+    { 
+      digit: "7", 
+      count: result.starCounts.sevens, 
+      title: t("ancestral.digits.sevenTitle"),
+      icon: Star
+    },
+  ];
+
+  return (
+    <div className="w-full max-w-4xl mx-auto space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <Button
+          variant="ghost"
+          onClick={onReset}
+          className="text-muted-foreground hover:text-foreground"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          {t("results.newCalculation")}
+        </Button>
+      </div>
+
+      {/* Title */}
+      <div className="text-center space-y-2">
+        <h2 className="text-2xl md:text-3xl font-display text-primary">
+          {t("ancestral.title")}
+        </h2>
+        {name && (
+          <p className="text-lg text-foreground">
+            {name}
+          </p>
+        )}
+        <p className="text-muted-foreground">
+          {t("results.birthDate")}: {formatBirthDate()}
+        </p>
+        <p className="text-sm text-muted-foreground">
+          {t("ancestral.gender")}: {result.gender === 'female' ? t("ancestral.female") : t("ancestral.male")}
+        </p>
+      </div>
+
+      {/* Working Numbers */}
+      <div className="gradient-card rounded-2xl p-6 border border-border">
+        <h3 className="text-lg font-display text-foreground mb-4 text-center">
+          {t("ancestral.workingNumbers")}
+        </h3>
+        
+        <div className="mb-4 text-center">
+          <p className="text-sm text-muted-foreground mb-2">{t("ancestral.dateRow")}:</p>
+          <p className="font-mono text-lg text-foreground">
+            {result.birthDate.day.toString().padStart(2, '0')}.
+            {result.birthDate.month.toString().padStart(2, '0')}.
+            {result.birthDate.year}
+          </p>
+        </div>
+        
+        <div className="text-center">
+          <p className="text-sm text-muted-foreground mb-2">{t("ancestral.workingRow")}:</p>
+          <div className="flex justify-center gap-4">
+            {[
+              { num: result.workingNumbers.first, label: "1" },
+              { num: result.workingNumbers.second, label: "2" },
+              { num: result.workingNumbers.third, label: "3" },
+              { num: result.workingNumbers.fourth, label: "4" },
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <div className="w-12 h-12 rounded-full bg-primary/10 border-2 border-primary flex items-center justify-center">
+                  <span className="text-lg font-bold text-primary">{item.num}</span>
+                </div>
+                <span className="text-xs text-muted-foreground mt-1">№{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        <p className="text-xs text-muted-foreground text-center mt-4">
+          {t("ancestral.allDigits")}: {result.allDigits}
+        </p>
+      </div>
+
+      {/* Karmic Star */}
+      <div className="gradient-card rounded-2xl p-6 border border-border">
+        <h3 className="text-lg font-display text-foreground mb-4 text-center">
+          {t("ancestral.karmicStar")}
+        </h3>
+        <KarmicStar counts={result.starCounts} />
+      </div>
+
+      {/* Roles */}
+      {(result.roles.isKeeper || result.roles.isHealer || result.roles.isLastHope) && (
+        <div className="gradient-card rounded-2xl p-6 border border-border bg-primary/5">
+          <h3 className="text-lg font-display text-foreground mb-4 text-center flex items-center justify-center gap-2">
+            <Crown className="w-5 h-5 text-primary" />
+            {t("ancestral.yourRole")}
+          </h3>
+          
+          <div className="space-y-4">
+            {result.roles.isKeeper && (
+              <div className="p-4 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Shield className="w-5 h-5 text-primary" />
+                  <h4 className="font-display font-semibold text-foreground">
+                    {t("ancestral.roles.keeper")}
+                  </h4>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {t("ancestral.roles.keeperDesc")}
+                </p>
+              </div>
+            )}
+            
+            {result.roles.isHealer && (
+              <div className="p-4 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Heart className="w-5 h-5 text-primary" />
+                  <h4 className="font-display font-semibold text-foreground">
+                    {t("ancestral.roles.healer")}
+                  </h4>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {t("ancestral.roles.healerDesc")}
+                </p>
+              </div>
+            )}
+            
+            {result.roles.isLastHope && (
+              <div className="p-4 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-2">
+                  <Star className="w-5 h-5 text-primary" />
+                  <h4 className="font-display font-semibold text-foreground">
+                    {t("ancestral.roles.lastHope")}
+                  </h4>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {t("ancestral.roles.lastHopeDesc")}
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Curse Warning */}
+      {result.roles.hasCurse && (
+        <div className="gradient-card rounded-2xl p-6 border border-destructive/50 bg-destructive/5">
+          <div className="flex items-center gap-2 mb-2">
+            <AlertTriangle className="w-5 h-5 text-destructive" />
+            <h4 className="font-display font-semibold text-foreground">
+              {t("ancestral.roles.curse")}
+            </h4>
+          </div>
+          <p className="text-sm text-muted-foreground">
+            {t("ancestral.roles.curseDesc")}
+          </p>
+        </div>
+      )}
+
+      {/* Digit Interpretations */}
+      <div className="space-y-4">
+        <h3 className="text-lg font-display text-foreground text-center">
+          {t("ancestral.interpretationsTitle")}
+        </h3>
+        
+        {digitInfo.map((info) => (
+          <div key={info.digit} className="gradient-card rounded-2xl p-5 border border-border">
+            <div className="flex items-start gap-4">
+              <div className={cn(
+                "w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0",
+                info.count > 0 ? "bg-primary" : "bg-muted"
+              )}>
+                <info.icon className={cn(
+                  "w-6 h-6",
+                  info.count > 0 ? "text-primary-foreground" : "text-muted-foreground"
+                )} />
+              </div>
+              
+              <div className="flex-1">
+                <div className="flex items-center gap-2 mb-1">
+                  <h4 className="font-display font-semibold text-foreground">
+                    {t("ancestral.digit")} {info.digit}: {info.title}
+                  </h4>
+                  <span className={cn(
+                    "px-2 py-0.5 rounded-full text-xs font-medium",
+                    info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
+                  )}>
+                    ×{info.count}
+                  </span>
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  {getDigitInterpretation(info.digit, info.count)}
+                </p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* CTA */}
+      <div className="gradient-card rounded-2xl p-6 border border-border text-center">
+        <h3 className="text-lg font-display text-foreground mb-2">
+          {t("ancestral.wantDeepAnalysis")}
+        </h3>
+        <p className="text-sm text-muted-foreground mb-4">
+          {t("ancestral.deepAnalysisDesc")}
+        </p>
+        <Button
+          onClick={handleTelegramClick}
+          className="btn-fill bg-primary hover:bg-primary text-primary-foreground rounded-full"
+        >
+          {t("results.bookConsultation")}
+          <ExternalLink className="w-4 h-4 ml-2" />
+        </Button>
+      </div>
+    </div>
+  );
+}

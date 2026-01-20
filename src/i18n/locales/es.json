@@ -32,6 +32,7 @@
     "calculateMonth": "Calcular pronóstico mensual",
     "calculateYear": "Calcular pronóstico anual",
     "calculatePurpose": "Descubre tu propósito",
+    "calculateAncestral": "Descubre programas ancestrales",
     "calculate": "Calcular"
   },
   "methodology": {
@@ -270,6 +271,83 @@
     "responsibilityDesc": "El usuario toma decisiones de forma independiente basándose en la información recibida. El servicio no es responsable de las acciones tomadas en base a los cálculos.",
     "termsChanges": "Cambios en los Términos",
     "termsChangesDesc": "Nos reservamos el derecho de cambiar estos términos. El uso continuado del servicio después de los cambios significa aceptación de los nuevos términos."
+  },
+  "ancestral": {
+    "title": "Numerología Ancestral",
+    "subtitle": "Tu función en el sistema de linaje",
+    "gender": "Género",
+    "selectGender": "Selecciona género",
+    "male": "Masculino",
+    "female": "Femenino",
+    "workingNumbers": "Números de Trabajo",
+    "dateRow": "Fecha de nacimiento",
+    "workingRow": "Números de trabajo",
+    "allDigits": "Todos los dígitos para análisis",
+    "karmicStar": "Estrella Kármica Ancestral",
+    "yourRole": "Tu Rol en el Linaje",
+    "digit": "Dígito",
+    "interpretationsTitle": "Interpretación de la Estrella Ancestral",
+    "digits": {
+      "two": "Derecho a la Vida",
+      "four": "Continuación del Linaje",
+      "five": "Balance de Energías",
+      "seven": "Protección y Suerte",
+      "eight": "Protección del Linaje",
+      "twoTitle": "Derecho a la Vida",
+      "fourTitle": "Derecho a Continuar el Linaje",
+      "fiveTitle": "Balance de Energías",
+      "sevenTitle": "Protección y Suerte",
+      "eightTitle": "Protección del Linaje"
+    },
+    "roles": {
+      "keeper": "Guardián del Linaje",
+      "keeperDesc": "Eres el protector de tu familia. Tu tarea es mantener el sistema unido, guiar a los parientes por el camino correcto. Puedes parecer duro, pero esta es tu función ancestral. Las profesiones relacionadas con la protección son favorables: policía, militar, psicología, medicina.",
+      "healer": "Sanador del Linaje",
+      "healerDesc": "Eres el mago blanco de tu familia. Tu tarea es sanar el linaje física y espiritualmente. Eres naturalmente empático y abierto. La primera mitad de la vida puede haber sido difícil — esto es preparación para tu misión. Las profesiones de ayuda son favorables.",
+      "lastHope": "Última Esperanza del Linaje",
+      "lastHopeDesc": "Eres el gestor de crisis del linaje. El linaje te envió en un momento crítico para salvar la rama familiar. Eres más fuerte de lo que pareces. Tu tarea es revivir las tradiciones del linaje, rezar por los ancestros, preservar la memoria familiar. No puedes separarte completamente de tu familia.",
+      "curse": "Maldición o Voto Ancestral",
+      "curseDesc": "La presencia de un seis en el segundo o cuarto número de trabajo indica una posible maldición o voto ancestral en tu linaje. Se recomienda trabajar con programas ancestrales."
+    },
+    "interpretations": {
+      "2": {
+        "0": "El linaje tenía poca energía en el momento de tu concepción. Es importante llenarte de energía de forma independiente, tener un donante de energía en tu entorno. Después de los 26 años, los niveles de energía pueden caer sin prácticas especiales.",
+        "1": "Eres energéticamente autosuficiente. El linaje te dio el derecho a la vida y suficientes reservas de energía.",
+        "2": "Eres un donante de energía. Puedes compartir energía con tus seres queridos.",
+        "3": "Tu energía tiene una naturaleza pulsante. A estas personas se les llama brujas o brujos — tienes una conexión especial con el mundo energético.",
+        "4": "Eres un donante de energía muy poderoso. Tu tarea es compartir energía no con una persona, sino con muchos a tu alrededor."
+      },
+      "4": {
+        "0": "Posibles dudas o miedos respecto a los hijos, dificultades durante el embarazo o larga recuperación después del parto. Esto no es una prohibición, sino una indicación de características.",
+        "1": "Tienes el potencial para continuar el linaje, buena salud y capacidad de autocuración.",
+        "2": "¡Fantástico potencial de autocuración! Puedes curarte de cualquier enfermedad si lo deseas. También es el programa de madre — la tarea de tener hijos.",
+        "3": "Potencial muy fuerte para la continuación del linaje. Tres cuatros fortalecen tu conexión con la energía ancestral.",
+        "4": "Máximo potencial para la continuación del linaje y autocuración. Eres un eslabón importante en la cadena de generaciones."
+      },
+      "5": {
+        "0": "Para mujeres: eres la última esperanza del linaje. Tienes un núcleo masculino interno y la capacidad de soportar pruebas. Tu tarea es salvar y revivir el linaje.",
+        "1": "Balance saludable de energía masculina y femenina en tu cuerpo. Estado armonioso.",
+        "2": "Eres un brote saludable en el árbol familiar. Tu tarea es dar a luz hijos y continuar el linaje.",
+        "3": "Fallo energético ancestral serio. Posible programa de rechazo del amor en el linaje. Se recomienda trabajo con un especialista.",
+        "4": "Nivel crítico de fallo ancestral. Es necesario un trabajo profundo con programas ancestrales."
+      },
+      "7": {
+        "0": "Hasta los 26 años, el Universo te protege. Después, necesitas ganar protección a través de buenas acciones y programas positivos.",
+        "1": "Tienes un ángel guardián, y es lo suficientemente fuerte para protegerte.",
+        "2": "Además del ángel guardián, tienes un guardián ancestral — protección rezada por los ancestros.",
+        "3": "¡Eres un transmisor de suerte para otros! Puede que no uses esta suerte tú mismo, pero las personas a tu alrededor la reciben de ti.",
+        "4": "Máxima protección del linaje. Estás rodeado de poderosa energía guardiana."
+      },
+      "8": {
+        "0": "Tu tarea es servir a la familia, incluso a tu propio costo. Cuida a los parientes y une a la familia.",
+        "1": "Proteger el linaje es tu prioridad. La familia debe ser lo primero, pero hay equilibrio con los intereses personales.",
+        "2": "Un ocho para la familia, el segundo para la carrera. Tienes potencial para el desarrollo a través de la sociedad.",
+        "3": "¡Grandeza! Un gran regalo del linaje. Tu tarea es iluminar a otros y traer el bien al mundo.",
+        "4": "Máximo regalo ancestral de protector e iluminador. Enorme responsabilidad y oportunidades."
+      }
+    },
+    "wantDeepAnalysis": "¿Quieres un análisis profundo de los programas ancestrales?",
+    "deepAnalysisDesc": "Obtén una consulta profesional con análisis detallado de programas ancestrales, eliminación de patrones negativos y recomendaciones personalizadas."
   },
   "common": {
     "loading": "Cargando...",
