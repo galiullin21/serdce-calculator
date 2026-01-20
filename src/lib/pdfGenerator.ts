@@ -14,13 +14,26 @@ interface PDFSection {
   highlight?: boolean;
 }
 
-// Gold/cream color palette
+// Warm brown/cream color palette matching site design
 const COLORS = {
-  gold: [212, 175, 55] as [number, number, number],
-  goldDark: [178, 134, 11] as [number, number, number],
-  cream: [255, 253, 245] as [number, number, number],
-  text: [51, 51, 51] as [number, number, number],
-  textMuted: [102, 102, 102] as [number, number, number],
+  // Primary brown: hsl(20, 45%, 32%)
+  brown: [118, 73, 45] as [number, number, number],
+  // Brown dark: hsl(18, 50%, 22%)
+  brownDark: [84, 48, 28] as [number, number, number],
+  // Brown light: hsl(25, 35%, 45%)
+  brownLight: [155, 110, 75] as [number, number, number],
+  // Gold/accent: hsl(30, 50%, 45%)
+  gold: [172, 128, 57] as [number, number, number],
+  // Gold light: hsl(35, 55%, 60%)
+  goldLight: [203, 171, 98] as [number, number, number],
+  // Cream background: hsl(35, 30%, 95%)
+  cream: [247, 243, 237] as [number, number, number],
+  // Cream dark: hsl(35, 25%, 88%)
+  creamDark: [232, 224, 212] as [number, number, number],
+  // Text foreground: hsl(20, 40%, 20%)
+  text: [71, 49, 31] as [number, number, number],
+  // Muted text: hsl(20, 20%, 45%)
+  textMuted: [138, 110, 92] as [number, number, number],
 };
 
 // Cache for loaded font
@@ -54,11 +67,11 @@ async function loadCyrillicFont(pdf: jsPDF): Promise<void> {
   }
 }
 
-function drawWavyLine(pdf: jsPDF, startX: number, startY: number, width: number, amplitude: number, frequency: number) {
+function drawWavyLine(pdf: jsPDF, startX: number, startY: number, width: number, amplitude: number, frequency: number, color: [number, number, number] = COLORS.brown) {
   const segments = 100;
   const segmentWidth = width / segments;
   
-  pdf.setDrawColor(...COLORS.gold);
+  pdf.setDrawColor(...color);
   pdf.setLineWidth(0.5);
   
   let prevX = startX;
@@ -81,32 +94,34 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   pdf.setFillColor(...COLORS.cream);
   pdf.rect(0, 0, pageWidth, pageHeight, "F");
   
-  // Decorative wavy lines at top
+  // Decorative wavy lines at top with brown gradient effect
   for (let i = 0; i < 5; i++) {
-    drawWavyLine(pdf, 0, 15 + i * 8, pageWidth, 3, 2 + i * 0.5);
+    const color = i % 2 === 0 ? COLORS.brown : COLORS.goldLight;
+    drawWavyLine(pdf, 0, 15 + i * 8, pageWidth, 3, 2 + i * 0.5, color);
   }
   
   // Decorative wavy lines at bottom
   for (let i = 0; i < 5; i++) {
-    drawWavyLine(pdf, 0, pageHeight - 50 + i * 8, pageWidth, 3, 2 + i * 0.5);
+    const color = i % 2 === 0 ? COLORS.brown : COLORS.goldLight;
+    drawWavyLine(pdf, 0, pageHeight - 50 + i * 8, pageWidth, 3, 2 + i * 0.5, color);
   }
   
-  // Gold decorative circle
-  pdf.setFillColor(...COLORS.gold);
+  // Brown decorative circle (primary color)
+  pdf.setFillColor(...COLORS.brown);
   pdf.circle(pageWidth / 2, pageHeight / 2 - 30, 40, "F");
   
-  // Inner circle
+  // Inner cream circle
   pdf.setFillColor(...COLORS.cream);
   pdf.circle(pageWidth / 2, pageHeight / 2 - 30, 35, "F");
   
-  // Star symbol in center
-  pdf.setFontSize(48);
-  pdf.setTextColor(...COLORS.gold);
-  pdf.text("*", pageWidth / 2, pageHeight / 2 - 25, { align: "center" });
+  // Heart symbol in center (matching site theme)
+  pdf.setFontSize(36);
+  pdf.setTextColor(...COLORS.brown);
+  pdf.text("♥", pageWidth / 2, pageHeight / 2 - 22, { align: "center" });
   
   // Title
   pdf.setFontSize(28);
-  pdf.setTextColor(...COLORS.goldDark);
+  pdf.setTextColor(...COLORS.brownDark);
   pdf.text(options.title, pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
   
   // Subtitle
@@ -130,7 +145,7 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   
   // Footer
   pdf.setFontSize(10);
-  pdf.setTextColor(...COLORS.gold);
+  pdf.setTextColor(...COLORS.brown);
   pdf.text("serdce-calculator.lovable.app", pageWidth / 2, pageHeight - 20, { align: "center" });
 }
 
@@ -146,8 +161,8 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
   pdf.setFillColor(...COLORS.cream);
   pdf.rect(0, 0, pageWidth, pageHeight, "F");
   
-  // Gold top border
-  pdf.setFillColor(...COLORS.gold);
+  // Brown top border (primary color)
+  pdf.setFillColor(...COLORS.brown);
   pdf.rect(0, 0, pageWidth, 5, "F");
   
   while (sectionIndex < sections.length && y < pageHeight - 40) {
@@ -155,11 +170,11 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
     
     // Section title
     if (section.highlight) {
-      pdf.setFillColor(...COLORS.gold);
+      pdf.setFillColor(...COLORS.brown);
       pdf.roundedRect(margin - 5, y - 5, contentWidth + 10, 12, 3, 3, "F");
-      pdf.setTextColor(255, 255, 255);
+      pdf.setTextColor(...COLORS.cream);
     } else {
-      pdf.setTextColor(...COLORS.goldDark);
+      pdf.setTextColor(...COLORS.brownDark);
     }
     
     pdf.setFontSize(14);
@@ -199,12 +214,22 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
       y += 2;
     }
     
-    y += 10;
+    // Decorative separator between sections
+    if (sectionIndex < sections.length - 1) {
+      y += 5;
+      pdf.setDrawColor(...COLORS.goldLight);
+      pdf.setLineWidth(0.3);
+      pdf.line(margin + 20, y, pageWidth - margin - 20, y);
+      y += 8;
+    } else {
+      y += 10;
+    }
+    
     sectionIndex++;
   }
   
-  // Gold bottom border
-  pdf.setFillColor(...COLORS.gold);
+  // Brown bottom border
+  pdf.setFillColor(...COLORS.brown);
   pdf.rect(0, pageHeight - 5, pageWidth, 5, "F");
   
   return sectionIndex;
