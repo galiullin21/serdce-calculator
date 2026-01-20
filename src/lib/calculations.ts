@@ -93,44 +93,55 @@ export function dayToArcana(day: number): number {
 }
 
 // Расчёт личной матрицы (12 позиций)
+// Структура:
+//     10     11     12
+//      1      2      4
+//         3      5
+//            6
+//         7  8  9 (диагональный ряд)
 export function calculatePersonalMatrix(day: number, month: number, year: number): PersonalMatrix {
   const positions: number[] = new Array(12).fill(0);
   
-  // Позиция 1: День рождения
+  // === ВВОДНЫЕ ДАННЫЕ ===
+  // Позиция 1: День рождения (если > 22, вычитаем 22)
   positions[0] = dayToArcana(day);
   
-  // Позиция 2: Месяц рождения
+  // Позиция 2: Месяц рождения (1-12, не меняем)
   positions[1] = month;
   
-  // Позиция 3: Год рождения (сумма цифр)
-  positions[2] = yearToArcana(year);
+  // Позиция 4: Год рождения (сумма цифр, если > 22, вычитаем 22)
+  // ВАЖНО: позиция 4, а не 3!
+  positions[3] = yearToArcana(year);
   
-  // Позиция 4: Позиция 1 + 2
-  positions[3] = normalizeToArcana(positions[0] + positions[1]);
+  // === ОСНОВНОЙ ТРЕУГОЛЬНИК ===
+  // Позиция 3: Позиция 1 + Позиция 2
+  positions[2] = normalizeToArcana(positions[0] + positions[1]);
   
-  // Позиция 5: Позиция 2 + 3
-  positions[4] = normalizeToArcana(positions[1] + positions[2]);
+  // Позиция 5: Позиция 2 + Позиция 4
+  positions[4] = normalizeToArcana(positions[1] + positions[3]);
   
-  // Позиция 6: Позиция 4 - 3 (может быть отрицательным)
-  positions[5] = normalizeToArcana(positions[3] - positions[2]);
+  // Позиция 6: Позиция 3 + Позиция 5
+  positions[5] = normalizeToArcana(positions[2] + positions[4]);
   
-  // Позиция 7: Позиция 1 + 4
-  positions[6] = normalizeToArcana(positions[0] + positions[3]);
+  // === ДИАГОНАЛЬНЫЙ РЯД ===
+  // Позиция 7: Позиция 3 + Позиция 4
+  positions[6] = normalizeToArcana(positions[2] + positions[3]);
   
-  // Позиция 8: Позиция 5 + 7
-  positions[7] = normalizeToArcana(positions[4] + positions[6]);
+  // Позиция 8: Позиция 2 + Позиция 6
+  positions[7] = normalizeToArcana(positions[1] + positions[5]);
   
-  // Позиция 9: Позиция 6 + 8
-  positions[8] = normalizeToArcana(positions[5] + positions[7]);
+  // Позиция 9: Позиция 7 + Позиция 8
+  positions[8] = normalizeToArcana(positions[6] + positions[7]);
   
-  // Позиция 10: Позиция 4 - 5
-  positions[9] = normalizeToArcana(positions[3] - positions[4]);
+  // === КАРМИЧЕСКИЙ ТРЕУГОЛЬНИК (вычитание) ===
+  // Позиция 10: Позиция 1 - Позиция 2 (если отрицательное, прибавляем 22)
+  positions[9] = normalizeToArcana(positions[0] - positions[1]);
   
-  // Позиция 11: Позиция 10 + 5
-  positions[10] = normalizeToArcana(positions[9] + positions[4]);
+  // Позиция 11: Позиция 2 - Позиция 4 (если отрицательное, прибавляем 22)
+  positions[10] = normalizeToArcana(positions[1] - positions[3]);
   
-  // Позиция 12: Позиция 10 + 11
-  positions[11] = normalizeToArcana(positions[9] + positions[10]);
+  // Позиция 12: Позиция 10 - Позиция 11 (если отрицательное, прибавляем 22)
+  positions[11] = normalizeToArcana(positions[9] - positions[10]);
   
   // Определение зеркальных и перевёрнутых арканов
   const { mirrorArcana, reversedArcana } = findSpecialArcana(positions);
