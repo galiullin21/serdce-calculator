@@ -29,8 +29,8 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  const handleDownloadPDF = () => {
-    generatePDF({
+  const handleDownloadPDF = async () => {
+    await generatePDF({
       title: t("forecast.monthForecast"),
       subtitle: `${monthName} ${forecast.targetYear}`,
       birthDate: formatBirthDateForPDF(forecast.birthDate.day, forecast.birthDate.month, forecast.birthDate.year),

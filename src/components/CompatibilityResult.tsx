@@ -37,11 +37,11 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
     return t("compatibility.challenging");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const person1Date = formatBirthDateForPDF(result.person1.birthDate.day, result.person1.birthDate.month, result.person1.birthDate.year);
     const person2Date = formatBirthDateForPDF(result.person2.birthDate.day, result.person2.birthDate.month, result.person2.birthDate.year);
     
-    generatePDF({
+    await generatePDF({
       title: t("compatibility.title"),
       subtitle: `${result.person1.name} & ${result.person2.name}`,
       birthDate: `${person1Date} / ${person2Date}`,

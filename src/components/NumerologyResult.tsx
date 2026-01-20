@@ -20,7 +20,7 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const numbers = [
       { num: result.mindNumber, title: "Ум", key: "mindInterpretation" as const },
       { num: result.actionNumber, title: "Действие", key: "actionInterpretation" as const },
@@ -36,7 +36,7 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
       };
     });
     
-    generatePDF({
+    await generatePDF({
       title: name ? `${name}, ваша нумерология` : "Ваша нумерология",
       subtitle: "Классическая нумерология",
       birthDate: formattedDate,

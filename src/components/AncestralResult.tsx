@@ -24,7 +24,7 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const sections = [];
     
     // Working numbers
@@ -74,7 +74,7 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
       });
     });
     
-    generatePDF({
+    await generatePDF({
       title: t("ancestral.title"),
       subtitle: result.gender === 'female' ? t("ancestral.female") : t("ancestral.male"),
       birthDate: formatBirthDateForPDF(result.birthDate.day, result.birthDate.month, result.birthDate.year),

@@ -23,22 +23,35 @@ const COLORS = {
   textMuted: [102, 102, 102] as [number, number, number],
 };
 
-// Transliteration map for Cyrillic to Latin
-const cyrillicToLatin: Record<string, string> = {
-  'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo', 'ж': 'zh',
-  'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm', 'н': 'n', 'о': 'o',
-  'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u', 'ф': 'f', 'х': 'kh', 'ц': 'ts',
-  'ч': 'ch', 'ш': 'sh', 'щ': 'shch', 'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu',
-  'я': 'ya',
-  'А': 'A', 'Б': 'B', 'В': 'V', 'Г': 'G', 'Д': 'D', 'Е': 'E', 'Ё': 'Yo', 'Ж': 'Zh',
-  'З': 'Z', 'И': 'I', 'Й': 'Y', 'К': 'K', 'Л': 'L', 'М': 'M', 'Н': 'N', 'О': 'O',
-  'П': 'P', 'Р': 'R', 'С': 'S', 'Т': 'T', 'У': 'U', 'Ф': 'F', 'Х': 'Kh', 'Ц': 'Ts',
-  'Ч': 'Ch', 'Ш': 'Sh', 'Щ': 'Shch', 'Ъ': '', 'Ы': 'Y', 'Ь': '', 'Э': 'E', 'Ю': 'Yu',
-  'Я': 'Ya'
-};
+// Cache for loaded font
+let fontLoaded = false;
 
-function transliterate(text: string): string {
-  return text.split('').map(char => cyrillicToLatin[char] || char).join('');
+async function loadCyrillicFont(pdf: jsPDF): Promise<void> {
+  if (fontLoaded) {
+    pdf.setFont("Roboto", "normal");
+    return;
+  }
+
+  try {
+    // Fetch Roboto font with Cyrillic support from Google Fonts
+    const fontUrl = "https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Me5WZLCzYlKw.ttf";
+    const response = await fetch(fontUrl);
+    const arrayBuffer = await response.arrayBuffer();
+    
+    // Convert to Base64
+    const base64 = btoa(
+      new Uint8Array(arrayBuffer).reduce((data, byte) => data + String.fromCharCode(byte), "")
+    );
+    
+    // Add font to jsPDF
+    pdf.addFileToVFS("Roboto-Regular.ttf", base64);
+    pdf.addFont("Roboto-Regular.ttf", "Roboto", "normal");
+    pdf.setFont("Roboto", "normal");
+    fontLoaded = true;
+  } catch (error) {
+    console.error("Failed to load Cyrillic font:", error);
+    // Fallback to default font
+  }
 }
 
 function drawWavyLine(pdf: jsPDF, startX: number, startY: number, width: number, amplitude: number, frequency: number) {
@@ -91,29 +104,29 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   pdf.setTextColor(...COLORS.gold);
   pdf.text("*", pageWidth / 2, pageHeight / 2 - 25, { align: "center" });
   
-  // Title (transliterated)
+  // Title
   pdf.setFontSize(28);
   pdf.setTextColor(...COLORS.goldDark);
-  pdf.text(transliterate(options.title), pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
+  pdf.text(options.title, pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
   
   // Subtitle
   if (options.subtitle) {
     pdf.setFontSize(14);
     pdf.setTextColor(...COLORS.textMuted);
-    pdf.text(transliterate(options.subtitle), pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
+    pdf.text(options.subtitle, pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
   }
   
   // Name
   if (options.name) {
     pdf.setFontSize(18);
     pdf.setTextColor(...COLORS.text);
-    pdf.text(transliterate(options.name), pageWidth / 2, pageHeight / 2 + 65, { align: "center" });
+    pdf.text(options.name, pageWidth / 2, pageHeight / 2 + 65, { align: "center" });
   }
   
   // Birth date
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.textMuted);
-  pdf.text(`Data rozhdeniya: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 80, { align: "center" });
+  pdf.text(`Дата рождения: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 80, { align: "center" });
   
   // Footer
   pdf.setFontSize(10);
@@ -150,20 +163,29 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
     }
     
     pdf.setFontSize(14);
-    pdf.text(transliterate(section.title), margin, y + 4);
-    y += 18;
+    const titleLines = pdf.splitTextToSize(section.title, contentWidth);
+    for (const titleLine of titleLines) {
+      pdf.text(titleLine, margin, y + 4);
+      y += 7;
+    }
+    y += 8;
     
     // Section content
     pdf.setTextColor(...COLORS.text);
     pdf.setFontSize(11);
     
     const contentLines = Array.isArray(section.content) 
-      ? section.content.map(transliterate)
-      : [transliterate(section.content)];
+      ? section.content 
+      : [section.content];
     
     for (const line of contentLines) {
       if (y > pageHeight - 40) {
         return sectionIndex; // Need new page
+      }
+      
+      if (!line || line.trim() === "") {
+        y += 4;
+        continue;
       }
       
       const wrappedLines = pdf.splitTextToSize(line, contentWidth);
@@ -188,12 +210,15 @@ function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number)
   return sectionIndex;
 }
 
-export function generatePDF(options: PDFOptions): void {
+export async function generatePDF(options: PDFOptions): Promise<void> {
   const pdf = new jsPDF({
     orientation: "portrait",
     unit: "mm",
     format: "a4",
   });
+  
+  // Load Cyrillic font
+  await loadCyrillicFont(pdf);
   
   // Title page
   drawTitlePage(pdf, options);
@@ -208,9 +233,9 @@ export function generatePDF(options: PDFOptions): void {
     }
   }
   
-  // Generate filename
-  const safeName = transliterate(options.name || "report").replace(/[^a-zA-Z0-9]/g, "_");
-  const safeTitle = transliterate(options.title).replace(/[^a-zA-Z0-9]/g, "_");
+  // Generate filename with safe characters
+  const safeName = (options.name || "report").replace(/[^\w\s-]/g, "").replace(/\s+/g, "_") || "report";
+  const safeTitle = options.title.replace(/[^\w\s-]/g, "").replace(/\s+/g, "_") || "analysis";
   const fileName = `${safeName}_${safeTitle}.pdf`;
   
   pdf.save(fileName);

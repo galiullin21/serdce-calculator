@@ -172,7 +172,7 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const numbers = [
       { num: result.mindNumber, title: t("keyto.mindNumber") },
       { num: result.actionNumber, title: t("keyto.actionNumber") },
@@ -199,7 +199,7 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
       };
     });
     
-    generatePDF({
+    await generatePDF({
       title: t("keyto.yourCalculationDefault"),
       subtitle: t("keyto.methodology1Classic"),
       birthDate: result.birthDate,
