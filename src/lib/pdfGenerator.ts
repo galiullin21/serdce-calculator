@@ -39,21 +39,40 @@ const COLORS = {
 // Cache for the font base64 data
 let cachedFontBase64: string | null = null;
 
-async function loadCyrillicFont(pdf: jsPDF): Promise<void> {
+async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
   try {
     if (!cachedFontBase64) {
-      // Use jsDelivr CDN for Roboto with full Cyrillic support
-      const fontUrl = "https://cdn.jsdelivr.net/fontsource/fonts/roboto@latest/cyrillic-400-normal.ttf";
-      const response = await fetch(fontUrl);
+      // Try multiple font sources for reliability
+      const fontSources = [
+        // Noto Sans with full Cyrillic support from jsDelivr
+        "https://cdn.jsdelivr.net/npm/@fontsource/noto-sans@5.0.6/files/noto-sans-cyrillic-400-normal.woff",
+        // PT Sans - reliable Cyrillic font
+        "https://cdn.jsdelivr.net/npm/@fontsource/pt-sans@5.0.8/files/pt-sans-cyrillic-400-normal.woff",
+        // Open Sans Cyrillic
+        "https://cdn.jsdelivr.net/npm/@fontsource/open-sans@5.0.28/files/open-sans-cyrillic-400-normal.woff",
+      ];
       
-      if (!response.ok) {
-        throw new Error(`Font fetch failed: ${response.status}`);
+      let fontData: ArrayBuffer | null = null;
+      
+      for (const url of fontSources) {
+        try {
+          const response = await fetch(url);
+          if (response.ok) {
+            fontData = await response.arrayBuffer();
+            console.log("Loaded font from:", url);
+            break;
+          }
+        } catch (e) {
+          console.warn("Failed to load font from:", url);
+        }
       }
       
-      const arrayBuffer = await response.arrayBuffer();
+      if (!fontData) {
+        throw new Error("All font sources failed");
+      }
       
       // Convert to Base64 properly
-      const uint8Array = new Uint8Array(arrayBuffer);
+      const uint8Array = new Uint8Array(fontData);
       let binary = '';
       const chunkSize = 8192;
       for (let i = 0; i < uint8Array.length; i += chunkSize) {
@@ -64,30 +83,13 @@ async function loadCyrillicFont(pdf: jsPDF): Promise<void> {
     }
     
     // Add font to jsPDF
-    pdf.addFileToVFS("Roboto-Cyrillic.ttf", cachedFontBase64);
-    pdf.addFont("Roboto-Cyrillic.ttf", "Roboto", "normal");
-    pdf.setFont("Roboto", "normal");
+    pdf.addFileToVFS("CyrillicFont.woff", cachedFontBase64);
+    pdf.addFont("CyrillicFont.woff", "CyrillicFont", "normal");
+    pdf.setFont("CyrillicFont", "normal");
+    return true;
   } catch (error) {
     console.error("Failed to load Cyrillic font:", error);
-    // Fallback - try another source
-    try {
-      const fallbackUrl = "https://rawcdn.githack.com/nickshanks/Roboto/master/Roboto-Regular.ttf";
-      const response = await fetch(fallbackUrl);
-      const arrayBuffer = await response.arrayBuffer();
-      const uint8Array = new Uint8Array(arrayBuffer);
-      let binary = '';
-      const chunkSize = 8192;
-      for (let i = 0; i < uint8Array.length; i += chunkSize) {
-        const chunk = uint8Array.subarray(i, i + chunkSize);
-        binary += String.fromCharCode.apply(null, Array.from(chunk));
-      }
-      const base64 = btoa(binary);
-      pdf.addFileToVFS("Roboto-Fallback.ttf", base64);
-      pdf.addFont("Roboto-Fallback.ttf", "Roboto", "normal");
-      pdf.setFont("Roboto", "normal");
-    } catch (fallbackError) {
-      console.error("Fallback font also failed:", fallbackError);
-    }
+    return false;
   }
 }
 
