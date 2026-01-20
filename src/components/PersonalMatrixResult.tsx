@@ -13,11 +13,11 @@ interface PersonalMatrixResultProps {
   onReset: () => void;
 }
 
-type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
+type TabType = "main" | "diagonal" | "karmic" | "success" | "periods" | "calculations";
 
 export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixResultProps) {
   const { t } = useTranslation();
-  const [activeTab, setActiveTab] = useState<TabType>("main");
+  const [activeTab, setActiveTab] = useState<TabType>("calculations");
   
   const formattedDate = formatBirthDate(
     matrix.birthDate.day,
@@ -37,7 +37,57 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
     return matrix.reversedArcana.some(r => r.positions.includes(position));
   };
 
+  // Расчёт пошаговых вычислений для таблицы
+  const { day, month, year } = matrix.birthDate;
+  const pos1 = day > 22 ? day - 22 : day;
+  const pos2 = month;
+  const yearSum = year.toString().split('').reduce((sum, d) => sum + parseInt(d), 0);
+  const pos4 = yearSum > 22 ? yearSum - 22 : yearSum;
+  
+  const pos3Raw = pos1 + pos2;
+  const pos3 = pos3Raw > 22 ? pos3Raw - 22 : pos3Raw;
+  
+  const pos5Raw = pos2 + pos4;
+  const pos5 = pos5Raw > 22 ? pos5Raw - 22 : pos5Raw;
+  
+  const pos6Raw = pos3 + pos5;
+  const pos6 = pos6Raw > 22 ? pos6Raw - 22 : pos6Raw;
+  
+  const pos7Raw = pos3 + pos4;
+  const pos7 = pos7Raw > 22 ? pos7Raw - 22 : pos7Raw;
+  
+  const pos8Raw = pos2 + pos6;
+  const pos8 = pos8Raw > 22 ? pos8Raw - 22 : pos8Raw;
+  
+  const pos9Raw = pos7 + pos8;
+  const pos9 = pos9Raw > 22 ? pos9Raw - 22 : pos9Raw;
+  
+  const pos10Raw = pos1 - pos2;
+  const pos10 = pos10Raw < 0 ? pos10Raw + 22 : (pos10Raw === 0 ? 22 : pos10Raw);
+  
+  const pos11Raw = pos2 - pos4;
+  const pos11 = pos11Raw < 0 ? pos11Raw + 22 : (pos11Raw === 0 ? 22 : pos11Raw);
+  
+  const pos12Raw = pos10 - pos11;
+  const pos12 = pos12Raw < 0 ? pos12Raw + 22 : (pos12Raw === 0 ? 22 : pos12Raw);
+  
+  const calculationSteps = [
+    { pos: 1, formula: `День: ${day}`, raw: day, result: pos1 },
+    { pos: 2, formula: `Месяц: ${month}`, raw: month, result: pos2 },
+    { pos: 4, formula: `Год: ${year.toString().split('').join('+')} = ${yearSum}`, raw: yearSum, result: pos4 },
+    { pos: 3, formula: `Поз.1 + Поз.2 = ${pos1} + ${pos2}`, raw: pos3Raw, result: pos3 },
+    { pos: 5, formula: `Поз.2 + Поз.4 = ${pos2} + ${pos4}`, raw: pos5Raw, result: pos5 },
+    { pos: 6, formula: `Поз.3 + Поз.5 = ${pos3} + ${pos5}`, raw: pos6Raw, result: pos6 },
+    { pos: 7, formula: `Поз.3 + Поз.4 = ${pos3} + ${pos4}`, raw: pos7Raw, result: pos7 },
+    { pos: 8, formula: `Поз.2 + Поз.6 = ${pos2} + ${pos6}`, raw: pos8Raw, result: pos8 },
+    { pos: 9, formula: `Поз.7 + Поз.8 = ${pos7} + ${pos8}`, raw: pos9Raw, result: pos9 },
+    { pos: 10, formula: `Поз.1 - Поз.2 = ${pos1} - ${pos2}`, raw: pos10Raw, result: pos10 },
+    { pos: 11, formula: `Поз.2 - Поз.4 = ${pos2} - ${pos4}`, raw: pos11Raw, result: pos11 },
+    { pos: 12, formula: `Поз.10 - Поз.11 = ${pos10} - ${pos11}`, raw: pos12Raw, result: pos12 },
+  ];
+
   const tabs = [
+    { id: "calculations" as TabType, label: "📊 Расчёты", positions: [] },
     { id: "main" as TabType, label: t("results.mainTriangle"), positions: [1, 2, 3, 4, 5, 6] },
     { id: "diagonal" as TabType, label: t("results.lifeGoals"), positions: [7, 8, 9] },
     { id: "karmic" as TabType, label: t("results.karma"), positions: [10, 11, 12] },
@@ -193,6 +243,60 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
       </div>
 
       <div className="space-y-4">
+        {activeTab === "calculations" && (
+          <>
+            <h2 className="text-lg font-display text-foreground flex items-center gap-2">
+              📊 Таблица вычислений
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Пошаговые расчёты для даты {day}.{month.toString().padStart(2, '0')}.{year}
+            </p>
+            
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm border-collapse">
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className="text-left py-2 px-3 font-medium text-foreground">Позиция</th>
+                    <th className="text-left py-2 px-3 font-medium text-foreground">Формула</th>
+                    <th className="text-center py-2 px-3 font-medium text-foreground">Результат</th>
+                    <th className="text-center py-2 px-3 font-medium text-foreground">После норм.</th>
+                    <th className="text-center py-2 px-3 font-medium text-foreground">В матрице</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {calculationSteps.map((step) => (
+                    <tr key={step.pos} className="border-b border-border/50 hover:bg-muted/50">
+                      <td className="py-2 px-3 font-medium text-primary">{step.pos}</td>
+                      <td className="py-2 px-3 text-muted-foreground">{step.formula}</td>
+                      <td className="py-2 px-3 text-center">{step.raw}</td>
+                      <td className="py-2 px-3 text-center font-medium">{step.result}</td>
+                      <td className="py-2 px-3 text-center">
+                        <span className={cn(
+                          "inline-flex items-center justify-center w-8 h-8 rounded-lg font-bold",
+                          matrix.positions[step.pos - 1] === step.result 
+                            ? "bg-green-500/20 text-green-600" 
+                            : "bg-destructive/20 text-destructive"
+                        )}>
+                          {matrix.positions[step.pos - 1]}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <div className="gradient-card rounded-xl p-4 border border-border mt-4">
+              <h3 className="font-medium text-foreground mb-2">Правила нормализации:</h3>
+              <ul className="text-sm text-muted-foreground space-y-1">
+                <li>• Если число &gt; 22, вычитаем 22</li>
+                <li>• Если число = 0, заменяем на 22</li>
+                <li>• Если число отрицательное, прибавляем 22</li>
+              </ul>
+            </div>
+          </>
+        )}
+
         {activeTab === "main" && (
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
