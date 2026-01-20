@@ -30,7 +30,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
     window.open("https://t.me/galiullin_ruzal", "_blank");
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     const sections = [];
     
     // Main positions
@@ -57,7 +57,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
       }),
     });
     
-    generatePDF({
+    await generatePDF({
       title: t("results.yourPurpose"),
       subtitle: t("results.personalMatrix"),
       birthDate: formatBirthDateForPDF(matrix.birthDate.day, matrix.birthDate.month, matrix.birthDate.year),
