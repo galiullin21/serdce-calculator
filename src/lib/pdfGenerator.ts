@@ -42,34 +42,18 @@ let cachedFontBase64: string | null = null;
 async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
   try {
     if (!cachedFontBase64) {
-      // Use TTF format - jsPDF doesn't support WOFF
-      const fontSources = [
-        // PT Sans from rawgit (TTF format)
-        "https://cdn.jsdelivr.net/gh/nickshanks/Roboto@master/Roboto-Regular.ttf",
-        // Alternative: Google Fonts direct TTF link
-        "https://fonts.gstatic.com/s/ptsans/v17/jizaRExUiTo99u79D0aEPuC5.ttf",
-      ];
+      // Use PT Sans Cyrillic from Google Fonts - guaranteed Cyrillic support
+      // This is the full PTSans-Regular with Latin + Cyrillic
+      const fontUrl = "https://fonts.gstatic.com/s/ptsans/v17/jizaRExUiTo99u79D0-ExdGM.ttf";
       
-      let fontData: ArrayBuffer | null = null;
-      
-      for (const url of fontSources) {
-        try {
-          const response = await fetch(url);
-          if (response.ok) {
-            fontData = await response.arrayBuffer();
-            console.log("Loaded font from:", url);
-            break;
-          }
-        } catch (e) {
-          console.warn("Failed to load font from:", url);
-        }
+      const response = await fetch(fontUrl);
+      if (!response.ok) {
+        throw new Error(`Font fetch failed: ${response.status}`);
       }
       
-      if (!fontData) {
-        throw new Error("All font sources failed");
-      }
+      const fontData = await response.arrayBuffer();
       
-      // Convert to Base64 properly
+      // Convert to Base64
       const uint8Array = new Uint8Array(fontData);
       let binary = '';
       const chunkSize = 8192;
@@ -80,10 +64,10 @@ async function loadCyrillicFont(pdf: jsPDF): Promise<boolean> {
       cachedFontBase64 = btoa(binary);
     }
     
-    // Add font to jsPDF - must be TTF format
-    pdf.addFileToVFS("CyrillicFont.ttf", cachedFontBase64);
-    pdf.addFont("CyrillicFont.ttf", "CyrillicFont", "normal");
-    pdf.setFont("CyrillicFont", "normal");
+    // Add font to jsPDF
+    pdf.addFileToVFS("PTSans.ttf", cachedFontBase64);
+    pdf.addFont("PTSans.ttf", "PTSans", "normal");
+    pdf.setFont("PTSans", "normal");
     return true;
   } catch (error) {
     console.error("Failed to load Cyrillic font:", error);
