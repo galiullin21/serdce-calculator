@@ -10,6 +10,7 @@ interface ArcanaCardProps {
   positionTitle?: string;
   positionDescription?: string;
   showYearForecast?: boolean;
+  showMonthForecast?: boolean;
   isReversed?: boolean;
   isMirror?: boolean;
   compact?: boolean;
@@ -21,6 +22,7 @@ export function ArcanaCard({
   positionTitle,
   positionDescription,
   showYearForecast = false,
+  showMonthForecast = false,
   isReversed = false,
   isMirror = false,
   compact = false,
@@ -33,9 +35,11 @@ export function ArcanaCard({
 
   const description = showYearForecast 
     ? arcana.yearForecast 
-    : isReversed 
-      ? arcana.personalReversed 
-      : arcana.personalDescription;
+    : showMonthForecast
+      ? arcana.monthForecast
+      : isReversed 
+        ? arcana.personalReversed 
+        : arcana.personalDescription;
 
   return (
     <div
@@ -126,7 +130,7 @@ export function ArcanaCard({
 
           <div>
             <h4 className="text-sm font-medium text-foreground mb-2">
-              {showYearForecast ? t("matrix.yearForecast") : isReversed ? t("matrix.reversedMeaning") : t("matrix.description")}
+              {showYearForecast ? t("matrix.yearForecast") : showMonthForecast ? t("matrix.monthForecast") : isReversed ? t("matrix.reversedMeaning") : t("matrix.description")}
             </h4>
             <p className="text-sm text-muted-foreground leading-relaxed">
               {description}
