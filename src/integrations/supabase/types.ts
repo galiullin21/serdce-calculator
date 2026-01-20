@@ -14,7 +14,130 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      analysis_packages: {
+        Row: {
+          created_at: string
+          credits: number
+          description: string | null
+          id: string
+          is_active: boolean
+          name: string
+          price_rub: number
+          price_usd: number | null
+          prodamus_product_id: string | null
+          stripe_price_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          credits?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          price_rub: number
+          price_usd?: number | null
+          prodamus_product_id?: string | null
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          credits?: number
+          description?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          price_rub?: number
+          price_usd?: number | null
+          prodamus_product_id?: string | null
+          stripe_price_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      analysis_results: {
+        Row: {
+          analysis_type: string
+          created_at: string
+          id: string
+          input_data: Json
+          purchase_id: string | null
+          result_data: Json
+        }
+        Insert: {
+          analysis_type: string
+          created_at?: string
+          id?: string
+          input_data: Json
+          purchase_id?: string | null
+          result_data: Json
+        }
+        Update: {
+          analysis_type?: string
+          created_at?: string
+          id?: string
+          input_data?: Json
+          purchase_id?: string | null
+          result_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "analysis_results_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      purchases: {
+        Row: {
+          access_token: string
+          created_at: string
+          credits_remaining: number
+          email: string
+          id: string
+          package_id: string | null
+          provider: Database["public"]["Enums"]["payment_provider"]
+          provider_payment_id: string | null
+          status: Database["public"]["Enums"]["purchase_status"]
+          updated_at: string
+        }
+        Insert: {
+          access_token?: string
+          created_at?: string
+          credits_remaining?: number
+          email: string
+          id?: string
+          package_id?: string | null
+          provider: Database["public"]["Enums"]["payment_provider"]
+          provider_payment_id?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          updated_at?: string
+        }
+        Update: {
+          access_token?: string
+          created_at?: string
+          credits_remaining?: number
+          email?: string
+          id?: string
+          package_id?: string | null
+          provider?: Database["public"]["Enums"]["payment_provider"]
+          provider_payment_id?: string | null
+          status?: Database["public"]["Enums"]["purchase_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "purchases_package_id_fkey"
+            columns: ["package_id"]
+            isOneToOne: false
+            referencedRelation: "analysis_packages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +146,8 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      payment_provider: "stripe" | "prodamus"
+      purchase_status: "pending" | "completed" | "failed" | "refunded"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +274,9 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      payment_provider: ["stripe", "prodamus"],
+      purchase_status: ["pending", "completed", "failed", "refunded"],
+    },
   },
 } as const
