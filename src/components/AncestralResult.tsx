@@ -151,44 +151,44 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
           
           <div className="space-y-4">
             {result.roles.isKeeper && (
-              <div className="p-4 rounded-xl bg-background border border-primary/30">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-5 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-3">
                   <Shield className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground">
+                  <h4 className="font-display font-semibold text-foreground text-lg">
                     {t("ancestral.roles.keeper")}
                   </h4>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
                   {t("ancestral.roles.keeperDesc")}
-                </p>
+                </div>
               </div>
             )}
             
             {result.roles.isHealer && (
-              <div className="p-4 rounded-xl bg-background border border-primary/30">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-5 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-3">
                   <Heart className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground">
+                  <h4 className="font-display font-semibold text-foreground text-lg">
                     {t("ancestral.roles.healer")}
                   </h4>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
                   {t("ancestral.roles.healerDesc")}
-                </p>
+                </div>
               </div>
             )}
             
             {result.roles.isLastHope && (
-              <div className="p-4 rounded-xl bg-background border border-primary/30">
-                <div className="flex items-center gap-2 mb-2">
+              <div className="p-5 rounded-xl bg-background border border-primary/30">
+                <div className="flex items-center gap-2 mb-3">
                   <Star className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground">
+                  <h4 className="font-display font-semibold text-foreground text-lg">
                     {t("ancestral.roles.lastHope")}
                   </h4>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
                   {t("ancestral.roles.lastHopeDesc")}
-                </p>
+                </div>
               </div>
             )}
           </div>
@@ -198,15 +198,15 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
       {/* Curse Warning */}
       {result.roles.hasCurse && (
         <div className="gradient-card rounded-2xl p-6 border border-destructive/50 bg-destructive/5">
-          <div className="flex items-center gap-2 mb-2">
+          <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="w-5 h-5 text-destructive" />
-            <h4 className="font-display font-semibold text-foreground">
+            <h4 className="font-display font-semibold text-foreground text-lg">
               {t("ancestral.roles.curse")}
             </h4>
           </div>
-          <p className="text-sm text-muted-foreground">
+          <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
             {t("ancestral.roles.curseDesc")}
-          </p>
+          </div>
         </div>
       )}
 
@@ -217,33 +217,33 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
         </h3>
         
         {digitInfo.map((info) => (
-          <div key={info.digit} className="gradient-card rounded-2xl p-5 border border-border">
+          <div key={info.digit} className="gradient-card rounded-2xl p-6 border border-border">
             <div className="flex items-start gap-4">
               <div className={cn(
-                "w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0",
+                "w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0",
                 info.count > 0 ? "bg-primary" : "bg-muted"
               )}>
                 <info.icon className={cn(
-                  "w-6 h-6",
+                  "w-7 h-7",
                   info.count > 0 ? "text-primary-foreground" : "text-muted-foreground"
                 )} />
               </div>
               
               <div className="flex-1">
-                <div className="flex items-center gap-2 mb-1">
-                  <h4 className="font-display font-semibold text-foreground">
+                <div className="flex items-center gap-2 mb-2">
+                  <h4 className="font-display font-semibold text-foreground text-lg">
                     {t("ancestral.digit")} {info.digit}: {info.title}
                   </h4>
                   <span className={cn(
-                    "px-2 py-0.5 rounded-full text-xs font-medium",
+                    "px-3 py-1 rounded-full text-sm font-medium",
                     info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
                   )}>
                     ×{info.count}
                   </span>
                 </div>
-                <p className="text-sm text-muted-foreground">
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
                   {getDigitInterpretation(info.digit, info.count)}
-                </p>
+                </div>
               </div>
             </div>
           </div>
