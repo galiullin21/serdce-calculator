@@ -126,7 +126,7 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
         </h2>
         <ArcanaCard
           number={forecast.position3}
-          showYearForecast={false}
+          showMonthForecast={true}
           compact={false}
         />
       </div>
@@ -139,13 +139,13 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
           <ArcanaCard
             number={forecast.position1}
             positionTitle={t("forecast.yearEnergyTitle")}
-            showYearForecast={false}
+            showMonthForecast={true}
             compact={true}
           />
           <ArcanaCard
             number={forecast.position2}
             positionTitle={`${t("forecast.energyOf")} ${monthName}`}
-            showYearForecast={false}
+            showMonthForecast={true}
             compact={true}
           />
         </div>
