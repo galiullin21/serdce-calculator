@@ -137,7 +137,7 @@ export function ArcanaCard({
             </p>
           </div>
 
-          {!showYearForecast && arcana.professions.length > 0 && (
+          {arcana.professions.length > 0 && (
             <div>
               <h4 className="text-sm font-medium text-foreground mb-2">
                 {t("matrix.suitableProfessions")}
