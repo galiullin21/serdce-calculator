@@ -38,13 +38,22 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
       const arcanaNumber = matrix.positions[pos - 1];
       const arcana = getArcana(arcanaNumber);
       const posDesc = positionDescriptions[pos];
+      
+      const content = [
+        posDesc?.description || "",
+        "",
+        arcana?.personalDescription || "",
+      ];
+      
+      // Add professions if available
+      if (arcana?.professions && arcana.professions.length > 0) {
+        content.push("");
+        content.push(`${t("matrix.suitableProfessions")}: ${arcana.professions.join(", ")}`);
+      }
+      
       sections.push({
         title: `${t("results.position")} ${pos}: ${posDesc?.title || ""} — ${arcanaNumber} (${arcana?.name || ""})`,
-        content: [
-          posDesc?.description || "",
-          "",
-          arcana?.personalDescription || "",
-        ],
+        content,
         highlight: pos === 12,
       });
     }
