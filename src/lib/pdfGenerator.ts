@@ -102,59 +102,48 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   pdf.setFillColor(...COLORS.cream);
   pdf.rect(0, 0, pageWidth, pageHeight, "F");
   
-  // Decorative wavy lines at top with brown gradient effect
-  for (let i = 0; i < 5; i++) {
-    const color = i % 2 === 0 ? COLORS.brown : COLORS.goldLight;
-    drawWavyLine(pdf, 0, 15 + i * 8, pageWidth, 3, 2 + i * 0.5, color);
-  }
-  
-  // Decorative wavy lines at bottom
-  for (let i = 0; i < 5; i++) {
-    const color = i % 2 === 0 ? COLORS.brown : COLORS.goldLight;
-    drawWavyLine(pdf, 0, pageHeight - 50 + i * 8, pageWidth, 3, 2 + i * 0.5, color);
-  }
-  
-  // Brown decorative circle (primary color)
+  // Simple top decorative line
   pdf.setFillColor(...COLORS.brown);
-  pdf.circle(pageWidth / 2, pageHeight / 2 - 30, 40, "F");
+  pdf.rect(0, 0, pageWidth, 3, "F");
   
-  // Inner cream circle
-  pdf.setFillColor(...COLORS.cream);
-  pdf.circle(pageWidth / 2, pageHeight / 2 - 30, 35, "F");
+  // Simple bottom decorative line
+  pdf.setFillColor(...COLORS.brown);
+  pdf.rect(0, pageHeight - 3, pageWidth, 3, "F");
   
-  // Heart symbol in center (matching site theme)
-  pdf.setFontSize(36);
-  pdf.setTextColor(...COLORS.brown);
-  pdf.text("♥", pageWidth / 2, pageHeight / 2 - 22, { align: "center" });
-  
-  // Title
-  pdf.setFontSize(28);
+  // Title - centered in upper third
+  pdf.setFontSize(32);
   pdf.setTextColor(...COLORS.brownDark);
-  pdf.text(options.title, pageWidth / 2, pageHeight / 2 + 30, { align: "center" });
+  const titleLines = pdf.splitTextToSize(options.title, pageWidth - 40);
+  let titleY = pageHeight / 3;
+  for (const line of titleLines) {
+    pdf.text(line, pageWidth / 2, titleY, { align: "center" });
+    titleY += 12;
+  }
   
   // Subtitle
   if (options.subtitle) {
-    pdf.setFontSize(14);
+    pdf.setFontSize(16);
     pdf.setTextColor(...COLORS.textMuted);
-    pdf.text(options.subtitle, pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
+    pdf.text(options.subtitle, pageWidth / 2, titleY + 10, { align: "center" });
+    titleY += 20;
   }
   
-  // Name
+  // Name - centered
   if (options.name) {
-    pdf.setFontSize(18);
+    pdf.setFontSize(20);
     pdf.setTextColor(...COLORS.text);
-    pdf.text(options.name, pageWidth / 2, pageHeight / 2 + 65, { align: "center" });
+    pdf.text(options.name, pageWidth / 2, pageHeight / 2 + 20, { align: "center" });
   }
   
   // Birth date
   pdf.setFontSize(14);
   pdf.setTextColor(...COLORS.textMuted);
-  pdf.text(`Дата рождения: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 80, { align: "center" });
+  pdf.text(`Дата рождения: ${options.birthDate}`, pageWidth / 2, pageHeight / 2 + 45, { align: "center" });
   
   // Footer
   pdf.setFontSize(10);
   pdf.setTextColor(...COLORS.brown);
-  pdf.text("lifecod.app", pageWidth / 2, pageHeight - 20, { align: "center" });
+  pdf.text("lifecod.app", pageWidth / 2, pageHeight - 15, { align: "center" });
 }
 
 function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number): number {

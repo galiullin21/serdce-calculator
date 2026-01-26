@@ -35,10 +35,11 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
     
     // Main positions
     for (let pos = 1; pos <= 12; pos++) {
-      const arcana = getArcana(matrix.positions[pos - 1]);
+      const arcanaNumber = matrix.positions[pos - 1];
+      const arcana = getArcana(arcanaNumber);
       const posDesc = positionDescriptions[pos];
       sections.push({
-        title: `${t("results.position")} ${pos}: ${posDesc?.title || ""} — ${arcana?.name || matrix.positions[pos - 1]}`,
+        title: `${t("results.position")} ${pos}: ${posDesc?.title || ""} — ${arcanaNumber} (${arcana?.name || ""})`,
         content: [
           posDesc?.description || "",
           "",
@@ -53,7 +54,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
       title: t("results.successCode"),
       content: matrix.successCode.map((a, i) => {
         const arcana = getArcana(a);
-        return `${t("results.pos")} ${successCodePositions[i]}: ${a} - ${arcana?.name || ""}`;
+        return `${t("results.pos")} ${successCodePositions[i]}: ${a} — ${arcana?.name || ""}`;
       }),
     });
     
