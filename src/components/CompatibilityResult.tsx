@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, ExternalLink } from "lucide-react";
 import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
-import { ArcanaCard } from "./ArcanaCard";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
@@ -55,27 +54,39 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
           title: result.person1.name,
           content: [
             `${t("results.birthDate")}: ${person1Date}`,
-            `${t("compatibility.destinyArcana")}: ${result.person1.destinyArcana} - ${person1DestinyArcana?.name || ""}`,
+            `${t("compatibility.destinyArcana")}: ${result.person1.destinyArcana} — ${person1DestinyArcana?.name || ""}`,
+            "",
+            person1DestinyArcana?.personalDescription || "",
           ],
         },
         {
           title: result.person2.name,
           content: [
             `${t("results.birthDate")}: ${person2Date}`,
-            `${t("compatibility.destinyArcana")}: ${result.person2.destinyArcana} - ${person2DestinyArcana?.name || ""}`,
+            `${t("compatibility.destinyArcana")}: ${result.person2.destinyArcana} — ${person2DestinyArcana?.name || ""}`,
+            "",
+            person2DestinyArcana?.personalDescription || "",
           ],
         },
         {
-          title: `${t("compatibility.unionArcana")}: ${unionArcana?.name || result.unionArcana}`,
-          content: unionArcana?.personalDescription || "",
+          title: `${t("compatibility.unionArcana")}: ${result.unionArcana} — ${unionArcana?.name || ""}`,
+          content: unionArcana?.compatibilityDescription || unionArcana?.personalDescription || "",
         },
         {
-          title: `${t("compatibility.harmonyArcana")}: ${harmonyArcana?.name || result.harmonyArcana}`,
-          content: harmonyArcana?.personalDescription || "",
+          title: `${t("compatibility.harmonyArcana")}: ${result.harmonyArcana} — ${harmonyArcana?.name || ""}`,
+          content: [
+            t("compatibility.emotionalConnection"),
+            "",
+            harmonyArcana?.compatibilityDescription || harmonyArcana?.personalDescription || "",
+          ],
         },
         {
-          title: `${t("compatibility.karmaArcana")}: ${karmaArcana?.name || result.karmaArcana}`,
-          content: karmaArcana?.personalDescription || "",
+          title: `${t("compatibility.karmaArcana")}: ${result.karmaArcana} — ${karmaArcana?.name || ""}`,
+          content: [
+            t("compatibility.karmicLesson"),
+            "",
+            karmaArcana?.personalDescription || "",
+          ],
         },
         {
           title: t("compatibility.strengths"),
@@ -167,50 +178,40 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
       <div className="mb-8">
         <h2 className="text-xl font-display text-primary mb-4 flex items-center gap-2">
           <Heart className="w-5 h-5" />
-          {t("compatibility.unionArcana")}
+          {t("compatibility.unionArcana")}: {result.unionArcana} — {unionArcana?.name}
         </h2>
-        <ArcanaCard
-          number={result.unionArcana}
-          showYearForecast={false}
-        />
+        <div className="gradient-card rounded-xl p-5 border border-primary/30">
+          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            {unionArcana?.compatibilityDescription || unionArcana?.personalDescription}
+          </p>
+        </div>
       </div>
 
-      {/* Harmony & Karma */}
-      <div className="grid md:grid-cols-2 gap-6 mb-8">
-        <div>
-          <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
-            <Sparkles className="w-4 h-4" />
-            {t("compatibility.harmonyArcana")}
-          </h3>
-          <div className="gradient-card rounded-xl p-5 border border-border">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <span className="text-xl font-display font-bold text-primary">{result.harmonyArcana}</span>
-              </div>
-              <div>
-                <p className="font-medium text-foreground">{harmonyArcana?.name}</p>
-                <p className="text-xs text-muted-foreground">{t("compatibility.emotionalConnection")}</p>
-              </div>
-            </div>
-          </div>
+      {/* Harmony Arcana */}
+      <div className="mb-8">
+        <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
+          <Sparkles className="w-4 h-4" />
+          {t("compatibility.harmonyArcana")}: {result.harmonyArcana} — {harmonyArcana?.name}
+        </h3>
+        <div className="gradient-card rounded-xl p-5 border border-border">
+          <p className="text-xs text-muted-foreground mb-3">{t("compatibility.emotionalConnection")}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            {harmonyArcana?.compatibilityDescription || harmonyArcana?.personalDescription}
+          </p>
         </div>
+      </div>
 
-        <div>
-          <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" />
-            {t("compatibility.karmaArcana")}
-          </h3>
-          <div className="gradient-card rounded-xl p-5 border border-border">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-full bg-accent/10 flex items-center justify-center">
-                <span className="text-xl font-display font-bold text-accent">{result.karmaArcana}</span>
-              </div>
-              <div>
-                <p className="font-medium text-foreground">{karmaArcana?.name}</p>
-                <p className="text-xs text-muted-foreground">{t("compatibility.karmicLesson")}</p>
-              </div>
-            </div>
-          </div>
+      {/* Karma Arcana */}
+      <div className="mb-8">
+        <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4" />
+          {t("compatibility.karmaArcana")}: {result.karmaArcana} — {karmaArcana?.name}
+        </h3>
+        <div className="gradient-card rounded-xl p-5 border border-destructive/30">
+          <p className="text-xs text-muted-foreground mb-3">{t("compatibility.karmicLesson")}</p>
+          <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
+            {karmaArcana?.personalDescription}
+          </p>
         </div>
       </div>
 
