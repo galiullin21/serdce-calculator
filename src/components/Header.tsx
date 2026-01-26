@@ -21,7 +21,7 @@ export function Header() {
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
-          <img src={logo} alt="Сердце Пилигрима" className="h-10 w-auto brightness-0 invert" />
+          <img src={logo} alt="Life C⚙D" className="h-10 w-auto brightness-0 invert" />
         </Link>
 
         {/* Navigation */}

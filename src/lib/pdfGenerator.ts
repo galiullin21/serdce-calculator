@@ -154,7 +154,7 @@ function drawTitlePage(pdf: jsPDF, options: PDFOptions) {
   // Footer
   pdf.setFontSize(10);
   pdf.setTextColor(...COLORS.brown);
-  pdf.text("serdce-calculator.lovable.app", pageWidth / 2, pageHeight - 20, { align: "center" });
+  pdf.text("lifecod.app", pageWidth / 2, pageHeight - 20, { align: "center" });
 }
 
 function drawContentPage(pdf: jsPDF, sections: PDFSection[], startIndex: number): number {
