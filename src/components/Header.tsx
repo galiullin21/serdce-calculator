@@ -12,6 +12,7 @@ export function Header() {
   const navItems = [
     { label: t("nav.analyses"), path: "/" },
     { label: t("nav.calendar"), path: "/calendar" },
+    { label: t("crisis.title"), path: "/crisis" },
     { label: t("nav.products"), path: "/products" },
   ];
 
