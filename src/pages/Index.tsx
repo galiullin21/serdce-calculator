@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { CompatibilityDateInput } from "@/components/CompatibilityDateInput";
@@ -9,6 +10,7 @@ import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
 import { KeyToResultComponent } from "@/components/KeyToResult";
 import { CompatibilityResultComponent } from "@/components/CompatibilityResult";
 import { AncestralResultComponent } from "@/components/AncestralResult";
+import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -27,7 +29,13 @@ import { cn } from "@/lib/utils";
 
 const Index = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   
+  // Check if user has seen onboarding
+  const [showOnboarding, setShowOnboarding] = useState(() => {
+    const seen = localStorage.getItem("lifecod-onboarding-seen");
+    return !seen;
+  });
   const analysisTypes = [
     {
       id: "full",
@@ -223,6 +231,39 @@ type ResultType =
   const handleMethodSelect = (methodId: string) => {
     setSelectedMethod(methodId);
   };
+
+  const handleOnboardingComplete = (scenario: ScenarioType) => {
+    localStorage.setItem("lifecod-onboarding-seen", "true");
+    setShowOnboarding(false);
+    
+    // Redirect based on scenario
+    if (scenario === "crisis") {
+      navigate("/crisis");
+    } else if (scenario === "forecast") {
+      setSelectedMethod("year");
+    } else if (scenario === "period") {
+      setSelectedMethod("purpose");
+    }
+    // diagnosis -> stays on purpose (default)
+  };
+
+  const handleOnboardingSkip = () => {
+    localStorage.setItem("lifecod-onboarding-seen", "true");
+    setShowOnboarding(false);
+  };
+
+  // Show onboarding flow for first-time visitors
+  if (showOnboarding) {
+    return (
+      <div className="min-h-screen">
+        <Header />
+        <OnboardingFlow 
+          onComplete={handleOnboardingComplete}
+          onSkip={handleOnboardingSkip}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
