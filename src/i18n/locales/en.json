@@ -516,5 +516,121 @@
         "expectedResult": "By following the recommendations, within 1-2 weeks you'll feel that the situation is under control and there's a concrete action plan."
       }
     }
+  },
+  "lifecod": {
+    "title": "Life C⚙D Compatibility",
+    "subtitle": "Deep compatibility analysis using 8 methods",
+    "relationType": {
+      "love": "Love / Relationships",
+      "business": "Business / Partnership"
+    },
+    "defaultNames": {
+      "partner1": "Partner 1",
+      "partner2": "Partner 2",
+      "business1": "Partner A",
+      "business2": "Partner B"
+    },
+    "form": {
+      "name": "Name",
+      "namePlaceholder": "Enter name",
+      "day": "Day",
+      "month": "Month",
+      "year": "Year",
+      "person1Love": "First Partner",
+      "person2Love": "Second Partner",
+      "person1Business": "Partner A",
+      "person2Business": "Partner B",
+      "calculate": "Calculate Compatibility"
+    },
+    "consciousness": {
+      "title": "Consciousness",
+      "chain": "Energy chain",
+      "compatibility": "Consciousness Compatibility"
+    },
+    "action": {
+      "title": "Actions",
+      "chain": "Action path",
+      "risks": "Risks"
+    },
+    "personalYear": {
+      "title": "Personal Year"
+    },
+    "stabilizer": {
+      "title": "Pair Stabilizer",
+      "holder": "Holds the union",
+      "both": "Both partners",
+      "none": "No one",
+      "noStabilizer": "No stabilizer — high risk",
+      "risks": "Destabilizers",
+      "status": {
+        "STRONG": "Strong",
+        "OK": "Sufficient",
+        "WEAK": "Weak",
+        "NO": "Absent"
+      }
+    },
+    "interaction": {
+      "title": "Current Interaction",
+      "risk": "Risk",
+      "category": {
+        "STABLE": "Stable",
+        "UNSTABLE": "Unstable",
+        "CRISIS": "Crisis",
+        "BREAKDOWN": "Breakdown"
+      }
+    },
+    "yearEntry": {
+      "title": "Year of Entry",
+      "stabilizerNeeded": "Stabilizer needed",
+      "status": {
+        "BEST": "Best time",
+        "OK": "Possible",
+        "TEMP": "Temporary",
+        "NO": "Not recommended"
+      }
+    },
+    "forecast": {
+      "title": "5-Year Forecast",
+      "current": "current",
+      "years": "Personal years",
+      "hasStabilizer": "Has stabilizer",
+      "type": {
+        "STABLE": "Stable period",
+        "CRISIS": "Crisis",
+        "BREAKDOWN": "Breakdown risk",
+        "RECOVERY": "Recovery",
+        "NEW_UNION": "New union"
+      }
+    },
+    "verdict": {
+      "title": "Overall Verdict",
+      "canBeTogether": "Can be together now",
+      "yes": "Yes, union is possible",
+      "no": "Not the best time now",
+      "whoHolds": "Who holds the union",
+      "both": "Both partners",
+      "noOne": "No one — union is unstable",
+      "mainRisk": "Main risk",
+      "longTerm": "Long-term prospects",
+      "recommendation": "Recommendation",
+      "prospect": {
+        "HIGH": "High",
+        "MEDIUM": "Medium",
+        "LOW": "Low"
+      }
+    },
+    "result": {
+      "title": "Compatibility Analysis",
+      "back": "New calculation",
+      "cta": {
+        "title": "Want a deep personal analysis?",
+        "description": "Get a professional consultation with detailed analysis of your relationships, personalized recommendations, and answers to all your questions.",
+        "button": "Book a consultation"
+      }
+    },
+    "methodSelector": {
+      "title": "Extended Compatibility",
+      "description": "8 analysis methods: consciousness, actions, personal years, forecasts"
+    }
   }
 }

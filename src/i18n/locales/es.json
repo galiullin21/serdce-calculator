@@ -359,5 +359,121 @@
     "next": "Siguiente",
     "yes": "Sí",
     "no": "No"
+  },
+  "lifecod": {
+    "title": "Compatibilidad Life C⚙D",
+    "subtitle": "Análisis profundo de compatibilidad con 8 métodos",
+    "relationType": {
+      "love": "Amor / Relaciones",
+      "business": "Negocios / Sociedad"
+    },
+    "defaultNames": {
+      "partner1": "Pareja 1",
+      "partner2": "Pareja 2",
+      "business1": "Socio A",
+      "business2": "Socio B"
+    },
+    "form": {
+      "name": "Nombre",
+      "namePlaceholder": "Ingresa el nombre",
+      "day": "Día",
+      "month": "Mes",
+      "year": "Año",
+      "person1Love": "Primera pareja",
+      "person2Love": "Segunda pareja",
+      "person1Business": "Socio A",
+      "person2Business": "Socio B",
+      "calculate": "Calcular compatibilidad"
+    },
+    "consciousness": {
+      "title": "Conciencia",
+      "chain": "Cadena de energías",
+      "compatibility": "Compatibilidad de conciencias"
+    },
+    "action": {
+      "title": "Acciones",
+      "chain": "Camino de acciones",
+      "risks": "Riesgos"
+    },
+    "personalYear": {
+      "title": "Año personal"
+    },
+    "stabilizer": {
+      "title": "Estabilizador de pareja",
+      "holder": "Mantiene la unión",
+      "both": "Ambos socios",
+      "none": "Nadie",
+      "noStabilizer": "Sin estabilizador — alto riesgo",
+      "risks": "Desestabilizadores",
+      "status": {
+        "STRONG": "Fuerte",
+        "OK": "Suficiente",
+        "WEAK": "Débil",
+        "NO": "Ausente"
+      }
+    },
+    "interaction": {
+      "title": "Interacción actual",
+      "risk": "Riesgo",
+      "category": {
+        "STABLE": "Estable",
+        "UNSTABLE": "Inestable",
+        "CRISIS": "Crisis",
+        "BREAKDOWN": "Ruptura"
+      }
+    },
+    "yearEntry": {
+      "title": "Año de entrada",
+      "stabilizerNeeded": "Se necesita estabilizador",
+      "status": {
+        "BEST": "Mejor momento",
+        "OK": "Posible",
+        "TEMP": "Temporal",
+        "NO": "No recomendado"
+      }
+    },
+    "forecast": {
+      "title": "Pronóstico de 5 años",
+      "current": "actual",
+      "years": "Años personales",
+      "hasStabilizer": "Tiene estabilizador",
+      "type": {
+        "STABLE": "Período estable",
+        "CRISIS": "Crisis",
+        "BREAKDOWN": "Riesgo de ruptura",
+        "RECOVERY": "Recuperación",
+        "NEW_UNION": "Nueva unión"
+      }
+    },
+    "verdict": {
+      "title": "Veredicto general",
+      "canBeTogether": "Pueden estar juntos ahora",
+      "yes": "Sí, la unión es posible",
+      "no": "No es el mejor momento ahora",
+      "whoHolds": "Quién mantiene la unión",
+      "both": "Ambos socios",
+      "noOne": "Nadie — unión inestable",
+      "mainRisk": "Riesgo principal",
+      "longTerm": "Perspectivas a largo plazo",
+      "recommendation": "Recomendación",
+      "prospect": {
+        "HIGH": "Altas",
+        "MEDIUM": "Medias",
+        "LOW": "Bajas"
+      }
+    },
+    "result": {
+      "title": "Análisis de compatibilidad",
+      "back": "Nuevo cálculo",
+      "cta": {
+        "title": "¿Quieres un análisis personal profundo?",
+        "description": "Obtén una consulta profesional con análisis detallado de tus relaciones, recomendaciones personalizadas y respuestas a todas tus preguntas.",
+        "button": "Reservar consulta"
+      }
+    },
+    "methodSelector": {
+      "title": "Compatibilidad extendida",
+      "description": "8 métodos de análisis: conciencia, acciones, años personales, pronósticos"
+    }
   }
 }
