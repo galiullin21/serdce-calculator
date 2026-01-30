@@ -11,6 +11,7 @@ import { KeyToResultComponent } from "@/components/KeyToResult";
 import { CompatibilityResultComponent } from "@/components/CompatibilityResult";
 import { AncestralResultComponent } from "@/components/AncestralResult";
 import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
+import { LifeCodInputForm, LifeCodResult } from "@/components/lifecod";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -23,8 +24,9 @@ import {
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
+import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType } from "@/lib/lifecod";
 import { Button } from "@/components/ui/button";
-import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check } from "lucide-react";
+import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Index = () => {
@@ -146,12 +148,27 @@ type ResultType =
   | { type: "keyto"; data: KeyToResult }
   | { type: "compatibility"; data: CompatibilityResult }
   | { type: "ancestral"; data: AncestralResult }
+  | { type: "lifecod"; data: LifeCodCompatibilityResult }
   | null;
 
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
   const [selectedMethod, setSelectedMethod] = useState("purpose");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
+
+  // Life C⚙D compatibility handler
+  const handleLifeCodCalculate = (
+    person1Name: string, person1Day: number, person1Month: number, person1Year: number,
+    person2Name: string, person2Day: number, person2Month: number, person2Year: number,
+    relationType: RelationType
+  ) => {
+    const lifecodResult = calculateLifeCodCompatibility(
+      person1Name, person1Day, person1Month, person1Year,
+      person2Name, person2Day, person2Month, person2Year,
+      relationType
+    );
+    setResult({ type: "lifecod", data: lifecodResult });
+  };
 
   // Reset method when methodology changes
   useEffect(() => {
@@ -435,7 +452,7 @@ type ResultType =
                     )}
                   </div>
 
-                  {/* Methodology 2 - Classic */}
+                  {/* Methodology 2 - Classic with Life C⚙D Compatibility */}
                   <div className="mb-6 md:mb-8">
                     <button
                       onClick={() => setSelectedMethodology("2")}
@@ -490,10 +507,60 @@ type ResultType =
                         </div>
                       </div>
                     </button>
+
+                    {/* Life C⚙D Compatibility Section for Methodology 2 */}
+                    {selectedMethodology === "2" && (
+                      <div className="mt-4 space-y-4">
+                        {/* Extended Compatibility Option */}
+                        <button
+                          onClick={() => setSelectedMethod("lifecod-compatibility")}
+                          className={cn(
+                            "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
+                            selectedMethod === "lifecod-compatibility"
+                              ? "bg-pink-50 border-pink-400 dark:bg-pink-950/30 dark:border-pink-600"
+                              : "bg-card border-border hover:border-pink-200"
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Heart className={cn(
+                              "w-5 h-5",
+                              selectedMethod === "lifecod-compatibility" ? "text-pink-500 fill-pink-500" : "text-muted-foreground"
+                            )} />
+                            <div>
+                              <h4 className="font-medium text-sm">{t("lifecod.methodSelector.title")}</h4>
+                              <p className="text-xs text-muted-foreground">{t("lifecod.methodSelector.description")}</p>
+                            </div>
+                          </div>
+                        </button>
+
+                        <button
+                          onClick={() => setSelectedMethod("classic-full")}
+                          className={cn(
+                            "w-full p-4 rounded-xl border transition-all duration-300 text-left",
+                            selectedMethod === "classic-full"
+                              ? "bg-primary/10 border-primary"
+                              : "bg-card border-border hover:border-primary/50"
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <FileText className={cn(
+                              "w-5 h-5",
+                              selectedMethod === "classic-full" ? "text-primary" : "text-muted-foreground"
+                            )} />
+                            <div>
+                              <h4 className="font-medium text-sm">{t("methods.fullAnalysis")}</h4>
+                              <p className="text-xs text-muted-foreground">{t("methods.fullAnalysisDesc")}</p>
+                            </div>
+                          </div>
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   {/* Date Input Form - conditional based on method */}
-                  {selectedMethodology === "1" && selectedMethod === "compatibility" ? (
+                  {selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
+                    <LifeCodInputForm onCalculate={handleLifeCodCalculate} />
+                  ) : selectedMethodology === "1" && selectedMethod === "compatibility" ? (
                     <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
                   ) : (
                     <DateInput 
@@ -612,6 +679,12 @@ type ResultType =
               <AncestralResultComponent
                 result={result.data}
                 name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "lifecod" && (
+              <LifeCodResult
+                result={result.data}
                 onReset={handleReset}
               />
             )}
