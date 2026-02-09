@@ -6,7 +6,10 @@ import { CompatibilityMetrics } from "./CompatibilityMetrics";
 import { ForecastTimeline } from "./ForecastTimeline";
 import { OverallVerdict } from "./OverallVerdict";
 import { consciousnessCompatibility } from "@/lib/lifecod/data";
-import { ArrowLeft, Brain, Heart, Briefcase } from "lucide-react";
+import { getPairYearLink, getPairYearRatingLabel, PairYearRating } from "@/lib/lifecod/pairYearLinks";
+import { PDFDownloadButton } from "@/components/PDFDownloadButton";
+import { generateLifeCodCompatibilityPDF } from "@/lib/lifecod/pdfExport";
+import { ArrowLeft, Brain, Heart, Briefcase, TrendingUp } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface LifeCodResultProps {
@@ -44,10 +47,15 @@ export function LifeCodResult({ result, onReset }: LifeCodResultProps) {
           </div>
         </div>
         
-        <Button variant="outline" onClick={onReset}>
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          {t('lifecod.result.back')}
-        </Button>
+        <div className="flex items-center gap-2">
+          <PDFDownloadButton
+            onDownload={() => generateLifeCodCompatibilityPDF(result)}
+          />
+          <Button variant="outline" onClick={onReset}>
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            {t('lifecod.result.back')}
+          </Button>
+        </div>
       </div>
       
       {/* Общий вердикт */}
@@ -100,6 +108,38 @@ export function LifeCodResult({ result, onReset }: LifeCodResultProps) {
         <PersonAnalysisCard person={result.person2} />
       </div>
       
+      {/* 81 связка личных годов */}
+      <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-5 h-5 text-primary" />
+          <h3 className="font-display font-semibold text-lg">Связка личных годов (81 матрица)</h3>
+        </div>
+        
+        <div className="space-y-3">
+          {result.forecast.map((point) => {
+            const pairLink = getPairYearLink(point.person1Year, point.person2Year);
+            const ratingColors: Record<PairYearRating, string> = {
+              resource: 'bg-green-100 text-green-700 border-green-300 dark:bg-green-950 dark:text-green-400',
+              possible: 'bg-amber-100 text-amber-700 border-amber-300 dark:bg-amber-950 dark:text-amber-400',
+              risk: 'bg-red-100 text-red-700 border-red-300 dark:bg-red-950 dark:text-red-400',
+            };
+            
+            return (
+              <div key={point.year} className={cn("rounded-lg border-2 p-3 space-y-1", ratingColors[pairLink.rating])}>
+                <div className="flex items-center justify-between flex-wrap gap-2">
+                  <span className="font-semibold">{point.year}: {result.person1.name} ({point.person1Year}) ↔ {result.person2.name} ({point.person2Year})</span>
+                  <span className="text-xs font-medium">{getPairYearRatingLabel(pairLink.rating)}</span>
+                </div>
+                <p className="text-sm font-medium">{pairLink.dynamics}</p>
+                <p className="text-sm">
+                  {result.relationType === 'love' ? pairLink.loveContext : pairLink.businessContext}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Прогноз на 5 лет */}
       <ForecastTimeline forecast={result.forecast} relationType={result.relationType} />
       
