@@ -6,3 +6,4 @@ export { ForecastTimeline } from './ForecastTimeline';
 export { OverallVerdict } from './OverallVerdict';
 export { LifeCodInputForm } from './LifeCodInputForm';
 export { LifeCodResult } from './LifeCodResult';
+export { LifeCodPersonalResult } from './LifeCodPersonalResult';
