@@ -16,6 +16,8 @@ import { PersonAnalysisCard } from "./PersonAnalysisCard";
 import { ArrowLeft, Mountain, AlertTriangle, Shield, Calendar, TrendingUp, TrendingDown, Flame, Snowflake, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { PDFDownloadButton } from "@/components/PDFDownloadButton";
+import { generateLifeCodPersonalPDF } from "@/lib/lifecod/pdfExport";
 
 interface LifeCodPersonalResultProps {
   name: string;
@@ -77,9 +79,19 @@ export function LifeCodPersonalResult({ name, day, month, year, onReset }: LifeC
           <h1 className="font-display text-2xl md:text-3xl text-primary">Персональный разбор</h1>
           <p className="text-muted-foreground">{name} • {day}.{String(month).padStart(2, '0')}.{year}</p>
         </div>
-        <Button variant="outline" onClick={onReset}>
-          <ArrowLeft className="w-4 h-4 mr-2" /> Назад
-        </Button>
+        <div className="flex items-center gap-2">
+          <PDFDownloadButton
+            onDownload={() => generateLifeCodPersonalPDF(name, day, month, year, 'basic')}
+            label="PDF Basic"
+          />
+          <PDFDownloadButton
+            onDownload={() => generateLifeCodPersonalPDF(name, day, month, year, 'full')}
+            label="PDF Full"
+          />
+          <Button variant="outline" onClick={onReset}>
+            <ArrowLeft className="w-4 h-4 mr-2" /> Назад
+          </Button>
+        </div>
       </div>
 
       {/* Tabs */}

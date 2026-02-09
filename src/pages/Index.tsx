@@ -25,6 +25,7 @@ import {
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
 import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType } from "@/lib/lifecod";
+import { LifeCodPersonalResult } from "@/components/lifecod";
 import { Button } from "@/components/ui/button";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -149,6 +150,7 @@ type ResultType =
   | { type: "compatibility"; data: CompatibilityResult }
   | { type: "ancestral"; data: AncestralResult }
   | { type: "lifecod"; data: LifeCodCompatibilityResult }
+  | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
   | null;
 
   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
@@ -173,7 +175,7 @@ type ResultType =
   // Reset method when methodology changes
   useEffect(() => {
     if (selectedMethodology === "2") {
-      setSelectedMethod("classic-full");
+      setSelectedMethod("lifecod-personal");
     } else {
       setSelectedMethod("purpose");
     }
@@ -192,6 +194,10 @@ type ResultType =
     
     // Methodology 2 - Classic numerology
     if (selectedMethodology === "2") {
+      if (selectedMethod === "lifecod-personal") {
+        setResult({ type: "lifecod-personal", data: { name: name || "Вы", day, month, year } });
+        return;
+      }
       const classicResult = calculateKeyTo(day, month, year);
       setResult({ type: "keyto", data: classicResult });
       return;
@@ -511,6 +517,28 @@ type ResultType =
                     {/* Life C⚙D Compatibility Section for Methodology 2 */}
                     {selectedMethodology === "2" && (
                       <div className="mt-4 space-y-4">
+                        {/* Personal Analysis */}
+                        <button
+                          onClick={() => setSelectedMethod("lifecod-personal")}
+                          className={cn(
+                            "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
+                            selectedMethod === "lifecod-personal"
+                              ? "bg-primary/10 border-primary"
+                              : "bg-card border-border hover:border-primary/50"
+                          )}
+                        >
+                          <div className="flex items-center gap-3">
+                            <Brain className={cn(
+                              "w-5 h-5",
+                              selectedMethod === "lifecod-personal" ? "text-primary" : "text-muted-foreground"
+                            )} />
+                            <div>
+                              <h4 className="font-medium text-sm">Персональный разбор</h4>
+                              <p className="text-xs text-muted-foreground">Сознание, действия, пиннакли, кризисы, помесячный прогноз</p>
+                            </div>
+                          </div>
+                        </button>
+
                         {/* Extended Compatibility Option */}
                         <button
                           onClick={() => setSelectedMethod("lifecod-compatibility")}
@@ -560,6 +588,11 @@ type ResultType =
                   {/* Date Input Form - conditional based on method */}
                   {selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
                     <LifeCodInputForm onCalculate={handleLifeCodCalculate} />
+                  ) : selectedMethodology === "2" && selectedMethod === "lifecod-personal" ? (
+                    <DateInput 
+                      selectedMethod="lifecod-personal"
+                      onCalculate={handleCalculate} 
+                    />
                   ) : selectedMethodology === "1" && selectedMethod === "compatibility" ? (
                     <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
                   ) : (
@@ -685,6 +718,15 @@ type ResultType =
             {result.type === "lifecod" && (
               <LifeCodResult
                 result={result.data}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "lifecod-personal" && (
+              <LifeCodPersonalResult
+                name={result.data.name}
+                day={result.data.day}
+                month={result.data.month}
+                year={result.data.year}
                 onReset={handleReset}
               />
             )}

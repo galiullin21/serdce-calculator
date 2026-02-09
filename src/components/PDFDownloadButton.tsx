@@ -6,9 +6,10 @@ import { useTranslation } from "react-i18next";
 interface PDFDownloadButtonProps {
   onDownload: () => Promise<void> | void;
   className?: string;
+  label?: string;
 }
 
-export function PDFDownloadButton({ onDownload, className }: PDFDownloadButtonProps) {
+export function PDFDownloadButton({ onDownload, className, label }: PDFDownloadButtonProps) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,7 +34,7 @@ export function PDFDownloadButton({ onDownload, className }: PDFDownloadButtonPr
       ) : (
         <Download className="w-4 h-4 mr-2" />
       )}
-      {t("pdf.download", "Скачать PDF")}
+      {label || t("pdf.download", "Скачать PDF")}
     </Button>
   );
 }
