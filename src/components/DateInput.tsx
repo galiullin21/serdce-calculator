@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 
 interface DateInputProps {
   selectedMethod: string;
-  onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number, gender?: 'male' | 'female') => void;
+  onCalculate: (day: number, month: number, year: number, name: string, targetMonth?: number, targetYear?: number, gender?: 'male' | 'female', targetDay?: number) => void;
 }
 
 const days = Array.from({ length: 31 }, (_, i) => ({
@@ -35,6 +35,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
   const [year, setYear] = useState<string>("");
   const [targetMonth, setTargetMonth] = useState<string>(String(currentMonth));
   const [targetYear, setTargetYear] = useState<string>(String(currentYear));
+  const [targetDay, setTargetDay] = useState<string>(String(new Date().getDate()));
   const [gender, setGender] = useState<'male' | 'female'>('female');
 
   const months = Array.from({ length: 12 }, (_, i) => ({
@@ -44,11 +45,11 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
   const handleCalculate = () => {
     if (day && month && year) {
-      const targetMonthNum = selectedMethod === "month" ? parseInt(targetMonth) : undefined;
-      const targetYearNum = (selectedMethod === "month" || selectedMethod === "year") 
-        ? parseInt(targetYear) 
-        : undefined;
+      const needsTarget = selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract";
+      const targetMonthNum = (selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? parseInt(targetMonth) : undefined;
+      const targetYearNum = needsTarget ? parseInt(targetYear) : undefined;
       const genderValue = selectedMethod === "ancestral" ? gender : undefined;
+      const targetDayNum = (selectedMethod === "day" || selectedMethod === "contract") ? parseInt(targetDay) : undefined;
       
       onCalculate(
         parseInt(day), 
@@ -57,7 +58,8 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
         name,
         targetMonthNum,
         targetYearNum,
-        genderValue
+        genderValue,
+        targetDayNum
       );
     }
   };
@@ -74,6 +76,12 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
         return t("calculator.calculatePurpose");
       case "ancestral":
         return t("calculator.calculateAncestral");
+      case "day":
+        return "Рассчитать прогноз на день";
+      case "contract":
+        return "Рассчитать энергию договора";
+      case "finance":
+        return "Рассчитать финансовый код";
       default:
         return t("calculator.calculate");
     }
@@ -141,13 +149,27 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
             </div>
           </div>
 
-          {(selectedMethod === "month" || selectedMethod === "year") && (
+          {(selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract") && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                {selectedMethod === "month" ? t("calculator.forecastMonthYear") : t("calculator.forecastYear")}
+                {selectedMethod === "day" ? "Дата прогноза" : selectedMethod === "contract" ? "Дата договора" : selectedMethod === "month" ? t("calculator.forecastMonthYear") : t("calculator.forecastYear")}
               </label>
-              <div className={`grid gap-3 ${selectedMethod === "month" ? "grid-cols-2" : "grid-cols-1"}`}>
-                {selectedMethod === "month" && (
+              <div className={`grid gap-3 ${(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? "grid-cols-3" : "grid-cols-1"}`}>
+                {(selectedMethod === "day" || selectedMethod === "contract") && (
+                  <Select value={targetDay} onValueChange={setTargetDay}>
+                    <SelectTrigger className="bg-background border-border focus:border-primary h-12">
+                      <SelectValue placeholder={t("calculator.day")} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-card border-border max-h-60">
+                      {days.map((d) => (
+                        <SelectItem key={d.value} value={d.value} className="focus:bg-secondary">
+                          {d.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                )}
+                {(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") && (
                   <Select value={targetMonth} onValueChange={setTargetMonth}>
                     <SelectTrigger className="bg-background border-border focus:border-primary h-12">
                       <SelectValue placeholder={t("calculator.month")} />
