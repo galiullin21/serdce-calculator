@@ -63,15 +63,15 @@ export function Header() {
       </div>
 
       {/* Mobile Navigation */}
-      <nav className="md:hidden flex items-center justify-center gap-6 pb-3 border-t border-white/10">
+      <nav className="md:hidden flex items-center justify-start gap-1 pb-2 pt-1 px-3 border-t border-white/10 overflow-x-auto scrollbar-hide">
         {navItems.map((item) => (
           <Link
             key={item.path}
             to={item.path}
             className={cn(
-              "text-xs font-medium transition-colors pt-3",
+              "text-[11px] font-medium transition-colors whitespace-nowrap px-2.5 py-1.5 rounded-full flex-shrink-0",
               location.pathname === item.path
-                ? "text-white"
+                ? "text-white bg-white/15"
                 : "text-white/70"
             )}
           >

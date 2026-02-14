@@ -89,8 +89,8 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
   return (
     <div className="w-full max-w-xl mx-auto">
-      <div className="gradient-card rounded-2xl p-8 border border-border">
-        <div className="space-y-6">
+      <div className="gradient-card rounded-2xl p-5 sm:p-8 border border-border">
+        <div className="space-y-5">
           <div className="space-y-2">
             <label className="text-sm font-medium text-foreground">
               {t("calculator.yourName")}
@@ -239,7 +239,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
           <Button
             onClick={handleCalculate}
             disabled={!isValid}
-            className="w-full h-14 text-lg font-display btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:animate-none transition-all duration-300 rounded-full border-2 border-primary"
+            className="w-full h-12 sm:h-14 text-base sm:text-lg font-display btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:animate-none transition-all duration-300 rounded-full border-2 border-primary"
           >
             {getButtonText()}
           </Button>

@@ -482,8 +482,8 @@ type ResultType =
                     </button>
 
                     {/* Methods grid - shown when Methodology 1 is selected */}
-                    {selectedMethodology === "1" && (
-                      <div className="mt-4 grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
+                  {selectedMethodology === "1" && (
+                      <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
                         {arcanaMethodsList.map((method) => (
                           <button
                             key={method.id}
@@ -653,8 +653,8 @@ type ResultType =
                   {/* Date Input Form - conditional based on method */}
                   {selectedMethodology === "1" && selectedMethod === "name" ? (
                     <div className="w-full max-w-xl mx-auto">
-                      <div className="gradient-card rounded-2xl p-8 border border-border">
-                        <div className="space-y-6">
+                    <div className="gradient-card rounded-2xl p-5 sm:p-8 border border-border">
+                        <div className="space-y-5">
                           <div className="space-y-2">
                             <label className="text-sm font-medium text-foreground">Название для проверки</label>
                             <Input
@@ -692,7 +692,7 @@ type ResultType =
                 </div>
 
                 {/* Analysis Types Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-12">
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-12">
                   {analysisTypes.map((type) => (
                     <div
                       key={type.id}
