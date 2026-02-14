@@ -10,6 +10,10 @@ import { PersonalMatrixResult } from "@/components/PersonalMatrixResult";
 import { KeyToResultComponent } from "@/components/KeyToResult";
 import { CompatibilityResultComponent } from "@/components/CompatibilityResult";
 import { AncestralResultComponent } from "@/components/AncestralResult";
+import { DailyForecastResultComponent } from "@/components/DailyForecastResult";
+import { FinancialCodeResultComponent } from "@/components/FinancialCodeResult";
+import { NameEnergyResultComponent } from "@/components/NameEnergyResult";
+import { ContractEnergyResultComponent } from "@/components/ContractEnergyResult";
 import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
 import { LifeCodInputForm, LifeCodResult } from "@/components/lifecod";
 import { 
@@ -25,8 +29,12 @@ import {
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
 import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType } from "@/lib/lifecod";
+import { calculateDailyForecast, DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
+import { calculateFinancialCode, FinancialCodeResult as FinancialCodeType } from "@/lib/financialCode";
+import { calculateNameEnergy, NameEnergyResult as NameEnergyType } from "@/lib/nameEnergy";
 import { LifeCodPersonalResult } from "@/components/lifecod";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -53,7 +61,7 @@ const Index = () => {
       titleKey: "analysisTypes.contractEnergy",
       descKey: "analysisTypes.contractEnergyDesc",
       icon: Building,
-      available: false,
+      available: true,
       hasPro: true,
     },
     {
@@ -77,7 +85,7 @@ const Index = () => {
       titleKey: "analysisTypes.nameEnergy",
       descKey: "analysisTypes.nameEnergyDesc",
       icon: Type,
-      available: false,
+      available: true,
       hasPro: false,
     },
     {
@@ -85,7 +93,7 @@ const Index = () => {
       titleKey: "analysisTypes.financialCode",
       descKey: "analysisTypes.financialCodeDesc",
       icon: Wallet,
-      available: false,
+      available: true,
       hasPro: false,
     },
   ];
@@ -130,7 +138,7 @@ const Index = () => {
       id: "day",
       name: t("methods.dayForecast"),
       description: t("methods.dayForecastDesc"),
-      available: false,
+      available: true,
       icon: Clock,
     },
     {
@@ -139,6 +147,27 @@ const Index = () => {
       description: t("methods.ancestralDesc"),
       available: true,
       icon: Brain,
+    },
+    {
+      id: "contract",
+      name: t("analysisTypes.contractEnergy"),
+      description: t("analysisTypes.contractEnergyDesc"),
+      available: true,
+      icon: Building,
+    },
+    {
+      id: "name",
+      name: t("analysisTypes.nameEnergy"),
+      description: t("analysisTypes.nameEnergyDesc"),
+      available: true,
+      icon: Type,
+    },
+    {
+      id: "finance",
+      name: t("analysisTypes.financialCode"),
+      description: t("analysisTypes.financialCodeDesc"),
+      available: true,
+      icon: Wallet,
     },
   ];
 
@@ -151,12 +180,17 @@ type ResultType =
   | { type: "ancestral"; data: AncestralResult }
   | { type: "lifecod"; data: LifeCodCompatibilityResult }
   | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
+  | { type: "day"; data: DailyForecastType }
+  | { type: "finance"; data: FinancialCodeType }
+  | { type: "name"; data: NameEnergyType }
+  | { type: "contract"; data: DailyForecastType }
   | null;
 
-  const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
+   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
   const [selectedMethod, setSelectedMethod] = useState("purpose");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
+  const [nameEnergyInput, setNameEnergyInput] = useState("");
 
   // Life C⚙D compatibility handler
   const handleLifeCodCalculate = (
@@ -188,7 +222,8 @@ type ResultType =
     name: string,
     targetMonth?: number,
     targetYear?: number,
-    gender?: 'male' | 'female'
+    gender?: 'male' | 'female',
+    targetDay?: number
   ) => {
     setUserName(name);
     
@@ -211,14 +246,37 @@ type ResultType =
         break;
       case "month":
         const monthForecast = calculateMonthForecast(
-          day, 
-          month, 
-          year, 
+          day, month, year, 
           targetMonth || new Date().getMonth() + 1,
           targetYear || new Date().getFullYear()
         );
         setResult({ type: "month", data: monthForecast });
         break;
+      case "day": {
+        const daily = calculateDailyForecast(
+          day, month, year,
+          targetDay || new Date().getDate(),
+          targetMonth || new Date().getMonth() + 1,
+          targetYear || new Date().getFullYear()
+        );
+        setResult({ type: "day", data: daily });
+        break;
+      }
+      case "contract": {
+        const contract = calculateDailyForecast(
+          day, month, year,
+          targetDay || new Date().getDate(),
+          targetMonth || new Date().getMonth() + 1,
+          targetYear || new Date().getFullYear()
+        );
+        setResult({ type: "contract", data: contract });
+        break;
+      }
+      case "finance": {
+        const finance = calculateFinancialCode(day, month, year);
+        setResult({ type: "finance", data: finance });
+        break;
+      }
       case "ancestral":
         const ancestralResult = calculateAncestralPrograms(day, month, year, gender || 'female');
         setResult({ type: "ancestral", data: ancestralResult });
@@ -228,6 +286,13 @@ type ResultType =
         const personalMatrix = calculatePersonalMatrix(day, month, year);
         setResult({ type: "purpose", data: personalMatrix });
         break;
+    }
+  };
+
+  const handleNameEnergyCalculate = () => {
+    if (nameEnergyInput.trim()) {
+      const nameResult = calculateNameEnergy(nameEnergyInput.trim());
+      setResult({ type: "name", data: nameResult });
     }
   };
 
@@ -586,7 +651,30 @@ type ResultType =
                   </div>
 
                   {/* Date Input Form - conditional based on method */}
-                  {selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
+                  {selectedMethodology === "1" && selectedMethod === "name" ? (
+                    <div className="w-full max-w-xl mx-auto">
+                      <div className="gradient-card rounded-2xl p-8 border border-border">
+                        <div className="space-y-6">
+                          <div className="space-y-2">
+                            <label className="text-sm font-medium text-foreground">Название для проверки</label>
+                            <Input
+                              placeholder="Введите название компании, продукта или имя"
+                              value={nameEnergyInput}
+                              onChange={(e) => setNameEnergyInput(e.target.value)}
+                              className="bg-background border-border focus:border-primary focus:ring-primary/20 h-12 text-foreground placeholder:text-muted-foreground"
+                            />
+                          </div>
+                          <Button
+                            onClick={handleNameEnergyCalculate}
+                            disabled={!nameEnergyInput.trim()}
+                            className="w-full h-14 text-lg font-display btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground disabled:opacity-50 disabled:cursor-not-allowed disabled:animate-none transition-all duration-300 rounded-full border-2 border-primary"
+                          >
+                            Рассчитать энергию названия
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
                     <LifeCodInputForm onCalculate={handleLifeCodCalculate} />
                   ) : selectedMethodology === "2" && selectedMethod === "lifecod-personal" ? (
                     <DateInput 
@@ -648,6 +736,14 @@ type ResultType =
                                 </Button>
                               )}
                               <Button
+                                onClick={() => {
+                                  const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
+                                  const method = methodMap[type.id];
+                                  if (method) {
+                                    setSelectedMethod(method);
+                                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                                  }
+                                }}
                                 className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary text-xs md:text-sm px-3 py-1 h-auto"
                               >
                                 {t("analysisTypes.basic")}
@@ -727,6 +823,33 @@ type ResultType =
                 day={result.data.day}
                 month={result.data.month}
                 year={result.data.year}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "day" && (
+              <DailyForecastResultComponent
+                result={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "finance" && (
+              <FinancialCodeResultComponent
+                result={result.data}
+                name={userName}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "name" && (
+              <NameEnergyResultComponent
+                result={result.data}
+                onReset={handleReset}
+              />
+            )}
+            {result.type === "contract" && (
+              <ContractEnergyResultComponent
+                result={result.data}
+                personName={userName}
                 onReset={handleReset}
               />
             )}
