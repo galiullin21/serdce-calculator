@@ -404,7 +404,7 @@ function calculatePinnaclesModule(day: number, month: number, year: number): { p
   const currentAge = new Date().getFullYear() - year;
   const activeIndex = getActivePinnacleIndex(data.pinnacles, currentAge);
 
-  const { pinnacleDescriptions } = require('./pinnacles');
+  // pinnacleDescriptions already imported at top
 
   const pinnacles: PinnacleModule[] = data.pinnacles.map((p, i) => {
     const desc = pinnacleDescriptions[p.value];
