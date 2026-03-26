@@ -28,7 +28,7 @@ import {
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
-import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType } from "@/lib/lifecod";
+import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType, calculateUnifiedPersonalAnalysis, UnifiedPersonalAnalysis } from "@/lib/lifecod";
 import { calculateDailyForecast, DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { calculateFinancialCode, FinancialCodeResult as FinancialCodeType } from "@/lib/financialCode";
 import { calculateNameEnergy, NameEnergyResult as NameEnergyType } from "@/lib/nameEnergy";
