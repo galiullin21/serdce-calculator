@@ -154,7 +154,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
               <label className="text-sm font-medium text-foreground">
                 {selectedMethod === "day" ? "Дата прогноза" : selectedMethod === "contract" ? "Дата договора" : selectedMethod === "month" ? t("calculator.forecastMonthYear") : selectedMethod === "lifecod-personal" ? "Год прогноза" : t("calculator.forecastYear")}
               </label>
-              <div className={`grid gap-3 ${(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? "grid-cols-3" : "grid-cols-1"}`}>
+              <div className={`grid gap-3 ${(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? "grid-cols-3" : (selectedMethod === "year" || selectedMethod === "lifecod-personal") ? "grid-cols-1" : "grid-cols-1"}`}>
                 {(selectedMethod === "day" || selectedMethod === "contract") && (
                   <Select value={targetDay} onValueChange={setTargetDay}>
                     <SelectTrigger className="bg-background border-border focus:border-primary h-12">
