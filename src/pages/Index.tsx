@@ -15,7 +15,7 @@ import { FinancialCodeResultComponent } from "@/components/FinancialCodeResult";
 import { NameEnergyResultComponent } from "@/components/NameEnergyResult";
 import { ContractEnergyResultComponent } from "@/components/ContractEnergyResult";
 import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
-import { LifeCodInputForm, LifeCodResult } from "@/components/lifecod";
+import { LifeCodInputForm, LifeCodResult, UnifiedPersonalResult } from "@/components/lifecod";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -28,7 +28,7 @@ import {
 } from "@/lib/calculations";
 import { calculateKeyTo, KeyToResult } from "@/lib/keyto";
 import { calculateAncestralPrograms, AncestralResult } from "@/lib/ancestral";
-import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType } from "@/lib/lifecod";
+import { calculateLifeCodCompatibility, LifeCodCompatibilityResult, RelationType, calculateUnifiedPersonalAnalysis, UnifiedPersonalAnalysis } from "@/lib/lifecod";
 import { calculateDailyForecast, DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { calculateFinancialCode, FinancialCodeResult as FinancialCodeType } from "@/lib/financialCode";
 import { calculateNameEnergy, NameEnergyResult as NameEnergyType } from "@/lib/nameEnergy";
@@ -180,6 +180,7 @@ type ResultType =
   | { type: "ancestral"; data: AncestralResult }
   | { type: "lifecod"; data: LifeCodCompatibilityResult }
   | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
+  | { type: "unified-personal"; data: UnifiedPersonalAnalysis }
   | { type: "day"; data: DailyForecastType }
   | { type: "finance"; data: FinancialCodeType }
   | { type: "name"; data: NameEnergyType }
@@ -227,10 +228,11 @@ type ResultType =
   ) => {
     setUserName(name);
     
-    // Methodology 2 - Classic numerology
+    // Methodology 2 - Unified personal analysis
     if (selectedMethodology === "2") {
       if (selectedMethod === "lifecod-personal") {
-        setResult({ type: "lifecod-personal", data: { name: name || "Вы", day, month, year } });
+        const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year);
+        setResult({ type: "unified-personal", data: unifiedResult });
         return;
       }
       const classicResult = calculateKeyTo(day, month, year);
@@ -824,6 +826,13 @@ type ResultType =
                 month={result.data.month}
                 year={result.data.year}
                 onReset={handleReset}
+              />
+            )}
+            {result.type === "unified-personal" && (
+              <UnifiedPersonalResult
+                analysis={result.data}
+                onReset={handleReset}
+                isPaid={false}
               />
             )}
             {result.type === "day" && (
