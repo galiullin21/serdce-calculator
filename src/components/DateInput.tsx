@@ -149,7 +149,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
             </div>
           </div>
 
-          {(selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract") && (
+          {(selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract" || selectedMethod === "lifecod-personal") && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
                 {selectedMethod === "day" ? "Дата прогноза" : selectedMethod === "contract" ? "Дата договора" : selectedMethod === "month" ? t("calculator.forecastMonthYear") : t("calculator.forecastYear")}
