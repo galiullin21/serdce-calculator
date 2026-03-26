@@ -180,6 +180,7 @@ type ResultType =
   | { type: "ancestral"; data: AncestralResult }
   | { type: "lifecod"; data: LifeCodCompatibilityResult }
   | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
+  | { type: "unified-personal"; data: UnifiedPersonalAnalysis }
   | { type: "day"; data: DailyForecastType }
   | { type: "finance"; data: FinancialCodeType }
   | { type: "name"; data: NameEnergyType }
