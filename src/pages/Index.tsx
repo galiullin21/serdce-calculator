@@ -828,6 +828,13 @@ type ResultType =
                 onReset={handleReset}
               />
             )}
+            {result.type === "unified-personal" && (
+              <UnifiedPersonalResult
+                analysis={result.data}
+                onReset={handleReset}
+                isPaid={false}
+              />
+            )}
             {result.type === "day" && (
               <DailyForecastResultComponent
                 result={result.data}
