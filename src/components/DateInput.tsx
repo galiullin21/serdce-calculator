@@ -45,7 +45,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
   const handleCalculate = () => {
     if (day && month && year) {
-      const needsTarget = selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract";
+      const needsTarget = selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract" || selectedMethod === "lifecod-personal";
       const targetMonthNum = (selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? parseInt(targetMonth) : undefined;
       const targetYearNum = needsTarget ? parseInt(targetYear) : undefined;
       const genderValue = selectedMethod === "ancestral" ? gender : undefined;
@@ -149,12 +149,12 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
             </div>
           </div>
 
-          {(selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract") && (
+          {(selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract" || selectedMethod === "lifecod-personal") && (
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                {selectedMethod === "day" ? "Дата прогноза" : selectedMethod === "contract" ? "Дата договора" : selectedMethod === "month" ? t("calculator.forecastMonthYear") : t("calculator.forecastYear")}
+                {selectedMethod === "day" ? "Дата прогноза" : selectedMethod === "contract" ? "Дата договора" : selectedMethod === "month" ? t("calculator.forecastMonthYear") : selectedMethod === "lifecod-personal" ? "Год прогноза" : t("calculator.forecastYear")}
               </label>
-              <div className={`grid gap-3 ${(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? "grid-cols-3" : "grid-cols-1"}`}>
+              <div className={`grid gap-3 ${(selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? "grid-cols-3" : (selectedMethod === "year" || selectedMethod === "lifecod-personal") ? "grid-cols-1" : "grid-cols-1"}`}>
                 {(selectedMethod === "day" || selectedMethod === "contract") && (
                   <Select value={targetDay} onValueChange={setTargetDay}>
                     <SelectTrigger className="bg-background border-border focus:border-primary h-12">
