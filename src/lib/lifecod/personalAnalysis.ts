@@ -2,7 +2,7 @@
 // 6 модулей: LY, GA, Сознание, Действия, Пиннакли, Суммарные числа + Risk Score
 
 import { calculateConsciousness, calculateAction, calculatePersonalYear, getPersonalYears } from './calculations';
-import { calculatePinnacles, determineCrisisLevel, getActivePinnacleIndex, PinnaclesAnalysis, CrisisLevel } from './pinnacles';
+import { calculatePinnacles, determineCrisisLevel, getActivePinnacleIndex, pinnacleDescriptions, PinnaclesAnalysis, CrisisLevel } from './pinnacles';
 import { personalYearDescriptions, consciousnessDescriptions, actionDescriptions } from './data';
 
 // ============= ТИПЫ =============
