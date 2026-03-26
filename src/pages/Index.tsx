@@ -15,7 +15,7 @@ import { FinancialCodeResultComponent } from "@/components/FinancialCodeResult";
 import { NameEnergyResultComponent } from "@/components/NameEnergyResult";
 import { ContractEnergyResultComponent } from "@/components/ContractEnergyResult";
 import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
-import { LifeCodInputForm, LifeCodResult } from "@/components/lifecod";
+import { LifeCodInputForm, LifeCodResult, UnifiedPersonalResult } from "@/components/lifecod";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
