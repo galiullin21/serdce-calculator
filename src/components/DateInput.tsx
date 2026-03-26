@@ -45,7 +45,7 @@ export function DateInput({ selectedMethod, onCalculate }: DateInputProps) {
 
   const handleCalculate = () => {
     if (day && month && year) {
-      const needsTarget = selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract";
+      const needsTarget = selectedMethod === "month" || selectedMethod === "year" || selectedMethod === "day" || selectedMethod === "contract" || selectedMethod === "lifecod-personal";
       const targetMonthNum = (selectedMethod === "month" || selectedMethod === "day" || selectedMethod === "contract") ? parseInt(targetMonth) : undefined;
       const targetYearNum = needsTarget ? parseInt(targetYear) : undefined;
       const genderValue = selectedMethod === "ancestral" ? gender : undefined;
