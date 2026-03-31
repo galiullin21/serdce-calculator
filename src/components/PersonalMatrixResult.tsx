@@ -201,7 +201,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
 
         {/* Professional sections - behind paywall */}
         {isPro && (
-          <PaidBlock isLocked={true} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
+          <PaidBlock isLocked={true} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды" features={["Диагональ судьбы — позиции 7, 8, 9", "Кармический треугольник — позиции 10, 11, 12", "Код успеха — ключевые точки реализации", "Жизненные периоды — когда что активируется"]}>
             {activeTab === "diagonal" && (
               <>
                 <h2 className="text-lg font-display text-foreground flex items-center gap-2">
