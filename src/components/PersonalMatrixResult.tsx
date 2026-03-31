@@ -389,6 +389,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false, sho
           </>
         )}
         </PaidBlock>
+        )}
       </div>
 
       
