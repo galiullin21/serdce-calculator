@@ -109,21 +109,7 @@ export function YearForecastResult({ forecast, name, onReset, isPro = false }: Y
         </PaidBlock>
       </div>
 
-      <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-        <h3 className="text-lg font-display text-foreground mb-2">
-          {t("forecast.wantMore")}
-        </h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          {t("forecast.wantMoreDesc")}
-        </p>
-        <Button
-          onClick={handleTelegramClick}
-          className="btn-fill bg-primary text-primary-foreground"
-        >
-          {t("results.bookConsultation")}
-          <ExternalLink className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      {!isPro && <ActivationBanner />}
     </div>
   );
 }
