@@ -93,7 +93,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, isP
           })}
         </Accordion>
 
-        {positions.length > 4 && (
+        {positions.length > 4 && showProSections && (
           <PaidBlock isLocked={!isPro} title="Полный анализ договора" description="Детальный разбор всех 12 позиций: ресурсы, скрытые мотивы, кармический урок и итог сотрудничества">
             <Accordion type="single" collapsible>
               {positions.slice(4).map((pos) => {
