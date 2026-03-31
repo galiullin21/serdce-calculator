@@ -1,5 +1,5 @@
 // Система управления доступом к разборам
-import { useState, useCallback, createContext, useContext, type ReactNode } from "react";
+import { useState, useCallback, createContext, useContext, createElement, type ReactNode } from "react";
 
 export type AccessState = 'locked' | 'preview' | 'payment_pending' | 'unlocked';
 
@@ -10,17 +10,11 @@ export interface AccessInfo {
 }
 
 interface AccessContextType {
-  /** Текущее состояние доступа к проф. разбору */
   accessState: AccessState;
-  /** Разблокировать (для теста или после оплаты) */
   unlock: () => void;
-  /** Сбросить в locked */
   lock: () => void;
-  /** Начать оплату (payment_pending) */
   startPayment: () => void;
-  /** Является ли dev-режим активным */
   isDevMode: boolean;
-  /** Переключить dev-режим */
   toggleDevMode: () => void;
 }
 
@@ -43,10 +37,10 @@ export function AccessProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  return (
-    <AccessContext.Provider value={{ accessState, unlock, lock, startPayment, isDevMode, toggleDevMode }}>
-      {children}
-    </AccessContext.Provider>
+  return createElement(
+    AccessContext.Provider,
+    { value: { accessState, unlock, lock, startPayment, isDevMode, toggleDevMode } },
+    children
   );
 }
 
