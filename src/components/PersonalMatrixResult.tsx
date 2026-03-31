@@ -8,7 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, ActivationBanner } from "./PaidBlock";
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
@@ -389,21 +389,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
         </PaidBlock>
       </div>
 
-      <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-        <h3 className="text-lg font-display text-foreground mb-2">
-          {t("results.wantDeepAnalysis")}
-        </h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          {t("results.deepAnalysisDesc")}
-        </p>
-        <Button
-          onClick={handleTelegramClick}
-          className="btn-fill bg-primary text-primary-foreground"
-        >
-          {t("results.bookConsultation")}
-          <ExternalLink className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      {!isPro && <ActivationBanner />}
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft } from "lucide-react";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, ActivationBanner } from "./PaidBlock";
 
 interface Props {
   result: DailyForecastType;
@@ -122,6 +122,8 @@ export function ContractEnergyResultComponent({ result, personName, onReset, isP
           </PaidBlock>
         )}
       </div>
+
+      {!isPro && <ActivationBanner />}
     </div>
   );
 }
