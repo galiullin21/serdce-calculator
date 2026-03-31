@@ -100,11 +100,13 @@ export function YearForecastResult({ forecast, name, onReset, isPro = false }: Y
           </div>
         </div>
 
-        <ArcanaCard
-          number={forecast.arcana}
-          showYearForecast={true}
-          compact={false}
-        />
+        <PaidBlock isLocked={!isPro} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии доступны в профессиональном разборе">
+          <ArcanaCard
+            number={forecast.arcana}
+            showYearForecast={true}
+            compact={false}
+          />
+        </PaidBlock>
       </div>
 
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
