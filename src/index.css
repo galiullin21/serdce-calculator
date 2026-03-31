@@ -259,8 +259,8 @@
 
   .warm-pattern {
     background-image: 
-      radial-gradient(circle at 20% 50%, hsl(30 50% 45% / 0.03) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, hsl(30 50% 45% / 0.02) 0%, transparent 40%),
-      radial-gradient(circle at 40% 80%, hsl(20 45% 32% / 0.02) 0%, transparent 40%);
+      radial-gradient(circle at 20% 50%, hsl(14 100% 4% / 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, hsl(14 100% 4% / 0.02) 0%, transparent 40%),
+      radial-gradient(circle at 40% 80%, hsl(14 100% 4% / 0.02) 0%, transparent 40%);
   }
 }
