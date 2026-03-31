@@ -6,7 +6,7 @@ import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface CompatibilityResultProps {
