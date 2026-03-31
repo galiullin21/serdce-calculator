@@ -266,6 +266,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
           </>
         )}
 
+        <PaidBlock isLocked={!isPro && activeTab !== "main"} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
         {activeTab === "diagonal" && (
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
@@ -385,6 +386,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
             </div>
           </>
         )}
+        </PaidBlock>
       </div>
 
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
