@@ -12,9 +12,10 @@ interface MonthForecastResultProps {
   name: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
-export function MonthForecastResult({ forecast, name, onReset, isPro = false }: MonthForecastResultProps) {
+export function MonthForecastResult({ forecast, name, onReset, isPro = false, showProSections = false }: MonthForecastResultProps) {
   const { t } = useTranslation();
   const formattedDate = formatBirthDate(
     forecast.birthDate.day,

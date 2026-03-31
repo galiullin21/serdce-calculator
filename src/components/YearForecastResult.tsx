@@ -12,9 +12,10 @@ interface YearForecastResultProps {
   name: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
-export function YearForecastResult({ forecast, name, onReset, isPro = false }: YearForecastResultProps) {
+export function YearForecastResult({ forecast, name, onReset, isPro = false, showProSections = false }: YearForecastResultProps) {
   const { t } = useTranslation();
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(
