@@ -786,6 +786,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
+                isPro={isPro}
               />
             )}
             {result.type === "month" && (
@@ -793,6 +794,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
+                isPro={isPro}
               />
             )}
             {result.type === "purpose" && (
@@ -800,6 +802,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
+                isPro={isPro}
               />
             )}
             {result.type === "keyto" && (
