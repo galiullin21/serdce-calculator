@@ -3,10 +3,10 @@ import { YearForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -91,20 +91,20 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
 
         {/* Professional: full forecast behind paywall */}
         {isPro ? (
-          <PaidBlock isLocked={true} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии">
+          <PaidBlock isLocked={true} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии" features={["Детальный прогноз по энергиям года", "Рекомендации по месяцам", "Подходящие сферы деятельности", "Подводные камни и как их обойти"]}>
             <ArcanaCard number={forecast.arcana} showYearForecast={true} compact={false} />
           </PaidBlock>
         ) : (
-          <div className="gradient-card rounded-2xl p-6 border border-border text-center mt-4">
-            <h3 className="text-lg font-display text-foreground mb-2">Хотите полный прогноз?</h3>
-            <p className="text-sm text-muted-foreground mb-4">
-              Профессиональный прогноз включает: детальное описание энергий, рекомендации по месяцам, подходящие сферы деятельности
-            </p>
-            <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-              Получить полный прогноз
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <InlinePaywall
+            title="Хотите полный прогноз?"
+            description="Профессиональный прогноз включает детальное описание энергий, рекомендации по месяцам, подходящие сферы деятельности"
+            features={[
+              "Детальное описание энергии года",
+              "Рекомендации по каждому месяцу",
+              "Подходящие профессии и сферы",
+              "Предупреждения и подводные камни",
+            ]}
+          />
         )}
       </div>
     </div>

@@ -2,11 +2,11 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { AncestralResult } from "@/lib/ancestral";
 import { KarmicStar } from "./KarmicStar";
-import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface AncestralResultProps {
@@ -224,14 +224,15 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
           </div>
         </PaidBlock>
       ) : (
-        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-          <h3 className="text-lg font-display text-foreground mb-2">{t("ancestral.wantDeepAnalysis")}</h3>
-          <p className="text-sm text-muted-foreground mb-4">{t("ancestral.deepAnalysisDesc")}</p>
-          <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary hover:bg-primary text-primary-foreground rounded-full">
-            {t("results.bookConsultation")}
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title={t("ancestral.wantDeepAnalysis")}
+          description={t("ancestral.deepAnalysisDesc")}
+          features={[
+            "Детальные интерпретации всех 5 цифр",
+            "Глубокий анализ родовых проклятий",
+            "Рекомендации по проработке программ",
+          ]}
+        />
       )}
     </div>
   );

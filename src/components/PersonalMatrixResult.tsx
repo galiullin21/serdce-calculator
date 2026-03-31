@@ -3,13 +3,14 @@ import { PersonalMatrix, formatBirthDate } from "@/lib/calculations";
 import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName, getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Compass, Star, Clock, ExternalLink } from "lucide-react";
+import { ArrowLeft, Compass, Star, Clock } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
+import { useAccess } from "@/lib/accessControl";
 
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
@@ -200,7 +201,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
 
         {/* Professional sections - behind paywall */}
         {isPro && (
-          <PaidBlock isLocked={true} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
+          <PaidBlock isLocked={true} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды" features={["Диагональ судьбы — позиции 7, 8, 9", "Кармический треугольник — позиции 10, 11, 12", "Код успеха — ключевые точки реализации", "Жизненные периоды — когда что активируется"]}>
             {activeTab === "diagonal" && (
               <>
                 <h2 className="text-lg font-display text-foreground flex items-center gap-2">
@@ -277,21 +278,19 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
         )}
       </div>
 
-      {/* CTA for basic tier */}
+      {/* Inline paywall for basic tier */}
       {!isPro && (
-        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-          <h3 className="text-lg font-display text-foreground mb-2">Хотите полный разбор?</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Профессиональный разбор включает: диагональ судьбы, кармический треугольник, код успеха и жизненные периоды
-          </p>
-          <Button
-            onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}
-            className="btn-fill bg-primary text-primary-foreground border-2 border-primary"
-          >
-            Получить полный разбор
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title="Хотите полный разбор?"
+          description="Профессиональный разбор включает: диагональ судьбы, кармический треугольник, код успеха и жизненные периоды"
+          features={[
+            "Все 12 позиций матрицы с подробными описаниями",
+            "Диагональ судьбы — ваши жизненные цели",
+            "Кармический треугольник — уроки прошлых жизней",
+            "Код успеха — ключевые точки реализации",
+            "Жизненные периоды — когда активируются энергии",
+          ]}
+        />
       )}
     </div>
   );

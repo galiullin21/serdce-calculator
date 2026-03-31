@@ -3,10 +3,10 @@ import { MonthForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -137,16 +137,15 @@ export function MonthForecastResult({ forecast, name, onReset, tier = 'basic' }:
           </div>
         </PaidBlock>
       ) : (
-        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-          <h3 className="text-lg font-display text-foreground mb-2">Хотите полный прогноз?</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Профессиональный прогноз включает: подробные описания всех трёх энергий, влияющие факторы и рекомендации
-          </p>
-          <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-            Получить полный прогноз
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title="Хотите полный прогноз?"
+          description="Подробные описания всех трёх энергий, влияющие факторы и рекомендации"
+          features={[
+            "Подробное описание главного аркана месяца",
+            "Влияющие энергии года и месяца",
+            "Рекомендации по дням и неделям",
+          ]}
+        />
       )}
     </div>
   );

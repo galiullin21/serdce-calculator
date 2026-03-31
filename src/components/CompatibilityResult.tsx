@@ -1,12 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle } from "lucide-react";
 import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface CompatibilityResultProps {
@@ -189,14 +189,16 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
           </div>
         </PaidBlock>
       ) : (
-        <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border text-center">
-          <h3 className="text-xl font-display text-primary mb-2">{t("compatibility.wantDeepAnalysis")}</h3>
-          <p className="text-muted-foreground mb-4 text-sm">{t("compatibility.deepAnalysisDesc")}</p>
-          <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-            {t("results.bookConsultation")}
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title={t("compatibility.wantDeepAnalysis")}
+          description={t("compatibility.deepAnalysisDesc")}
+          features={[
+            "Аркан гармонии — эмоциональная связь",
+            "Кармический аркан — уроки отношений",
+            "Сильные и слабые стороны пары",
+            "Детальные рекомендации по развитию отношений",
+          ]}
+        />
       )}
     </div>
   );
