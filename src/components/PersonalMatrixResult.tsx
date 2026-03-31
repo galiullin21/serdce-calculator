@@ -3,13 +3,14 @@ import { PersonalMatrix, formatBirthDate } from "@/lib/calculations";
 import { positionDescriptions, successCodePositions, lifePeriods, getArcanaName, getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Compass, Star, Clock, ExternalLink } from "lucide-react";
+import { ArrowLeft, Compass, Star, Clock } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
+import { useAccess } from "@/lib/accessControl";
 
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
