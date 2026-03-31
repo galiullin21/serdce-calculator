@@ -230,7 +230,7 @@ export function MonthForecastResult({ forecast, name, onReset, isPro = false }: 
         </div>
       </PaidBlock>
 
-      {!isPro && <ActivationBanner />}
+      
     </div>
   );
 }

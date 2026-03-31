@@ -109,7 +109,7 @@ export function YearForecastResult({ forecast, name, onReset, isPro = false }: Y
         </PaidBlock>
       </div>
 
-      {!isPro && <ActivationBanner />}
+      
     </div>
   );
 }

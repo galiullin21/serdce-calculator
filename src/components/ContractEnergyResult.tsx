@@ -123,7 +123,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, isP
         )}
       </div>
 
-      {!isPro && <ActivationBanner />}
+      
     </div>
   );
 }

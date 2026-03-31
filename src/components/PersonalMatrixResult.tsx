@@ -389,7 +389,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
         </PaidBlock>
       </div>
 
-      {!isPro && <ActivationBanner />}
+      
     </div>
   );
 }
