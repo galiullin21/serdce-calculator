@@ -1,7 +1,7 @@
 import { NumerologyResult as Result, numberDescriptions } from "@/lib/numerology";
 import { NumberCard } from "./NumberCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Crown, ExternalLink } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { PDFDownloadButton } from "./PDFDownloadButton";
