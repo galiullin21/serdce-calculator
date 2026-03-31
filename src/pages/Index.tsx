@@ -382,15 +382,6 @@ type ResultType =
                   <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed">
                     {t("hero.description3")} <span className="font-semibold text-foreground">{t("hero.welcome")}</span>
                   </p>
-                  
-                  <Button
-                    onClick={handleTelegramClick}
-                    size="lg"
-                    className="btn-fill animate-gentle-shake bg-primary hover:bg-primary text-primary-foreground font-medium px-6 md:px-8 py-4 md:py-6 text-sm md:text-base rounded-full border-2 border-primary"
-                  >
-                    {t("hero.bookConsultation")}
-                    <ExternalLink className="w-4 h-4 ml-2" />
-                  </Button>
                 </div>
               </div>
             </section>
