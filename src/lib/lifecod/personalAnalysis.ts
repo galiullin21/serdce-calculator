@@ -112,24 +112,44 @@ export interface UnifiedPersonalAnalysis {
   birthYear: number;
   targetYear: number;
 
-  // Модуль 1: Личные годы
+  // Блок 1: Матрица судьбы
+  destinyMatrix: DestinyMatrixModule;
+
+  // Модуль: Личные годы
   personalYears: PersonalYearModule[];
   currentPersonalYear: PersonalYearModule;
 
-  // Модуль 2: Год в действиях
+  // Модуль: Год в действиях
   yearInActions: YearInActionsModule;
 
-  // Модуль 3: Число сознания
+  // Модуль: Число сознания
   consciousness: ConsciousnessModule;
 
-  // Модуль 4: Число действий
+  // Модуль: Число действий
   actions: ActionsModule;
 
-  // Модуль 5: Пиннакли
+  // Блок 2: Пиннакли
   pinnacles: PinnacleModule[];
   pinnaclesCalcTrace: CalcTrace;
 
-  // Модуль 6: Суммарные числа + Risk Score
+  // Блок 3: Личный прогноз (месяц + день)
+  forecastMonths: PersonalMonthModule[];
+  currentMonth: PersonalMonthModule;
+  today: PersonalDayModule;
+
+  // Блок 4: Финансовый код
+  financialCode: FinancialCodeLCModule;
+
+  // Блок 5: Психопрофиль
+  psychProfile: PsychProfileModule;
+
+  // Блок 6: Энергокарта
+  energyMap: EnergyMapModule;
+
+  // План действий
+  actionPlan: ActionPlanModule;
+
+  // Суммарные числа + Risk Score
   summaryNumbers: SummaryNumbersModule;
   riskScore: RiskScoreModule;
 
