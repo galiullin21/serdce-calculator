@@ -6,10 +6,12 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { PaidBlock } from "./PaidBlock";
 interface YearForecastResultProps {
   forecast: YearForecast;
   name: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
 export function YearForecastResult({ forecast, name, onReset }: YearForecastResultProps) {
