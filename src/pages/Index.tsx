@@ -779,7 +779,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
@@ -788,7 +788,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
@@ -797,7 +797,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
@@ -868,7 +868,7 @@ type ResultType =
                 result={result.data}
                 personName={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
