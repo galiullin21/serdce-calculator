@@ -22,6 +22,7 @@ export function Header() {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-3">
           <img src={logo} alt="Life C⚙D" className="h-10 w-auto brightness-0 invert" />
+          <span className="font-display font-bold text-lg text-white tracking-tight">Life C⚙D</span>
         </Link>
 
         {/* Navigation */}
