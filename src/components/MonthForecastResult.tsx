@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -74,7 +73,7 @@ export function MonthForecastResult({ forecast, name, onReset, tier = 'basic' }:
         <p className="text-muted-foreground">{t("results.birthDate")}: {formattedDate}</p>
       </div>
 
-      {/* Triangle visualization - always shown */}
+      {/* Triangle visualization */}
       <div className="gradient-card rounded-2xl p-6 border border-primary/30">
         <div className="flex items-center gap-3 mb-6">
           <Calendar className="w-6 h-6 text-primary" />
@@ -121,32 +120,18 @@ export function MonthForecastResult({ forecast, name, onReset, tier = 'basic' }:
         </div>
       </div>
 
-      {/* Professional: detailed arcana cards */}
-      {isPro ? (
-        <PaidBlock isLocked={true} title="Полный прогноз на месяц" description="Детальное описание всех энергий месяца и рекомендации">
-          <div className="space-y-4">
-            <h2 className="text-lg font-display text-foreground">{t("forecast.mainMonthArcana")}</h2>
-            <ArcanaCard number={forecast.position3} showMonthForecast={true} compact={false} />
-          </div>
-          <div className="space-y-4 mt-4">
-            <h2 className="text-lg font-display text-foreground">{t("forecast.influencingEnergies")}</h2>
-            <div className="grid gap-4">
-              <ArcanaCard number={forecast.position1} positionTitle={t("forecast.yearEnergyTitle")} showMonthForecast={true} compact={true} />
-              <ArcanaCard number={forecast.position2} positionTitle={`${t("forecast.energyOf")} ${monthName}`} showMonthForecast={true} compact={true} />
-            </div>
-          </div>
-        </PaidBlock>
-      ) : (
-        <InlinePaywall
-          title="Хотите полный прогноз?"
-          description="Подробные описания всех трёх энергий, влияющие факторы и рекомендации"
-          features={[
-            "Подробное описание главного аркана месяца",
-            "Влияющие энергии года и месяца",
-            "Рекомендации по дням и неделям",
-          ]}
-        />
-      )}
+      {/* Full detailed arcana cards — always shown (pro gets here only after payment) */}
+      <div className="space-y-4">
+        <h2 className="text-lg font-display text-foreground">{t("forecast.mainMonthArcana")}</h2>
+        <ArcanaCard number={forecast.position3} showMonthForecast={true} compact={false} />
+      </div>
+      <div className="space-y-4">
+        <h2 className="text-lg font-display text-foreground">{t("forecast.influencingEnergies")}</h2>
+        <div className="grid gap-4">
+          <ArcanaCard number={forecast.position1} positionTitle={t("forecast.yearEnergyTitle")} showMonthForecast={true} compact={true} />
+          <ArcanaCard number={forecast.position2} positionTitle={`${t("forecast.energyOf")} ${monthName}`} showMonthForecast={true} compact={true} />
+        </div>
+      </div>
     </div>
   );
 }

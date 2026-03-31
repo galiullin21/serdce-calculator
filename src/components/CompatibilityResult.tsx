@@ -6,7 +6,6 @@ import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface CompatibilityResultProps {
@@ -78,7 +77,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         <p className="text-muted-foreground">{result.person1.name} & {result.person2.name}</p>
       </div>
 
-      {/* Score - always shown */}
+      {/* Score */}
       <div className="gradient-card rounded-2xl p-6 md:p-8 border border-border mb-8 text-center">
         <div className="mb-4">
           <span className={cn("text-5xl md:text-6xl font-display font-bold", getCompatibilityColor(result.compatibilityPercent))}>
@@ -90,7 +89,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         </p>
       </div>
 
-      {/* Partners Info - always shown */}
+      {/* Partners Info */}
       <div className="grid md:grid-cols-2 gap-4 mb-8">
         {[result.person1, result.person2].map((person, idx) => {
           const destinyArcana = idx === 0 ? person1DestinyArcana : person2DestinyArcana;
@@ -114,7 +113,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         })}
       </div>
 
-      {/* Union Arcana - always shown (basic content) */}
+      {/* Union Arcana */}
       <div className="mb-8">
         <h2 className="text-xl font-display text-primary mb-4 flex items-center gap-2">
           <Heart className="w-5 h-5" />
@@ -127,9 +126,9 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         </div>
       </div>
 
-      {/* Professional sections */}
-      {isPro ? (
-        <PaidBlock isLocked={true} title="Полный анализ совместимости" description="Гармония, карма, сильные/слабые стороны, детальные рекомендации">
+      {/* Pro sections — shown directly (pro gets here only after payment) */}
+      {isPro && (
+        <>
           {/* Harmony */}
           <div className="mb-8">
             <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
@@ -187,18 +186,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
               </ul>
             </div>
           </div>
-        </PaidBlock>
-      ) : (
-        <InlinePaywall
-          title={t("compatibility.wantDeepAnalysis")}
-          description={t("compatibility.deepAnalysisDesc")}
-          features={[
-            "Аркан гармонии — эмоциональная связь",
-            "Кармический аркан — уроки отношений",
-            "Сильные и слабые стороны пары",
-            "Детальные рекомендации по развитию отношений",
-          ]}
-        />
+        </>
       )}
     </div>
   );

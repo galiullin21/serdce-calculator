@@ -3,7 +3,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { FinancialCodeResult as FinancialCodeType } from "@/lib/financialCode";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft, Wallet, Star, Shield, AlertTriangle } from "lucide-react";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -25,8 +24,7 @@ export function FinancialCodeResultComponent({ result, name, onReset, tier = 'ba
   ];
 
   // Basic: first 2 cards. Pro: all 4
-  const basicCards = allCards.slice(0, 2);
-  const proCards = allCards.slice(2);
+  const shownCards = isPro ? allCards : allCards.slice(0, 2);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -49,7 +47,7 @@ export function FinancialCodeResultComponent({ result, name, onReset, tier = 'ba
           {name ? `${name}, ` : ''}дата рождения: {result.birthDate.day}.{String(result.birthDate.month).padStart(2, '0')}.{result.birthDate.year}
         </p>
 
-        {/* Basic cards grid */}
+        {/* Cards grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
           {allCards.map((card) => {
             const arcanaData = getArcana(card.arcana);
@@ -64,10 +62,10 @@ export function FinancialCodeResultComponent({ result, name, onReset, tier = 'ba
           })}
         </div>
 
-        {/* Basic: only talent & resource details */}
-        <Accordion type="single" collapsible defaultValue="talent">
-          {basicCards.map((card, i) => (
-            <AccordionItem key={i} value={['talent', 'resource'][i]} className="border-border">
+        {/* Shown card details */}
+        <Accordion type="single" collapsible defaultValue="card-0">
+          {shownCards.map((card, i) => (
+            <AccordionItem key={i} value={`card-${i}`} className="border-border">
               <AccordionTrigger className="hover:no-underline py-3">
                 <span className="font-display text-foreground text-sm flex items-center gap-2">
                   <card.icon className={`w-4 h-4 ${card.color}`} />
@@ -79,43 +77,16 @@ export function FinancialCodeResultComponent({ result, name, onReset, tier = 'ba
           ))}
         </Accordion>
 
-        {/* Professional: mission & block details */}
-        {isPro ? (
-          <PaidBlock isLocked={true} title="Полный финансовый код" description="Финансовая миссия, блоки и рекомендуемые профессии">
-            <Accordion type="single" collapsible>
-              {proCards.map((card, i) => (
-                <AccordionItem key={i} value={['mission', 'block'][i]} className="border-border">
-                  <AccordionTrigger className="hover:no-underline py-3">
-                    <span className="font-display text-foreground text-sm flex items-center gap-2">
-                      <card.icon className={`w-4 h-4 ${card.color}`} />
-                      {card.title} — {card.arcana} ({getArcana(card.arcana)?.name})
-                    </span>
-                  </AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground text-sm pb-4">{card.desc}</AccordionContent>
-                </AccordionItem>
+        {/* Professions — only in pro */}
+        {isPro && result.professions.length > 0 && (
+          <div className="mt-4 p-4 bg-primary/5 rounded-xl border border-primary/20">
+            <h3 className="font-display text-foreground text-sm mb-2">Рекомендуемые профессии для заработка</h3>
+            <div className="flex flex-wrap gap-2">
+              {result.professions.map((p, i) => (
+                <span key={i} className="text-xs px-3 py-1 bg-secondary rounded-full text-muted-foreground">{p}</span>
               ))}
-            </Accordion>
-            {result.professions.length > 0 && (
-              <div className="mt-4 p-4 bg-primary/5 rounded-xl border border-primary/20">
-                <h3 className="font-display text-foreground text-sm mb-2">Рекомендуемые профессии для заработка</h3>
-                <div className="flex flex-wrap gap-2">
-                  {result.professions.map((p, i) => (
-                    <span key={i} className="text-xs px-3 py-1 bg-secondary rounded-full text-muted-foreground">{p}</span>
-                  ))}
-                </div>
-              </div>
-            )}
-          </PaidBlock>
-        ) : (
-          <InlinePaywall
-            title="Полный финансовый код"
-            description="Финансовая миссия, блоки и рекомендуемые профессии"
-            features={[
-              "Финансовая миссия — ваше предназначение в деньгах",
-              "Финансовый блок — что мешает зарабатывать",
-              "Рекомендуемые профессии для максимального дохода",
-            ]}
-          />
+            </div>
+          </div>
         )}
       </div>
     </div>

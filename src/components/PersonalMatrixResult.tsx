@@ -8,9 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
-import { useAccess } from "@/lib/accessControl";
 
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
@@ -199,99 +197,79 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
           </>
         )}
 
-        {/* Professional sections - behind paywall */}
-        {isPro && (
-          <PaidBlock isLocked={true} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды" features={["Диагональ судьбы — позиции 7, 8, 9", "Кармический треугольник — позиции 10, 11, 12", "Код успеха — ключевые точки реализации", "Жизненные периоды — когда что активируется"]}>
-            {activeTab === "diagonal" && (
-              <>
-                <h2 className="text-lg font-display text-foreground flex items-center gap-2">
-                  <Star className="w-5 h-5 text-primary" />
-                  {t("results.diagonalRow")}
-                </h2>
-                <div className="grid gap-4">
-                  {[7, 8, 9].map((pos) => (
-                    <ArcanaCard key={pos} number={matrix.positions[pos - 1]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={false} />
-                  ))}
-                </div>
-              </>
-            )}
-            {activeTab === "karmic" && (
-              <>
-                <h2 className="text-lg font-display text-foreground">{t("results.karmicTriangle")}</h2>
-                <p className="text-sm text-muted-foreground mb-4">{t("results.karmicTriangleDesc")}</p>
-                <div className="grid gap-4">
-                  {[10, 11, 12].map((pos) => (
-                    <ArcanaCard key={pos} number={matrix.positions[pos - 1]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={pos !== 12} />
-                  ))}
-                </div>
-              </>
-            )}
-            {activeTab === "success" && (
-              <>
-                <h2 className="text-lg font-display text-foreground flex items-center gap-2">
-                  <Star className="w-5 h-5 text-amber-500" />
-                  {t("results.successCode")}
-                </h2>
-                <p className="text-sm text-muted-foreground mb-4">{t("results.successCodeDesc")}</p>
-                <div className="flex justify-center gap-3 mb-6">
-                  {matrix.successCode.map((arcana, index) => (
-                    <div key={index} className="flex flex-col items-center">
-                      <div className="w-14 h-14 rounded-xl bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center">
-                        <span className="text-xl font-display font-bold text-amber-600">{arcana}</span>
-                      </div>
-                      <span className="text-xs text-muted-foreground mt-1">{t("results.pos")} {successCodePositions[index]}</span>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid gap-4">
-                  {successCodePositions.map((pos, index) => (
-                    <ArcanaCard key={pos} number={matrix.successCode[index]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={true} />
-                  ))}
-                </div>
-              </>
-            )}
-            {activeTab === "periods" && (
-              <>
-                <h2 className="text-lg font-display text-foreground flex items-center gap-2">
-                  <Clock className="w-5 h-5 text-primary" />
-                  {t("results.lifePeriods")}
-                </h2>
-                <div className="grid gap-4">
-                  {lifePeriods.map((period, index) => (
-                    <div key={index} className="gradient-card rounded-xl p-4 border border-border">
-                      <h3 className="font-display font-semibold text-foreground mb-2">{period.title}</h3>
-                      <p className="text-sm text-muted-foreground mb-3">{period.description}</p>
-                      <div className="flex gap-2">
-                        {period.positions.map((pos) => (
-                          <div key={pos} className="flex flex-col items-center bg-muted/50 rounded-lg p-2">
-                            <span className="text-lg font-display font-bold text-primary">{matrix.positions[pos - 1]}</span>
-                            <span className="text-xs text-muted-foreground">{getArcanaName(matrix.positions[pos - 1])}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </PaidBlock>
+        {/* Professional sections — shown directly (pro gets here only after payment) */}
+        {isPro && activeTab === "diagonal" && (
+          <>
+            <h2 className="text-lg font-display text-foreground flex items-center gap-2">
+              <Star className="w-5 h-5 text-primary" />
+              {t("results.diagonalRow")}
+            </h2>
+            <div className="grid gap-4">
+              {[7, 8, 9].map((pos) => (
+                <ArcanaCard key={pos} number={matrix.positions[pos - 1]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={false} />
+              ))}
+            </div>
+          </>
         )}
-      </div>
-
-      {/* Inline paywall for basic tier */}
-      {!isPro && (
-        <InlinePaywall
-          title="Хотите полный разбор?"
-          description="Профессиональный разбор включает: диагональ судьбы, кармический треугольник, код успеха и жизненные периоды"
-          features={[
-            "Все 12 позиций матрицы с подробными описаниями",
-            "Диагональ судьбы — ваши жизненные цели",
-            "Кармический треугольник — уроки прошлых жизней",
-            "Код успеха — ключевые точки реализации",
-            "Жизненные периоды — когда активируются энергии",
-          ]}
-        />
-      )}
+        {isPro && activeTab === "karmic" && (
+          <>
+            <h2 className="text-lg font-display text-foreground">{t("results.karmicTriangle")}</h2>
+            <p className="text-sm text-muted-foreground mb-4">{t("results.karmicTriangleDesc")}</p>
+            <div className="grid gap-4">
+              {[10, 11, 12].map((pos) => (
+                <ArcanaCard key={pos} number={matrix.positions[pos - 1]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={pos !== 12} />
+              ))}
+            </div>
+          </>
+        )}
+        {isPro && activeTab === "success" && (
+          <>
+            <h2 className="text-lg font-display text-foreground flex items-center gap-2">
+              <Star className="w-5 h-5 text-amber-500" />
+              {t("results.successCode")}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-4">{t("results.successCodeDesc")}</p>
+            <div className="flex justify-center gap-3 mb-6">
+              {matrix.successCode.map((arcana, index) => (
+                <div key={index} className="flex flex-col items-center">
+                  <div className="w-14 h-14 rounded-xl bg-amber-500/20 border-2 border-amber-500 flex items-center justify-center">
+                    <span className="text-xl font-display font-bold text-amber-600">{arcana}</span>
+                  </div>
+                  <span className="text-xs text-muted-foreground mt-1">{t("results.pos")} {successCodePositions[index]}</span>
+                </div>
+              ))}
+            </div>
+            <div className="grid gap-4">
+              {successCodePositions.map((pos, index) => (
+                <ArcanaCard key={pos} number={matrix.successCode[index]} position={pos} positionTitle={positionDescriptions[pos]?.title} positionDescription={positionDescriptions[pos]?.description} compact={true} />
+              ))}
+            </div>
+          </>
+        )}
+        {isPro && activeTab === "periods" && (
+          <>
+            <h2 className="text-lg font-display text-foreground flex items-center gap-2">
+              <Clock className="w-5 h-5 text-primary" />
+              {t("results.lifePeriods")}
+            </h2>
+            <div className="grid gap-4">
+              {lifePeriods.map((period, index) => (
+                <div key={index} className="gradient-card rounded-xl p-4 border border-border">
+                  <h3 className="font-display font-semibold text-foreground mb-2">{period.title}</h3>
+                  <p className="text-sm text-muted-foreground mb-3">{period.description}</p>
+                  <div className="flex gap-2">
+                    {period.positions.map((pos) => (
+                      <div key={pos} className="flex flex-col items-center bg-muted/50 rounded-lg p-2">
+                        <span className="text-lg font-display font-bold text-primary">{matrix.positions[pos - 1]}</span>
+                        <span className="text-xs text-muted-foreground">{getArcanaName(matrix.positions[pos - 1])}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
     </div>
   );
 }
