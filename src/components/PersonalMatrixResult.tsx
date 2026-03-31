@@ -8,7 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, ActivationBanner } from "./PaidBlock";
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
