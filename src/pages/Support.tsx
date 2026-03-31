@@ -7,7 +7,7 @@ const SupportPage = () => {
   const { t } = useTranslation();
 
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   return (

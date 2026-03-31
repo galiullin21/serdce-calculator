@@ -29,7 +29,7 @@ export function MonthForecastResult({ forecast, name, onReset, isPro = false, sh
   const arcana3 = getArcana(forecast.position3);
 
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   const handleDownloadPDF = async () => {

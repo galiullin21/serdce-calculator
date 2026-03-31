@@ -371,7 +371,7 @@ export function LifeCodPersonalResult({ name, day, month, year, onReset }: LifeC
           Получите полный персональный отчёт с рекомендациями от эксперта
         </p>
         <Button size="lg" className="bg-primary text-primary-foreground"
-          onClick={() => window.open("https://t.me/galiullin_ruzal", "_blank")}
+          onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}
         >
           Записаться на консультацию
         </Button>

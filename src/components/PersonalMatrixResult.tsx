@@ -30,7 +30,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false, sho
   );
 
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   const handleDownloadPDF = async () => {

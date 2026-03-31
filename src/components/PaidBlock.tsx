@@ -16,7 +16,7 @@ export function PaidBlock({ children, isLocked, title, description, className }:
   }
 
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   return (
@@ -56,7 +56,7 @@ export function PaidBlock({ children, isLocked, title, description, className }:
 /** Маркетинговый CTA-блок «Ваш результат активирован на 37%» */
 export function ActivationBanner({ score = 37 }: { score?: number }) {
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   return (

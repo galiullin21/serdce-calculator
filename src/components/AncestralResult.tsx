@@ -21,7 +21,7 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
   };
 
   const handleTelegramClick = () => {
-    window.open("https://t.me/galiullin_ruzal", "_blank");
+    window.open("https://t.me/BisnessWomenN", "_blank");
   };
 
   const handleDownloadPDF = async () => {
