@@ -28,7 +28,7 @@ const contractPositionTitles: Record<number, string> = {
   12: 'Кармический урок',
 };
 
-export function ContractEnergyResultComponent({ result, personName, onReset, isPro = false }: Props) {
+export function ContractEnergyResultComponent({ result, personName, onReset, isPro = false, showProSections = false }: Props) {
   const { targetDate, birthDate, positions } = result;
   const contractDateStr = `${targetDate.day}.${String(targetDate.month).padStart(2, '0')}.${targetDate.year}`;
   const birthDateStr = `${birthDate.day}.${String(birthDate.month).padStart(2, '0')}.${birthDate.year}`;
