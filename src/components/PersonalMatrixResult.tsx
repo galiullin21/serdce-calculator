@@ -8,7 +8,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, ActivationBanner } from "./PaidBlock";
+import { PaidBlock } from "./PaidBlock";
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
@@ -389,7 +389,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
         </PaidBlock>
       </div>
 
-      {!isPro && <ActivationBanner />}
+      
     </div>
   );
 }
