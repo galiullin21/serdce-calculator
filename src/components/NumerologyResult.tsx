@@ -17,9 +17,6 @@ interface NumerologyResultProps {
 export function NumerologyResult({ result, name, onReset }: NumerologyResultProps) {
   const formattedDate = format(result.birthDate, "d MMMM yyyy", { locale: ru });
 
-  const handleTelegramClick = () => {
-    window.open("https://t.me/BisnessWomenN", "_blank");
-  };
 
   const handleDownloadPDF = async () => {
     const numbers = [

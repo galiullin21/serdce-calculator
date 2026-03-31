@@ -168,9 +168,6 @@ function DetailedSection({
 export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps) {
   const { t } = useTranslation();
 
-  const handleTelegramClick = () => {
-    window.open("https://t.me/BisnessWomenN", "_blank");
-  };
 
   const handleDownloadPDF = async () => {
     const numbers = [
