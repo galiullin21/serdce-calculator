@@ -724,10 +724,10 @@ function ActivationCTA({ accessLevel = 'free', score = 37 }: { accessLevel?: str
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         {accessLevel === 'free' && (
           <>
-            <Button variant="outline" size="lg" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+            <Button variant="outline" size="lg" onClick={() => {/* будет подключена оплата */}}>
               Стандарт — полный разбор
             </Button>
-            <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+            <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
               <Crown className="w-4 h-4 mr-2" /> Премиум — Книга судьбы
             </Button>
           </>
