@@ -267,6 +267,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false, sho
           </>
         )}
 
+        {showProSections && (
         <PaidBlock isLocked={!isPro && activeTab !== "main"} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
         {activeTab === "diagonal" && (
           <>
