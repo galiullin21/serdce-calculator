@@ -89,15 +89,15 @@ export function DailyForecastResultComponent({ result, name, onReset, tier = 'ba
         )}
 
         {!isPro && proPositions.length > 0 && (
-          <div className="mt-6 p-4 rounded-xl border border-border text-center">
-            <p className="text-sm text-muted-foreground mb-3">
-              Ещё {proPositions.length} позиций доступны в профессиональном разборе
-            </p>
-            <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-              Получить полный прогноз
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <InlinePaywall
+            title="Полный прогноз на день"
+            description={`Ещё ${proPositions.length} позиций доступны в профессиональном разборе`}
+            features={[
+              "Все 12 позиций дня с полными описаниями",
+              "Скрытые влияния и нюансы",
+              "Рекомендации по времени суток",
+            ]}
+          />
         )}
       </div>
     </div>
