@@ -579,6 +579,21 @@ const Index = () => {
           </>
         ) : (
           <div className="container mx-auto px-4 py-6 md:py-8">
+            {/* Dev mode toggle */}
+            <div className="flex justify-end mb-2">
+              <button
+                type="button"
+                onClick={toggleDevMode}
+                className={cn(
+                  "text-xs px-3 py-1 rounded-full border transition-colors",
+                  isDevMode
+                    ? "bg-primary/10 border-primary text-primary"
+                    : "bg-muted border-border text-muted-foreground hover:border-primary/50"
+                )}
+              >
+                {isDevMode ? "🔧 DEV ON" : "🔧 DEV"}
+              </button>
+            </div>
             {result.type === "year" && (
               <YearForecastResult
                 forecast={result.data}
