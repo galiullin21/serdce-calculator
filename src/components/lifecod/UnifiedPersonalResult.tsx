@@ -733,7 +733,7 @@ function ActivationCTA({ accessLevel = 'free', score = 37 }: { accessLevel?: str
           </>
         )}
         {accessLevel === 'standard' && (
-          <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+          <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
             <Crown className="w-4 h-4 mr-2" /> Обновить до Премиум
           </Button>
         )}

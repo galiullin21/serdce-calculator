@@ -6,6 +6,7 @@ import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF } from "@/lib/pdfGenerator";
+import { InlinePaywall } from "./PaidBlock";
 
 interface NumerologyResultProps {
   result: Result;
