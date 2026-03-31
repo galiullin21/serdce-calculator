@@ -4,7 +4,6 @@ import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface Props {
@@ -19,9 +18,8 @@ export function DailyForecastResultComponent({ result, name, onReset, tier = 'ba
   const { targetDate, positions } = result;
   const dateStr = `${targetDate.day}.${String(targetDate.month).padStart(2, '0')}.${targetDate.year}`;
 
-  // Basic: show first 4. Pro: all 12 behind paywall
-  const basicPositions = positions.slice(0, 4);
-  const proPositions = positions.slice(4);
+  // Basic: first 4. Pro: all positions
+  const shownPositions = isPro ? positions : positions.slice(0, 4);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -44,8 +42,8 @@ export function DailyForecastResultComponent({ result, name, onReset, tier = 'ba
           {name ? `${name}, ` : ''}дата: {dateStr}
         </p>
 
-        <Accordion type="single" collapsible defaultValue={`pos-${basicPositions[0]?.position}`}>
-          {basicPositions.map((pos) => {
+        <Accordion type="single" collapsible defaultValue={`pos-${shownPositions[0]?.position}`}>
+          {shownPositions.map((pos) => {
             const arcanaData = getArcana(pos.arcana);
             return (
               <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
@@ -63,42 +61,6 @@ export function DailyForecastResultComponent({ result, name, onReset, tier = 'ba
             );
           })}
         </Accordion>
-
-        {proPositions.length > 0 && isPro && (
-          <PaidBlock isLocked={true} title="Полный прогноз на день" description="Все 12 позиций дня с полными описаниями">
-            <Accordion type="single" collapsible>
-              {proPositions.map((pos) => {
-                const arcanaData = getArcana(pos.arcana);
-                return (
-                  <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
-                    <AccordionTrigger className="hover:no-underline py-3">
-                      <div className="flex items-center gap-3 text-left">
-                        <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">{pos.arcana}</span>
-                        <div>
-                          <span className="font-display text-foreground text-sm">{pos.title}</span>
-                          <span className="text-xs text-muted-foreground ml-2">{arcanaData?.name}</span>
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">{pos.description}</AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-          </PaidBlock>
-        )}
-
-        {!isPro && proPositions.length > 0 && (
-          <InlinePaywall
-            title="Полный прогноз на день"
-            description={`Ещё ${proPositions.length} позиций доступны в профессиональном разборе`}
-            features={[
-              "Все 12 позиций дня с полными описаниями",
-              "Скрытые влияния и нюансы",
-              "Рекомендации по времени суток",
-            ]}
-          />
-        )}
       </div>
     </div>
   );

@@ -3,7 +3,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft } from "lucide-react";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -40,9 +39,8 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
   const harmonyScore = keyPositions.filter(p => harmonious.includes(p.arcana)).length;
   const isGood = harmonyScore >= 3;
 
-  // Basic: first 4 positions. Pro: all 12 (behind paywall)
-  const basicPositions = positions.slice(0, 4);
-  const proPositions = positions.slice(4);
+  // Basic: first 4. Pro: all 12
+  const shownPositions = isPro ? positions : positions.slice(0, 4);
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -77,7 +75,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
         </div>
 
         <Accordion type="single" collapsible defaultValue="pos-4">
-          {basicPositions.map((pos) => {
+          {shownPositions.map((pos) => {
             const arcanaData = getArcana(pos.arcana);
             return (
               <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
@@ -95,43 +93,6 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
             );
           })}
         </Accordion>
-
-        {proPositions.length > 0 && isPro && (
-          <PaidBlock isLocked={true} title="Полный анализ договора" description="Детальный разбор всех 12 позиций: ресурсы, скрытые мотивы, кармический урок">
-            <Accordion type="single" collapsible>
-              {proPositions.map((pos) => {
-                const arcanaData = getArcana(pos.arcana);
-                return (
-                  <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
-                    <AccordionTrigger className="hover:no-underline py-3">
-                      <div className="flex items-center gap-3 text-left">
-                        <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">{pos.arcana}</span>
-                        <div>
-                          <span className="font-display text-foreground text-sm">{contractPositionTitles[pos.position]}</span>
-                          <span className="text-xs text-muted-foreground ml-2">{arcanaData?.name}</span>
-                        </div>
-                      </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="text-muted-foreground text-sm pb-4">{pos.description}</AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
-          </PaidBlock>
-        )}
-
-        {!isPro && proPositions.length > 0 && (
-          <InlinePaywall
-            title="Полный анализ договора"
-            description={`Ещё ${proPositions.length} позиций: ресурсы, скрытые мотивы, кармический урок`}
-            features={[
-              "Все 12 позиций с полными расшифровками",
-              "Скрытые мотивы сторон",
-              "Кармический урок договора",
-              "Итоговые рекомендации",
-            ]}
-          />
-        )}
       </div>
     </div>
   );

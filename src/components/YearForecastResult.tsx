@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -82,30 +81,14 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
           </div>
         </div>
 
-        {/* Basic: brief summary */}
         <div className="p-4 bg-muted/30 rounded-xl mb-4">
           <p className="text-sm text-muted-foreground">
             <strong>Планета:</strong> {arcana?.planet || "—"} · <strong>Стихия:</strong> {arcana?.element || "—"}
           </p>
         </div>
 
-        {/* Professional: full forecast behind paywall */}
-        {isPro ? (
-          <PaidBlock isLocked={true} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии" features={["Детальный прогноз по энергиям года", "Рекомендации по месяцам", "Подходящие сферы деятельности", "Подводные камни и как их обойти"]}>
-            <ArcanaCard number={forecast.arcana} showYearForecast={true} compact={false} />
-          </PaidBlock>
-        ) : (
-          <InlinePaywall
-            title="Хотите полный прогноз?"
-            description="Профессиональный прогноз включает детальное описание энергий, рекомендации по месяцам, подходящие сферы деятельности"
-            features={[
-              "Детальное описание энергии года",
-              "Рекомендации по каждому месяцу",
-              "Подходящие профессии и сферы",
-              "Предупреждения и подводные камни",
-            ]}
-          />
-        )}
+        {/* Full forecast — shown for both tiers (pro gets here only after payment) */}
+        <ArcanaCard number={forecast.arcana} showYearForecast={true} compact={false} />
       </div>
     </div>
   );
