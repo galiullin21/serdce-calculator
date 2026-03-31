@@ -107,15 +107,15 @@ export function FinancialCodeResultComponent({ result, name, onReset, tier = 'ba
             )}
           </PaidBlock>
         ) : (
-          <div className="mt-6 p-4 rounded-xl border border-border text-center">
-            <p className="text-sm text-muted-foreground mb-3">
-              Финансовая миссия, блоки и рекомендуемые профессии доступны в профессиональном разборе
-            </p>
-            <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-              Получить полный финансовый код
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <InlinePaywall
+            title="Полный финансовый код"
+            description="Финансовая миссия, блоки и рекомендуемые профессии"
+            features={[
+              "Финансовая миссия — ваше предназначение в деньгах",
+              "Финансовый блок — что мешает зарабатывать",
+              "Рекомендуемые профессии для максимального дохода",
+            ]}
+          />
         )}
       </div>
     </div>

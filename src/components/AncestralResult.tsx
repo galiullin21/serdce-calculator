@@ -224,14 +224,15 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
           </div>
         </PaidBlock>
       ) : (
-        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-          <h3 className="text-lg font-display text-foreground mb-2">{t("ancestral.wantDeepAnalysis")}</h3>
-          <p className="text-sm text-muted-foreground mb-4">{t("ancestral.deepAnalysisDesc")}</p>
-          <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary hover:bg-primary text-primary-foreground rounded-full">
-            {t("results.bookConsultation")}
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title={t("ancestral.wantDeepAnalysis")}
+          description={t("ancestral.deepAnalysisDesc")}
+          features={[
+            "Детальные интерпретации всех 5 цифр",
+            "Глубокий анализ родовых проклятий",
+            "Рекомендации по проработке программ",
+          ]}
+        />
       )}
     </div>
   );

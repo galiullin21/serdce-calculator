@@ -121,15 +121,16 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
         )}
 
         {!isPro && proPositions.length > 0 && (
-          <div className="mt-6 p-4 rounded-xl border border-border text-center">
-            <p className="text-sm text-muted-foreground mb-3">
-              Ещё {proPositions.length} позиций доступны в профессиональном разборе: ресурсы, скрытые мотивы, кармический урок
-            </p>
-            <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary text-primary-foreground border-2 border-primary">
-              Получить полный анализ
-              <ExternalLink className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <InlinePaywall
+            title="Полный анализ договора"
+            description={`Ещё ${proPositions.length} позиций: ресурсы, скрытые мотивы, кармический урок`}
+            features={[
+              "Все 12 позиций с полными расшифровками",
+              "Скрытые мотивы сторон",
+              "Кармический урок договора",
+              "Итоговые рекомендации",
+            ]}
+          />
         )}
       </div>
     </div>
