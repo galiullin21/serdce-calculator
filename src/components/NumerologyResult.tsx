@@ -102,62 +102,17 @@ export function NumerologyResult({ result, name, onReset }: NumerologyResultProp
         <NumberCard number={result.totalNumber} category="total" delay={300} />
       </div>
 
-      {/* CTA Section */}
-      <div className="relative overflow-hidden rounded-2xl p-6 shadow-elevated border-2 border-primary/50">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-accent/10 to-primary/5" />
-        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-full blur-3xl" />
-        
-        <div className="relative flex items-start gap-4">
-          <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-primary to-gold-dark flex items-center justify-center flex-shrink-0 shadow-glow">
-            <Crown className="w-6 h-6 text-primary-foreground" />
-          </div>
-          <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
-              <h3 className="text-xl font-display font-bold text-foreground">
-                Получить полный разбор
-              </h3>
-              <span className="px-2 py-0.5 bg-primary/20 text-primary text-xs font-medium rounded-full">
-                PREMIUM
-              </span>
-            </div>
-            <p className="text-sm text-muted-foreground mb-4">
-              Индивидуальная консультация с экспертом-нумерологом. Глубокий анализ вашей личности, 
-              кармических задач, отношений, карьеры и здоровья. Персональные рекомендации и ответы на все вопросы.
-            </p>
-            <ul className="text-xs text-muted-foreground mb-4 space-y-1">
-              <li className="flex items-center gap-2">
-                <span className="text-primary">✓</span> Личная консультация 60-90 минут
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">✓</span> Анализ всех 22 энергий
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">✓</span> Прогноз на год по месяцам
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">✓</span> Совместимость с партнёром
-              </li>
-              <li className="flex items-center gap-2">
-                <span className="text-primary">✓</span> Ответы на ваши вопросы
-              </li>
-            </ul>
-            <Button
-              onClick={handleTelegramClick}
-              className="w-full sm:w-auto bg-gradient-to-r from-primary to-gold-dark hover:from-primary/90 hover:to-gold-dark/90 text-primary-foreground font-bold shadow-glow"
-            >
-              <Crown className="w-4 h-4 mr-2" />
-              Записаться на консультацию
-              <ExternalLink className="w-3 h-3 ml-2" />
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Footer note */}
-      <p className="text-center text-xs text-muted-foreground pb-8">
-        Это базовый бесплатный расчёт. Для полного понимания вашей нумерологии 
-        рекомендуется консультация специалиста.
-      </p>
+      {/* Inline Paywall */}
+      <InlinePaywall
+        title="Профессиональный нумерологический разбор"
+        description="Глубокий анализ всех аспектов вашей личности, кармических задач и жизненного пути"
+        features={[
+          "Полный анализ всех 22 энергий",
+          "Прогноз на год по месяцам",
+          "Совместимость с партнёром",
+          "Персональные рекомендации",
+        ]}
+      />
     </div>
   );
 }
