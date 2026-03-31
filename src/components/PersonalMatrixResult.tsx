@@ -14,11 +14,12 @@ interface PersonalMatrixResultProps {
   name: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
 
-export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: PersonalMatrixResultProps) {
+export function PersonalMatrixResult({ matrix, name, onReset, isPro = false, showProSections = false }: PersonalMatrixResultProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("main");
   
@@ -226,20 +227,22 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
       </div>
 
       <div className="flex flex-wrap gap-2 justify-center">
-        {tabs.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={cn(
-              "px-4 py-2 rounded-full text-sm font-medium transition-all",
-              activeTab === tab.id
-                ? "bg-primary text-primary-foreground"
-                : "bg-muted text-muted-foreground hover:bg-muted/80"
-            )}
-          >
-            {tab.label}
-          </button>
-        ))}
+        {tabs
+          .filter((tab) => showProSections || tab.id === "main")
+          .map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={cn(
+                "px-4 py-2 rounded-full text-sm font-medium transition-all",
+                activeTab === tab.id
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-muted text-muted-foreground hover:bg-muted/80"
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
       </div>
 
       <div className="space-y-4">
@@ -266,6 +269,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
           </>
         )}
 
+        {showProSections && (
         <PaidBlock isLocked={!isPro && activeTab !== "main"} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
         {activeTab === "diagonal" && (
           <>
@@ -387,6 +391,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: P
           </>
         )}
         </PaidBlock>
+        )}
       </div>
 
       

@@ -12,9 +12,10 @@ interface YearForecastResultProps {
   name: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
-export function YearForecastResult({ forecast, name, onReset, isPro = false }: YearForecastResultProps) {
+export function YearForecastResult({ forecast, name, onReset, isPro = false, showProSections = false }: YearForecastResultProps) {
   const { t } = useTranslation();
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(
@@ -100,13 +101,15 @@ export function YearForecastResult({ forecast, name, onReset, isPro = false }: Y
           </div>
         </div>
 
-        <PaidBlock isLocked={!isPro} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии доступны в профессиональном разборе">
-          <ArcanaCard
-            number={forecast.arcana}
-            showYearForecast={true}
-            compact={false}
-          />
-        </PaidBlock>
+        {showProSections && (
+          <PaidBlock isLocked={!isPro} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии доступны в профессиональном разборе">
+            <ArcanaCard
+              number={forecast.arcana}
+              showYearForecast={true}
+              compact={false}
+            />
+          </PaidBlock>
+        )}
       </div>
 
       

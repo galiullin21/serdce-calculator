@@ -10,6 +10,7 @@ interface Props {
   personName: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
 const contractPositionTitles: Record<number, string> = {
@@ -27,7 +28,7 @@ const contractPositionTitles: Record<number, string> = {
   12: 'Кармический урок',
 };
 
-export function ContractEnergyResultComponent({ result, personName, onReset, isPro = false }: Props) {
+export function ContractEnergyResultComponent({ result, personName, onReset, isPro = false, showProSections = false }: Props) {
   const { targetDate, birthDate, positions } = result;
   const contractDateStr = `${targetDate.day}.${String(targetDate.month).padStart(2, '0')}.${targetDate.year}`;
   const birthDateStr = `${birthDate.day}.${String(birthDate.month).padStart(2, '0')}.${birthDate.year}`;
@@ -92,7 +93,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, isP
           })}
         </Accordion>
 
-        {positions.length > 4 && (
+        {positions.length > 4 && showProSections && (
           <PaidBlock isLocked={!isPro} title="Полный анализ договора" description="Детальный разбор всех 12 позиций: ресурсы, скрытые мотивы, кармический урок и итог сотрудничества">
             <Accordion type="single" collapsible>
               {positions.slice(4).map((pos) => {
