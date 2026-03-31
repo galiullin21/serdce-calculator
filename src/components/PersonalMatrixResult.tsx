@@ -12,6 +12,7 @@ interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
