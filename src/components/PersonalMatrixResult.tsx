@@ -278,21 +278,19 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
         )}
       </div>
 
-      {/* CTA for basic tier */}
+      {/* Inline paywall for basic tier */}
       {!isPro && (
-        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-          <h3 className="text-lg font-display text-foreground mb-2">Хотите полный разбор?</h3>
-          <p className="text-sm text-muted-foreground mb-4">
-            Профессиональный разбор включает: диагональ судьбы, кармический треугольник, код успеха и жизненные периоды
-          </p>
-          <Button
-            onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}
-            className="btn-fill bg-primary text-primary-foreground border-2 border-primary"
-          >
-            Получить полный разбор
-            <ExternalLink className="w-4 h-4 ml-2" />
-          </Button>
-        </div>
+        <InlinePaywall
+          title="Хотите полный разбор?"
+          description="Профессиональный разбор включает: диагональ судьбы, кармический треугольник, код успеха и жизненные периоды"
+          features={[
+            "Все 12 позиций матрицы с подробными описаниями",
+            "Диагональ судьбы — ваши жизненные цели",
+            "Кармический треугольник — уроки прошлых жизней",
+            "Код успеха — ключевые точки реализации",
+            "Жизненные периоды — когда активируются энергии",
+          ]}
+        />
       )}
     </div>
   );
