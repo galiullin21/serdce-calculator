@@ -752,6 +752,7 @@ type ResultType =
                                   const method = methodMap[type.id];
                                   if (method) {
                                     setSelectedMethod(method);
+                                    setIsPro(false);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                   }
                                 }}
