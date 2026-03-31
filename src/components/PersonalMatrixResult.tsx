@@ -17,7 +17,7 @@ interface PersonalMatrixResultProps {
 
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
 
-export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixResultProps) {
+export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: PersonalMatrixResultProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("main");
   
