@@ -192,6 +192,7 @@ type ResultType =
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
   const [nameEnergyInput, setNameEnergyInput] = useState("");
+  const [showPro, setShowPro] = useState(false);
 
   // Life C⚙D compatibility handler
   const handleLifeCodCalculate = (
