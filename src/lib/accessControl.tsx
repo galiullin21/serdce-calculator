@@ -10,17 +10,11 @@ export interface AccessInfo {
 }
 
 interface AccessContextType {
-  /** Текущее состояние доступа к проф. разбору */
   accessState: AccessState;
-  /** Разблокировать (для теста или после оплаты) */
   unlock: () => void;
-  /** Сбросить в locked */
   lock: () => void;
-  /** Начать оплату (payment_pending) */
   startPayment: () => void;
-  /** Является ли dev-режим активным */
   isDevMode: boolean;
-  /** Переключить dev-режим */
   toggleDevMode: () => void;
 }
 
