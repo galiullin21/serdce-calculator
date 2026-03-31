@@ -2,8 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { FinancialCodeResult as FinancialCodeType } from "@/lib/financialCode";
 import { getArcana } from "@/lib/arcana";
-import { ArrowLeft, Wallet, Star, Shield, AlertTriangle, ExternalLink } from "lucide-react";
-import { PaidBlock } from "./PaidBlock";
+import { ArrowLeft, Wallet, Star, Shield, AlertTriangle } from "lucide-react";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
