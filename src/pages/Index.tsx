@@ -869,6 +869,7 @@ type ResultType =
                 personName={userName}
                 onReset={handleReset}
                 isPro={false}
+                showProSections={showPro}
               />
             )}
           </div>
