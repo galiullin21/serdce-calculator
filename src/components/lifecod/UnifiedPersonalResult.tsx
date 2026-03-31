@@ -73,7 +73,7 @@ function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNo
           <Lock className="w-6 h-6 text-primary mx-auto" />
           <p className="text-sm font-medium">{label || 'Доступно в полном отчёте'}</p>
           {level && <p className="text-xs text-muted-foreground">Уровень: {level}</p>}
-          <Button size="sm" variant="default" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+          <Button size="sm" variant="default" onClick={() => {/* будет подключена оплата */}}>
             Получить полный разбор
           </Button>
         </div>
