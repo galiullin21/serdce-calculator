@@ -798,6 +798,7 @@ type ResultType =
                 name={userName}
                 onReset={handleReset}
                 isPro={false}
+                showProSections={showPro}
               />
             )}
             {result.type === "keyto" && (
