@@ -257,7 +257,7 @@ export function CompatibilityResultComponent({ result, onReset }: CompatibilityR
           {t("compatibility.deepAnalysisDesc")}
         </p>
         <Button
-          onClick={() => window.open("https://t.me/galiullin_ruzal", "_blank")}
+          onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}
           className="btn-fill bg-primary text-primary-foreground border-2 border-primary"
         >
           {t("results.bookConsultation")}
