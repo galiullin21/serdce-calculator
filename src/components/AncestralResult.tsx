@@ -6,7 +6,6 @@ import { ArrowLeft, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users }
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface AncestralResultProps {
@@ -38,9 +37,8 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
     { digit: "7", count: result.starCounts.sevens, title: t("ancestral.digits.sevenTitle"), icon: Star },
   ];
 
-  // Basic: show working numbers, star, roles. Pro: add full digit interpretations
-  const basicDigits = digitInfo.slice(0, 2);
-  const proDigits = digitInfo.slice(2);
+  // Basic: first 2 digits. Pro: all 5
+  const shownDigits = isPro ? digitInfo : digitInfo.slice(0, 2);
 
   const handleDownloadPDF = async () => {
     const sections = [];
@@ -94,7 +92,7 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
         </p>
       </div>
 
-      {/* Working Numbers - always shown */}
+      {/* Working Numbers */}
       <div className="gradient-card rounded-2xl p-6 border border-border">
         <h3 className="text-lg font-display text-foreground mb-4 text-center">{t("ancestral.workingNumbers")}</h3>
         <div className="mb-4 text-center">
@@ -124,13 +122,13 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
         <p className="text-xs text-muted-foreground text-center mt-4">{t("ancestral.allDigits")}: {result.allDigits}</p>
       </div>
 
-      {/* Karmic Star - always shown */}
+      {/* Karmic Star */}
       <div className="gradient-card rounded-2xl p-6 border border-border">
         <h3 className="text-lg font-display text-foreground mb-4 text-center">{t("ancestral.karmicStar")}</h3>
         <KarmicStar counts={result.starCounts} />
       </div>
 
-      {/* Roles - always shown */}
+      {/* Roles */}
       {(result.roles.isKeeper || result.roles.isHealer || result.roles.isLastHope) && (
         <div className="gradient-card rounded-2xl p-6 border border-border bg-primary/5">
           <h3 className="text-lg font-display text-foreground mb-4 text-center flex items-center justify-center gap-2">
@@ -169,7 +167,7 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
         </div>
       )}
 
-      {/* Curse - always shown */}
+      {/* Curse */}
       {result.roles.hasCurse && (
         <div className="gradient-card rounded-2xl p-6 border border-destructive/50 bg-destructive/5">
           <div className="flex items-center gap-2 mb-3">
@@ -180,10 +178,10 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
         </div>
       )}
 
-      {/* Basic digit interpretations */}
+      {/* Digit interpretations — shown based on tier */}
       <div className="space-y-4">
         <h3 className="text-lg font-display text-foreground text-center">{t("ancestral.interpretationsTitle")}</h3>
-        {basicDigits.map((info) => (
+        {shownDigits.map((info) => (
           <div key={info.digit} className="gradient-card rounded-2xl p-6 border border-border">
             <div className="flex items-start gap-4">
               <div className={cn("w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0", info.count > 0 ? "bg-primary" : "bg-muted")}>
@@ -200,40 +198,6 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
           </div>
         ))}
       </div>
-
-      {/* Professional: remaining digit interpretations */}
-      {isPro ? (
-        <PaidBlock isLocked={true} title="Полный анализ родовых программ" description="Детальные интерпретации всех цифр кармической звезды">
-          <div className="space-y-4">
-            {proDigits.map((info) => (
-              <div key={info.digit} className="gradient-card rounded-2xl p-6 border border-border">
-                <div className="flex items-start gap-4">
-                  <div className={cn("w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0", info.count > 0 ? "bg-primary" : "bg-muted")}>
-                    <info.icon className={cn("w-7 h-7", info.count > 0 ? "text-primary-foreground" : "text-muted-foreground")} />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-2">
-                      <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.digit")} {info.digit}: {info.title}</h4>
-                      <span className={cn("px-3 py-1 rounded-full text-sm font-medium", info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>×{info.count}</span>
-                    </div>
-                    <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{getDigitInterpretation(info.digit, info.count)}</div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </PaidBlock>
-      ) : (
-        <InlinePaywall
-          title={t("ancestral.wantDeepAnalysis")}
-          description={t("ancestral.deepAnalysisDesc")}
-          features={[
-            "Детальные интерпретации всех 5 цифр",
-            "Глубокий анализ родовых проклятий",
-            "Рекомендации по проработке программ",
-          ]}
-        />
-      )}
     </div>
   );
 }
