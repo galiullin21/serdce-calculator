@@ -1,6 +1,6 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, ExternalLink } from "lucide-react";
+import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle } from "lucide-react";
 import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
