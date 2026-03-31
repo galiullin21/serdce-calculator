@@ -168,9 +168,6 @@ function DetailedSection({
 export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps) {
   const { t } = useTranslation();
 
-  const handleTelegramClick = () => {
-    window.open("https://t.me/BisnessWomenN", "_blank");
-  };
 
   const handleDownloadPDF = async () => {
     const numbers = [
@@ -288,11 +285,10 @@ export function KeyToResultComponent({ result, name, onReset }: KeyToResultProps
               {t("keyto.tryMethodology2Btn")}
             </Button>
             <Button
-              onClick={handleTelegramClick}
+              onClick={onReset}
               className="bg-primary text-primary-foreground"
             >
               {t("keyto.consultSpecialist")}
-              <ExternalLink className="w-4 h-4 ml-2" />
             </Button>
           </div>
         </CardContent>

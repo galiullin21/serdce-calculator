@@ -73,7 +73,7 @@ function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNo
           <Lock className="w-6 h-6 text-primary mx-auto" />
           <p className="text-sm font-medium">{label || 'Доступно в полном отчёте'}</p>
           {level && <p className="text-xs text-muted-foreground">Уровень: {level}</p>}
-          <Button size="sm" variant="default" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+          <Button size="sm" variant="default" onClick={() => {/* будет подключена оплата */}}>
             Получить полный разбор
           </Button>
         </div>
@@ -724,16 +724,16 @@ function ActivationCTA({ accessLevel = 'free', score = 37 }: { accessLevel?: str
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         {accessLevel === 'free' && (
           <>
-            <Button variant="outline" size="lg" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+            <Button variant="outline" size="lg" onClick={() => {/* будет подключена оплата */}}>
               Стандарт — полный разбор
             </Button>
-            <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+            <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
               <Crown className="w-4 h-4 mr-2" /> Премиум — Книга судьбы
             </Button>
           </>
         )}
         {accessLevel === 'standard' && (
-          <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}>
+          <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
             <Crown className="w-4 h-4 mr-2" /> Обновить до Премиум
           </Button>
         )}

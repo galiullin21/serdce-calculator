@@ -154,7 +154,7 @@ export function LifeCodResult({ result, onReset }: LifeCodResultProps) {
         <Button 
           size="lg" 
           className="bg-primary text-primary-foreground"
-          onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")}
+          onClick={() => {/* будет подключена оплата */}}
         >
           {t('lifecod.result.cta.button')}
         </Button>
