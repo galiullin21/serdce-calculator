@@ -779,7 +779,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
