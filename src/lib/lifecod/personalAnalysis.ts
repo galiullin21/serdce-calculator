@@ -1,9 +1,15 @@
 // Единый расчётный движок для персонального анализа
-// 6 модулей: LY, GA, Сознание, Действия, Пиннакли, Суммарные числа + Risk Score
+// 10 модулей: Матрица судьбы, Пиннаклы, LY/GA/месяц/день, Финкод, Психопрофиль, Энергокарта, План
 
 import { calculateConsciousness, calculateAction, calculatePersonalYear, getPersonalYears } from './calculations';
 import { calculatePinnacles, determineCrisisLevel, getActivePinnacleIndex, pinnacleDescriptions, PinnaclesAnalysis, CrisisLevel } from './pinnacles';
 import { personalYearDescriptions, consciousnessDescriptions, actionDescriptions } from './data';
+import { calculateDestinyMatrix, DestinyMatrixModule } from './destinyMatrix';
+import { calculateFullForecast, PersonalMonthModule, PersonalDayModule } from './personalForecast';
+import { calculateFinancialCodeLC, FinancialCodeLCModule } from './financialCodeLC';
+import { calculatePsychProfile, PsychProfileModule } from './psychProfile';
+import { calculateEnergyMap, EnergyMapModule } from './energyMap';
+import { calculateActionPlan, ActionPlanModule } from './actionPlan';
 
 // ============= ТИПЫ =============
 
@@ -106,24 +112,44 @@ export interface UnifiedPersonalAnalysis {
   birthYear: number;
   targetYear: number;
 
-  // Модуль 1: Личные годы
+  // Блок 1: Матрица судьбы
+  destinyMatrix: DestinyMatrixModule;
+
+  // Модуль: Личные годы
   personalYears: PersonalYearModule[];
   currentPersonalYear: PersonalYearModule;
 
-  // Модуль 2: Год в действиях
+  // Модуль: Год в действиях
   yearInActions: YearInActionsModule;
 
-  // Модуль 3: Число сознания
+  // Модуль: Число сознания
   consciousness: ConsciousnessModule;
 
-  // Модуль 4: Число действий
+  // Модуль: Число действий
   actions: ActionsModule;
 
-  // Модуль 5: Пиннакли
+  // Блок 2: Пиннакли
   pinnacles: PinnacleModule[];
   pinnaclesCalcTrace: CalcTrace;
 
-  // Модуль 6: Суммарные числа + Risk Score
+  // Блок 3: Личный прогноз (месяц + день)
+  forecastMonths: PersonalMonthModule[];
+  currentMonth: PersonalMonthModule;
+  today: PersonalDayModule;
+
+  // Блок 4: Финансовый код
+  financialCode: FinancialCodeLCModule;
+
+  // Блок 5: Психопрофиль
+  psychProfile: PsychProfileModule;
+
+  // Блок 6: Энергокарта
+  energyMap: EnergyMapModule;
+
+  // План действий
+  actionPlan: ActionPlanModule;
+
+  // Суммарные числа + Risk Score
   summaryNumbers: SummaryNumbersModule;
   riskScore: RiskScoreModule;
 
@@ -628,32 +654,53 @@ export function calculateUnifiedPersonalAnalysis(
 ): UnifiedPersonalAnalysis {
   const ty = targetYear || new Date().getFullYear();
 
-  // Модуль 1: Личные годы (текущий + 4 следующих)
+  // Личные годы (текущий + 4 следующих)
   const personalYears: PersonalYearModule[] = [];
   for (let i = 0; i < 5; i++) {
     personalYears.push(calculatePersonalYearModule(day, month, ty + i));
   }
   const currentPY = personalYears[0];
 
-  // Модуль 2: Год в действиях
+  // Год в действиях
   const yearInActions = calculateYearInActionsModule(currentPY.personalYear, day);
 
-  // Модуль 3: Число сознания
+  // Число сознания
   const consciousness = calculateConsciousnessModule(day, month);
 
-  // Модуль 4: Число действий
+  // Число действий
   const actions = calculateActionsModule(year);
 
-  // Модуль 5: Пиннакли
+  // Пиннакли
   const { pinnacles, calcTrace: pinnaclesCalcTrace } = calculatePinnaclesModule(day, month, year);
   const activePinnacle = pinnacles.find(p => p.isActive) || pinnacles[0];
 
-  // Модуль 6: Суммарные числа
+  // Блок 1: Матрица судьбы
+  const destinyMatrix = calculateDestinyMatrix(day, month, year);
+
+  // Блок 3: Прогноз (месяцы + день)
+  const forecast = calculateFullForecast(day, month, year, currentPY.personalYear, ty);
+
+  // Блок 4: Финансовый код
+  const financialCode = calculateFinancialCodeLC(day, month, year);
+
+  // Блок 5: Психопрофиль
+  const missingDigits = Object.entries(destinyMatrix.digitPresence)
+    .filter(([_, c]) => c === 0).map(([n]) => parseInt(n));
+  const dominantDigits = Object.entries(destinyMatrix.digitPresence)
+    .filter(([_, c]) => c >= 2).map(([n]) => parseInt(n));
+  const psychProfile = calculatePsychProfile(
+    consciousness.result, actions.result,
+    missingDigits, dominantDigits,
+    pinnacles.map(p => p.value)
+  );
+
+  // Блок 6: Энергокарта
+  const energyMap = calculateEnergyMap(destinyMatrix.digitPresence);
+
+  // Суммарные числа
   const summaryNumbers = calculateSummaryNumbers(
-    consciousness.result,
-    actions.result,
-    currentPY.personalYear,
-    activePinnacle.value
+    consciousness.result, actions.result,
+    currentPY.personalYear, activePinnacle.value
   );
 
   // Risk Score
@@ -663,36 +710,30 @@ export function calculateUnifiedPersonalAnalysis(
   const activeChallenge = pinnaclesData.challenges[activeIdx];
 
   const riskScore = calculateRiskScore(
-    currentPY.personalYear,
-    activePinnacle.value,
-    activeChallenge.value,
-    consciousness.result,
-    actions.result,
-    summaryNumbers.sumFull
+    currentPY.personalYear, activePinnacle.value,
+    activeChallenge.value, consciousness.result,
+    actions.result, summaryNumbers.sumFull
+  );
+
+  // План действий
+  const actionPlan = calculateActionPlan(
+    currentPY.personalYear, consciousness.result, actions.result,
+    destinyMatrix.missionNumber, missingDigits, dominantDigits
   );
 
   // Кризисный уровень
   const currentCrisisLevel = determineCrisisLevel(
-    activePinnacle.value,
-    activeChallenge.value,
-    currentPY.personalYear
+    activePinnacle.value, activeChallenge.value, currentPY.personalYear
   );
 
   return {
-    name,
-    birthDay: day,
-    birthMonth: month,
-    birthYear: year,
-    targetYear: ty,
-    personalYears,
-    currentPersonalYear: currentPY,
-    yearInActions,
-    consciousness,
-    actions,
-    pinnacles,
-    pinnaclesCalcTrace,
-    summaryNumbers,
-    riskScore,
-    currentCrisisLevel,
+    name, birthDay: day, birthMonth: month, birthYear: year, targetYear: ty,
+    destinyMatrix,
+    personalYears, currentPersonalYear: currentPY,
+    yearInActions, consciousness, actions,
+    pinnacles, pinnaclesCalcTrace,
+    forecastMonths: forecast.months, currentMonth: forecast.currentMonth, today: forecast.today,
+    financialCode, psychProfile, energyMap, actionPlan,
+    summaryNumbers, riskScore, currentCrisisLevel,
   };
 }
