@@ -797,7 +797,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
