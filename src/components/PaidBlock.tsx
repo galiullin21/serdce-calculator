@@ -1,4 +1,4 @@
-import { Lock, ExternalLink } from "lucide-react";
+import { Lock, Crown, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -48,6 +48,37 @@ export function PaidBlock({ children, isLocked, title, description, className }:
             <ExternalLink className="w-4 h-4 ml-2" />
           </Button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/** Маркетинговый CTA-блок «Ваш результат активирован на 37%» */
+export function ActivationBanner({ score = 37 }: { score?: number }) {
+  const handleTelegramClick = () => {
+    window.open("https://t.me/galiullin_ruzal", "_blank");
+  };
+
+  return (
+    <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/20 rounded-2xl p-6 text-center space-y-4">
+      <div className="flex items-center justify-center gap-2">
+        <Crown className="w-6 h-6 text-primary" />
+        <h3 className="font-display font-semibold text-xl text-primary">Life COD Club</h3>
+      </div>
+      <p className="text-foreground font-medium">
+        Ваш результат активирован на <span className="text-primary font-bold text-lg">{score}%</span>
+      </p>
+      <p className="text-muted-foreground text-sm max-w-lg mx-auto">
+        Полная активация судьбы доступна в Life COD Club — получите глубокий профессиональный разбор 
+        с детальными описаниями, рекомендациями и прогнозами.
+      </p>
+      <div className="flex flex-col sm:flex-row gap-3 justify-center">
+        <Button variant="outline" size="lg" onClick={handleTelegramClick}>
+          Стандарт — полный разбор
+        </Button>
+        <Button size="lg" className="bg-primary text-primary-foreground" onClick={handleTelegramClick}>
+          <Crown className="w-4 h-4 mr-2" /> Премиум — Книга судьбы
+        </Button>
       </div>
     </div>
   );
