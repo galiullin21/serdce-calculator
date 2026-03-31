@@ -3,11 +3,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft } from "lucide-react";
+import { PaidBlock } from "./PaidBlock";
 
 interface Props {
   result: DailyForecastType;
   personName: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
 const contractPositionTitles: Record<number, string> = {
