@@ -10,6 +10,7 @@ interface Props {
   personName: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
 const contractPositionTitles: Record<number, string> = {
