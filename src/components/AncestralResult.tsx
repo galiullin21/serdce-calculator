@@ -6,74 +6,60 @@ import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Spa
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { PaidBlock } from "./PaidBlock";
+import type { TierType } from "@/lib/analysisConfig";
+
 interface AncestralResultProps {
   result: AncestralResult;
   name: string;
   onReset: () => void;
+  tier?: TierType;
 }
 
-export function AncestralResultComponent({ result, name, onReset }: AncestralResultProps) {
+export function AncestralResultComponent({ result, name, onReset, tier = 'basic' }: AncestralResultProps) {
   const { t } = useTranslation();
+  const isPro = tier === 'professional';
 
-  const formatBirthDate = () => {
+  const formatBirthDateStr = () => {
     const { day, month, year } = result.birthDate;
     return `${day.toString().padStart(2, '0')}.${month.toString().padStart(2, '0')}.${year}`;
   };
 
-  const handleTelegramClick = () => {
-    window.open("https://t.me/BisnessWomenN", "_blank");
+  const getDigitInterpretation = (digit: string, count: number) => {
+    const key = `ancestral.interpretations.${digit}.${Math.min(count, 4)}`;
+    return t(key);
   };
+
+  const digitInfo = [
+    { digit: "2", count: result.starCounts.twos, title: t("ancestral.digits.twoTitle"), icon: Heart },
+    { digit: "4", count: result.starCounts.fours, title: t("ancestral.digits.fourTitle"), icon: Users },
+    { digit: "8", count: result.starCounts.eights, title: t("ancestral.digits.eightTitle"), icon: Shield },
+    { digit: "5", count: result.starCounts.fives, title: t("ancestral.digits.fiveTitle"), icon: Sparkles },
+    { digit: "7", count: result.starCounts.sevens, title: t("ancestral.digits.sevenTitle"), icon: Star },
+  ];
+
+  // Basic: show working numbers, star, roles. Pro: add full digit interpretations
+  const basicDigits = digitInfo.slice(0, 2);
+  const proDigits = digitInfo.slice(2);
 
   const handleDownloadPDF = async () => {
     const sections = [];
-    
-    // Working numbers
     sections.push({
       title: t("ancestral.workingNumbers"),
       content: [
-        `${t("ancestral.dateRow")}: ${formatBirthDate()}`,
-        `№1: ${result.workingNumbers.first}`,
-        `№2: ${result.workingNumbers.second}`,
-        `№3: ${result.workingNumbers.third}`,
-        `№4: ${result.workingNumbers.fourth}`,
+        `${t("ancestral.dateRow")}: ${formatBirthDateStr()}`,
+        `№1: ${result.workingNumbers.first}`, `№2: ${result.workingNumbers.second}`,
+        `№3: ${result.workingNumbers.third}`, `№4: ${result.workingNumbers.fourth}`,
       ],
       highlight: true,
     });
-    
-    // Roles
-    if (result.roles.isKeeper) {
-      sections.push({
-        title: t("ancestral.roles.keeper"),
-        content: t("ancestral.roles.keeperDesc"),
-      });
-    }
-    if (result.roles.isHealer) {
-      sections.push({
-        title: t("ancestral.roles.healer"),
-        content: t("ancestral.roles.healerDesc"),
-      });
-    }
-    if (result.roles.isLastHope) {
-      sections.push({
-        title: t("ancestral.roles.lastHope"),
-        content: t("ancestral.roles.lastHopeDesc"),
-      });
-    }
-    if (result.roles.hasCurse) {
-      sections.push({
-        title: t("ancestral.roles.curse"),
-        content: t("ancestral.roles.curseDesc"),
-      });
-    }
-    
-    // Digit interpretations
+    if (result.roles.isKeeper) sections.push({ title: t("ancestral.roles.keeper"), content: t("ancestral.roles.keeperDesc") });
+    if (result.roles.isHealer) sections.push({ title: t("ancestral.roles.healer"), content: t("ancestral.roles.healerDesc") });
+    if (result.roles.isLastHope) sections.push({ title: t("ancestral.roles.lastHope"), content: t("ancestral.roles.lastHopeDesc") });
+    if (result.roles.hasCurse) sections.push({ title: t("ancestral.roles.curse"), content: t("ancestral.roles.curseDesc") });
     digitInfo.forEach((info) => {
-      sections.push({
-        title: `${t("ancestral.digit")} ${info.digit}: ${info.title} (×${info.count})`,
-        content: getDigitInterpretation(info.digit, info.count),
-      });
+      sections.push({ title: `${t("ancestral.digit")} ${info.digit}: ${info.title} (×${info.count})`, content: getDigitInterpretation(info.digit, info.count) });
     });
-    
     await generatePDF({
       title: t("ancestral.title"),
       subtitle: result.gender === 'female' ? t("ancestral.female") : t("ancestral.male"),
@@ -82,93 +68,41 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
       sections,
     });
   };
-  // Интерпретации для каждой цифры
-  const getDigitInterpretation = (digit: string, count: number) => {
-    const key = `ancestral.interpretations.${digit}.${Math.min(count, 4)}`;
-    return t(key);
-  };
-
-  const digitInfo = [
-    { 
-      digit: "2", 
-      count: result.starCounts.twos, 
-      title: t("ancestral.digits.twoTitle"),
-      icon: Heart
-    },
-    { 
-      digit: "4", 
-      count: result.starCounts.fours, 
-      title: t("ancestral.digits.fourTitle"),
-      icon: Users
-    },
-    { 
-      digit: "8", 
-      count: result.starCounts.eights, 
-      title: t("ancestral.digits.eightTitle"),
-      icon: Shield
-    },
-    { 
-      digit: "5", 
-      count: result.starCounts.fives, 
-      title: t("ancestral.digits.fiveTitle"),
-      icon: Sparkles
-    },
-    { 
-      digit: "7", 
-      count: result.starCounts.sevens, 
-      title: t("ancestral.digits.sevenTitle"),
-      icon: Star
-    },
-  ];
 
   return (
     <div className="w-full max-w-4xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
-        <Button
-          variant="ghost"
-          onClick={onReset}
-          className="text-muted-foreground hover:text-foreground"
-        >
+        <Button variant="ghost" onClick={onReset} className="text-muted-foreground hover:text-foreground">
           <ArrowLeft className="w-4 h-4 mr-2" />
           {t("results.newCalculation")}
         </Button>
         <PDFDownloadButton onDownload={handleDownloadPDF} />
       </div>
 
-      {/* Title */}
       <div className="text-center space-y-2">
-        <h2 className="text-2xl md:text-3xl font-display text-primary">
-          {t("ancestral.title")}
-        </h2>
-        {name && (
-          <p className="text-lg text-foreground">
-            {name}
-          </p>
-        )}
-        <p className="text-muted-foreground">
-          {t("results.birthDate")}: {formatBirthDate()}
-        </p>
+        <span className={cn(
+          "inline-block px-3 py-1 rounded-full text-xs font-medium",
+          isPro ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"
+        )}>
+          {isPro ? "Профессиональный разбор" : "Базовый разбор"}
+        </span>
+        <h2 className="text-2xl md:text-3xl font-display text-primary">{t("ancestral.title")}</h2>
+        {name && <p className="text-lg text-foreground">{name}</p>}
+        <p className="text-muted-foreground">{t("results.birthDate")}: {formatBirthDateStr()}</p>
         <p className="text-sm text-muted-foreground">
           {t("ancestral.gender")}: {result.gender === 'female' ? t("ancestral.female") : t("ancestral.male")}
         </p>
       </div>
 
-      {/* Working Numbers */}
+      {/* Working Numbers - always shown */}
       <div className="gradient-card rounded-2xl p-6 border border-border">
-        <h3 className="text-lg font-display text-foreground mb-4 text-center">
-          {t("ancestral.workingNumbers")}
-        </h3>
-        
+        <h3 className="text-lg font-display text-foreground mb-4 text-center">{t("ancestral.workingNumbers")}</h3>
         <div className="mb-4 text-center">
           <p className="text-sm text-muted-foreground mb-2">{t("ancestral.dateRow")}:</p>
           <p className="font-mono text-lg text-foreground">
-            {result.birthDate.day.toString().padStart(2, '0')}.
-            {result.birthDate.month.toString().padStart(2, '0')}.
-            {result.birthDate.year}
+            {result.birthDate.day.toString().padStart(2, '0')}.{result.birthDate.month.toString().padStart(2, '0')}.{result.birthDate.year}
           </p>
         </div>
-        
         <div className="text-center">
           <p className="text-sm text-muted-foreground mb-2">{t("ancestral.workingRow")}:</p>
           <div className="flex justify-center gap-4">
@@ -187,145 +121,118 @@ export function AncestralResultComponent({ result, name, onReset }: AncestralRes
             ))}
           </div>
         </div>
-        
-        <p className="text-xs text-muted-foreground text-center mt-4">
-          {t("ancestral.allDigits")}: {result.allDigits}
-        </p>
+        <p className="text-xs text-muted-foreground text-center mt-4">{t("ancestral.allDigits")}: {result.allDigits}</p>
       </div>
 
-      {/* Karmic Star */}
+      {/* Karmic Star - always shown */}
       <div className="gradient-card rounded-2xl p-6 border border-border">
-        <h3 className="text-lg font-display text-foreground mb-4 text-center">
-          {t("ancestral.karmicStar")}
-        </h3>
+        <h3 className="text-lg font-display text-foreground mb-4 text-center">{t("ancestral.karmicStar")}</h3>
         <KarmicStar counts={result.starCounts} />
       </div>
 
-      {/* Roles */}
+      {/* Roles - always shown */}
       {(result.roles.isKeeper || result.roles.isHealer || result.roles.isLastHope) && (
         <div className="gradient-card rounded-2xl p-6 border border-border bg-primary/5">
           <h3 className="text-lg font-display text-foreground mb-4 text-center flex items-center justify-center gap-2">
             <Crown className="w-5 h-5 text-primary" />
             {t("ancestral.yourRole")}
           </h3>
-          
           <div className="space-y-4">
             {result.roles.isKeeper && (
               <div className="p-5 rounded-xl bg-background border border-primary/30">
                 <div className="flex items-center gap-2 mb-3">
                   <Shield className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground text-lg">
-                    {t("ancestral.roles.keeper")}
-                  </h4>
+                  <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.roles.keeper")}</h4>
                 </div>
-                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                  {t("ancestral.roles.keeperDesc")}
-                </div>
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{t("ancestral.roles.keeperDesc")}</div>
               </div>
             )}
-            
             {result.roles.isHealer && (
               <div className="p-5 rounded-xl bg-background border border-primary/30">
                 <div className="flex items-center gap-2 mb-3">
                   <Heart className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground text-lg">
-                    {t("ancestral.roles.healer")}
-                  </h4>
+                  <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.roles.healer")}</h4>
                 </div>
-                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                  {t("ancestral.roles.healerDesc")}
-                </div>
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{t("ancestral.roles.healerDesc")}</div>
               </div>
             )}
-            
             {result.roles.isLastHope && (
               <div className="p-5 rounded-xl bg-background border border-primary/30">
                 <div className="flex items-center gap-2 mb-3">
                   <Star className="w-5 h-5 text-primary" />
-                  <h4 className="font-display font-semibold text-foreground text-lg">
-                    {t("ancestral.roles.lastHope")}
-                  </h4>
+                  <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.roles.lastHope")}</h4>
                 </div>
-                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                  {t("ancestral.roles.lastHopeDesc")}
-                </div>
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{t("ancestral.roles.lastHopeDesc")}</div>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Curse Warning */}
+      {/* Curse - always shown */}
       {result.roles.hasCurse && (
         <div className="gradient-card rounded-2xl p-6 border border-destructive/50 bg-destructive/5">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="w-5 h-5 text-destructive" />
-            <h4 className="font-display font-semibold text-foreground text-lg">
-              {t("ancestral.roles.curse")}
-            </h4>
+            <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.roles.curse")}</h4>
           </div>
-          <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-            {t("ancestral.roles.curseDesc")}
-          </div>
+          <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{t("ancestral.roles.curseDesc")}</div>
         </div>
       )}
 
-      {/* Digit Interpretations */}
+      {/* Basic digit interpretations */}
       <div className="space-y-4">
-        <h3 className="text-lg font-display text-foreground text-center">
-          {t("ancestral.interpretationsTitle")}
-        </h3>
-        
-        {digitInfo.map((info) => (
+        <h3 className="text-lg font-display text-foreground text-center">{t("ancestral.interpretationsTitle")}</h3>
+        {basicDigits.map((info) => (
           <div key={info.digit} className="gradient-card rounded-2xl p-6 border border-border">
             <div className="flex items-start gap-4">
-              <div className={cn(
-                "w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0",
-                info.count > 0 ? "bg-primary" : "bg-muted"
-              )}>
-                <info.icon className={cn(
-                  "w-7 h-7",
-                  info.count > 0 ? "text-primary-foreground" : "text-muted-foreground"
-                )} />
+              <div className={cn("w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0", info.count > 0 ? "bg-primary" : "bg-muted")}>
+                <info.icon className={cn("w-7 h-7", info.count > 0 ? "text-primary-foreground" : "text-muted-foreground")} />
               </div>
-              
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
-                  <h4 className="font-display font-semibold text-foreground text-lg">
-                    {t("ancestral.digit")} {info.digit}: {info.title}
-                  </h4>
-                  <span className={cn(
-                    "px-3 py-1 rounded-full text-sm font-medium",
-                    info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground"
-                  )}>
-                    ×{info.count}
-                  </span>
+                  <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.digit")} {info.digit}: {info.title}</h4>
+                  <span className={cn("px-3 py-1 rounded-full text-sm font-medium", info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>×{info.count}</span>
                 </div>
-                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">
-                  {getDigitInterpretation(info.digit, info.count)}
-                </div>
+                <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{getDigitInterpretation(info.digit, info.count)}</div>
               </div>
             </div>
           </div>
         ))}
       </div>
 
-      {/* CTA */}
-      <div className="gradient-card rounded-2xl p-6 border border-border text-center">
-        <h3 className="text-lg font-display text-foreground mb-2">
-          {t("ancestral.wantDeepAnalysis")}
-        </h3>
-        <p className="text-sm text-muted-foreground mb-4">
-          {t("ancestral.deepAnalysisDesc")}
-        </p>
-        <Button
-          onClick={handleTelegramClick}
-          className="btn-fill bg-primary hover:bg-primary text-primary-foreground rounded-full"
-        >
-          {t("results.bookConsultation")}
-          <ExternalLink className="w-4 h-4 ml-2" />
-        </Button>
-      </div>
+      {/* Professional: remaining digit interpretations */}
+      {isPro ? (
+        <PaidBlock isLocked={true} title="Полный анализ родовых программ" description="Детальные интерпретации всех цифр кармической звезды">
+          <div className="space-y-4">
+            {proDigits.map((info) => (
+              <div key={info.digit} className="gradient-card rounded-2xl p-6 border border-border">
+                <div className="flex items-start gap-4">
+                  <div className={cn("w-14 h-14 rounded-full flex items-center justify-center flex-shrink-0", info.count > 0 ? "bg-primary" : "bg-muted")}>
+                    <info.icon className={cn("w-7 h-7", info.count > 0 ? "text-primary-foreground" : "text-muted-foreground")} />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2 mb-2">
+                      <h4 className="font-display font-semibold text-foreground text-lg">{t("ancestral.digit")} {info.digit}: {info.title}</h4>
+                      <span className={cn("px-3 py-1 rounded-full text-sm font-medium", info.count > 0 ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground")}>×{info.count}</span>
+                    </div>
+                    <div className="text-sm text-muted-foreground whitespace-pre-line leading-relaxed">{getDigitInterpretation(info.digit, info.count)}</div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </PaidBlock>
+      ) : (
+        <div className="gradient-card rounded-2xl p-6 border border-border text-center">
+          <h3 className="text-lg font-display text-foreground mb-2">{t("ancestral.wantDeepAnalysis")}</h3>
+          <p className="text-sm text-muted-foreground mb-4">{t("ancestral.deepAnalysisDesc")}</p>
+          <Button onClick={() => window.open("https://t.me/BisnessWomenN", "_blank")} className="btn-fill bg-primary hover:bg-primary text-primary-foreground rounded-full">
+            {t("results.bookConsultation")}
+            <ExternalLink className="w-4 h-4 ml-2" />
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
