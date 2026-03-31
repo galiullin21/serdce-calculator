@@ -731,7 +731,15 @@ type ResultType =
                               {type.hasPro && (
                                 <Button
                                   variant="outline"
-                                  onClick={handleTelegramClick}
+                                  onClick={() => {
+                                    const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
+                                    const method = methodMap[type.id];
+                                    if (method) {
+                                      setSelectedMethod(method);
+                                      setIsPro(true);
+                                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }
+                                  }}
                                   className="btn-fill border-primary text-primary hover:text-white text-xs md:text-sm px-3 py-1 h-auto"
                                 >
                                   {t("analysisTypes.professional")}
