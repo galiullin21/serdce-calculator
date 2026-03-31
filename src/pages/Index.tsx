@@ -769,7 +769,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
             {result.type === "month" && (
