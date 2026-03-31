@@ -872,6 +872,7 @@ type ResultType =
                 result={result.data}
                 personName={userName}
                 onReset={handleReset}
+                isPro={isPro}
               />
             )}
           </div>
