@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { AncestralResult } from "@/lib/ancestral";
 import { KarmicStar } from "./KarmicStar";
-import { ArrowLeft, ExternalLink, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
