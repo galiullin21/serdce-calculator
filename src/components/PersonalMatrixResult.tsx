@@ -14,6 +14,7 @@ interface PersonalMatrixResultProps {
   name: string;
   onReset: () => void;
   isPro?: boolean;
+  showProSections?: boolean;
 }
 
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
