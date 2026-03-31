@@ -22,8 +22,8 @@ export function PaymentScreen({ methodId, onPaid, onBack }: PaymentScreenProps) 
     }, 1500);
   };
 
-  const proFeatures = config?.tiers.professional?.description 
-    ? [config.tiers.professional.description]
+  const proFeatures = config?.professional?.description 
+    ? [config.professional.description]
     : [];
 
   return (
