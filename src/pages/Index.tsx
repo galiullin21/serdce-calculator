@@ -868,7 +868,7 @@ type ResultType =
                 result={result.data}
                 personName={userName}
                 onReset={handleReset}
-                isPro={false}
+                isPro={showPro}
                 showProSections={showPro}
               />
             )}
