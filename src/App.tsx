@@ -17,19 +17,19 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <AccessProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/calendar" element={<CalendarPage />} />
-          <Route path="/products" element={<ProductsPage />} />
-          <Route path="/support" element={<SupportPage />} />
-          <Route path="/crisis" element={<CrisisPage />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/calendar" element={<CalendarPage />} />
+            <Route path="/products" element={<ProductsPage />} />
+            <Route path="/support" element={<SupportPage />} />
+            <Route path="/crisis" element={<CrisisPage />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
       </AccessProvider>
     </TooltipProvider>
   </QueryClientProvider>
