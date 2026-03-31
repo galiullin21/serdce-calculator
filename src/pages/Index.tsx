@@ -209,10 +209,13 @@ const Index = () => {
     setResult({ type: "compatibility", data: compatResult });
   };
 
+  const { lock, isDevMode, toggleDevMode } = useAccess();
+
   const handleReset = () => {
     setResult(null);
     setUserName("");
     setSelectedTier("basic");
+    lock(); // reset access state for new calculation
   };
 
   const handleMethodSelect = (methodId: string) => {
