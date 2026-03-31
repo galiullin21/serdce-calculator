@@ -721,12 +721,30 @@ type ResultType =
                           
                           {type.available ? (
                             <div className="flex flex-wrap gap-2 md:gap-3">
+                              {type.hasPro && (
+                                <Button
+                                  variant="outline"
+                                  onClick={() => {
+                                    const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
+                                    const method = methodMap[type.id];
+                                    if (method) {
+                                      setSelectedMethod(method);
+                                      setShowPro(true);
+                                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                                    }
+                                  }}
+                                  className="btn-fill border-primary text-primary hover:text-white text-xs md:text-sm px-3 py-1 h-auto"
+                                >
+                                  {t("analysisTypes.professional")}
+                                </Button>
+                              )}
                               <Button
                                 onClick={() => {
                                   const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
                                   const method = methodMap[type.id];
                                   if (method) {
                                     setSelectedMethod(method);
+                                    setShowPro(false);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                   }
                                 }}
