@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { PaidBlock } from "./PaidBlock";
 interface YearForecastResultProps {
   forecast: YearForecast;
   name: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
-export function YearForecastResult({ forecast, name, onReset }: YearForecastResultProps) {
+export function YearForecastResult({ forecast, name, onReset, isPro = false }: YearForecastResultProps) {
   const { t } = useTranslation();
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(
@@ -98,11 +100,13 @@ export function YearForecastResult({ forecast, name, onReset }: YearForecastResu
           </div>
         </div>
 
-        <ArcanaCard
-          number={forecast.arcana}
-          showYearForecast={true}
-          compact={false}
-        />
+        <PaidBlock isLocked={!isPro} title="Полный прогноз на год" description="Детальное описание энергий года, рекомендации и подходящие профессии доступны в профессиональном разборе">
+          <ArcanaCard
+            number={forecast.arcana}
+            showYearForecast={true}
+            compact={false}
+          />
+        </PaidBlock>
       </div>
 
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">

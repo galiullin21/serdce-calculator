@@ -3,11 +3,13 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
 import { ArrowLeft } from "lucide-react";
+import { PaidBlock } from "./PaidBlock";
 
 interface Props {
   result: DailyForecastType;
   personName: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
 const contractPositionTitles: Record<number, string> = {
@@ -25,7 +27,7 @@ const contractPositionTitles: Record<number, string> = {
   12: 'Кармический урок',
 };
 
-export function ContractEnergyResultComponent({ result, personName, onReset }: Props) {
+export function ContractEnergyResultComponent({ result, personName, onReset, isPro = false }: Props) {
   const { targetDate, birthDate, positions } = result;
   const contractDateStr = `${targetDate.day}.${String(targetDate.month).padStart(2, '0')}.${targetDate.year}`;
   const birthDateStr = `${birthDate.day}.${String(birthDate.month).padStart(2, '0')}.${birthDate.year}`;
@@ -63,8 +65,9 @@ export function ContractEnergyResultComponent({ result, personName, onReset }: P
           </p>
         </div>
 
+        {/* Show first 4 positions for free, rest locked */}
         <Accordion type="single" collapsible defaultValue="pos-4">
-          {positions.map((pos) => {
+          {positions.slice(0, 4).map((pos) => {
             const arcanaData = getArcana(pos.arcana);
             return (
               <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
@@ -88,6 +91,36 @@ export function ContractEnergyResultComponent({ result, personName, onReset }: P
             );
           })}
         </Accordion>
+
+        {positions.length > 4 && (
+          <PaidBlock isLocked={!isPro} title="Полный анализ договора" description="Детальный разбор всех 12 позиций: ресурсы, скрытые мотивы, кармический урок и итог сотрудничества">
+            <Accordion type="single" collapsible>
+              {positions.slice(4).map((pos) => {
+                const arcanaData = getArcana(pos.arcana);
+                return (
+                  <AccordionItem key={pos.position} value={`pos-${pos.position}`} className="border-border">
+                    <AccordionTrigger className="hover:no-underline py-3">
+                      <div className="flex items-center gap-3 text-left">
+                        <span className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-bold text-primary">
+                          {pos.arcana}
+                        </span>
+                        <div>
+                          <span className="font-display text-foreground text-sm">
+                            {contractPositionTitles[pos.position]}
+                          </span>
+                          <span className="text-xs text-muted-foreground ml-2">{arcanaData?.name}</span>
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground text-sm pb-4">
+                      {pos.description}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
+              })}
+            </Accordion>
+          </PaidBlock>
+        )}
       </div>
     </div>
   );

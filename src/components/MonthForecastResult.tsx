@@ -6,13 +6,15 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { PaidBlock } from "./PaidBlock";
 interface MonthForecastResultProps {
   forecast: MonthForecast;
   name: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
-export function MonthForecastResult({ forecast, name, onReset }: MonthForecastResultProps) {
+export function MonthForecastResult({ forecast, name, onReset, isPro = false }: MonthForecastResultProps) {
   const { t } = useTranslation();
   const formattedDate = formatBirthDate(
     forecast.birthDate.day,
@@ -195,36 +197,38 @@ export function MonthForecastResult({ forecast, name, onReset }: MonthForecastRe
         </div>
       </div>
 
-      <div className="space-y-4">
-        <h2 className="text-lg font-display text-foreground">
-          {t("forecast.mainMonthArcana")}
-        </h2>
-        <ArcanaCard
-          number={forecast.position3}
-          showMonthForecast={true}
-          compact={false}
-        />
-      </div>
-
-      <div className="space-y-4">
-        <h2 className="text-lg font-display text-foreground">
-          {t("forecast.influencingEnergies")}
-        </h2>
-        <div className="grid gap-4">
+      <PaidBlock isLocked={!isPro} title="Полный прогноз на месяц" description="Детальное описание всех энергий месяца, влияющие арканы и рекомендации доступны в профессиональном разборе">
+        <div className="space-y-4">
+          <h2 className="text-lg font-display text-foreground">
+            {t("forecast.mainMonthArcana")}
+          </h2>
           <ArcanaCard
-            number={forecast.position1}
-            positionTitle={t("forecast.yearEnergyTitle")}
+            number={forecast.position3}
             showMonthForecast={true}
-            compact={true}
-          />
-          <ArcanaCard
-            number={forecast.position2}
-            positionTitle={`${t("forecast.energyOf")} ${monthName}`}
-            showMonthForecast={true}
-            compact={true}
+            compact={false}
           />
         </div>
-      </div>
+
+        <div className="space-y-4 mt-4">
+          <h2 className="text-lg font-display text-foreground">
+            {t("forecast.influencingEnergies")}
+          </h2>
+          <div className="grid gap-4">
+            <ArcanaCard
+              number={forecast.position1}
+              positionTitle={t("forecast.yearEnergyTitle")}
+              showMonthForecast={true}
+              compact={true}
+            />
+            <ArcanaCard
+              number={forecast.position2}
+              positionTitle={`${t("forecast.energyOf")} ${monthName}`}
+              showMonthForecast={true}
+              compact={true}
+            />
+          </div>
+        </div>
+      </PaidBlock>
 
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
         <h3 className="text-lg font-display text-foreground mb-2">

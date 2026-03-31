@@ -8,15 +8,17 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { PaidBlock } from "./PaidBlock";
 interface PersonalMatrixResultProps {
   matrix: PersonalMatrix;
   name: string;
   onReset: () => void;
+  isPro?: boolean;
 }
 
 type TabType = "main" | "diagonal" | "karmic" | "success" | "periods";
 
-export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixResultProps) {
+export function PersonalMatrixResult({ matrix, name, onReset, isPro = false }: PersonalMatrixResultProps) {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<TabType>("main");
   
@@ -264,6 +266,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
           </>
         )}
 
+        <PaidBlock isLocked={!isPro && activeTab !== "main"} title="Полный разбор матрицы" description="Жизненные цели, кармический треугольник, код успеха и жизненные периоды доступны в профессиональном разборе">
         {activeTab === "diagonal" && (
           <>
             <h2 className="text-lg font-display text-foreground flex items-center gap-2">
@@ -383,6 +386,7 @@ export function PersonalMatrixResult({ matrix, name, onReset }: PersonalMatrixRe
             </div>
           </>
         )}
+        </PaidBlock>
       </div>
 
       <div className="gradient-card rounded-2xl p-6 border border-border text-center">
