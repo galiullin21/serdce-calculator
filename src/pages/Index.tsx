@@ -785,7 +785,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
             {result.type === "keyto" && (
