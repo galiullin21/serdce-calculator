@@ -312,7 +312,7 @@ type ResultType =
   const handleReset = () => {
     setResult(null);
     setUserName("");
-    setIsPro(false);
+    
   };
 
   const handleTelegramClick = () => {
