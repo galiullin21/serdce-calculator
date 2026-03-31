@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock, ActivationBanner } from "./PaidBlock";
+import { PaidBlock } from "./PaidBlock";
 interface MonthForecastResultProps {
   forecast: MonthForecast;
   name: string;
