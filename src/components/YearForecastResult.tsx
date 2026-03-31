@@ -14,7 +14,7 @@ interface YearForecastResultProps {
   isPro?: boolean;
 }
 
-export function YearForecastResult({ forecast, name, onReset }: YearForecastResultProps) {
+export function YearForecastResult({ forecast, name, onReset, isPro = false }: YearForecastResultProps) {
   const { t } = useTranslation();
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(
