@@ -1,9 +1,15 @@
 // Единый расчётный движок для персонального анализа
-// 6 модулей: LY, GA, Сознание, Действия, Пиннакли, Суммарные числа + Risk Score
+// 10 модулей: Матрица судьбы, Пиннаклы, LY/GA/месяц/день, Финкод, Психопрофиль, Энергокарта, План
 
 import { calculateConsciousness, calculateAction, calculatePersonalYear, getPersonalYears } from './calculations';
 import { calculatePinnacles, determineCrisisLevel, getActivePinnacleIndex, pinnacleDescriptions, PinnaclesAnalysis, CrisisLevel } from './pinnacles';
 import { personalYearDescriptions, consciousnessDescriptions, actionDescriptions } from './data';
+import { calculateDestinyMatrix, DestinyMatrixModule } from './destinyMatrix';
+import { calculateFullForecast, PersonalMonthModule, PersonalDayModule } from './personalForecast';
+import { calculateFinancialCodeLC, FinancialCodeLCModule } from './financialCodeLC';
+import { calculatePsychProfile, PsychProfileModule } from './psychProfile';
+import { calculateEnergyMap, EnergyMapModule } from './energyMap';
+import { calculateActionPlan, ActionPlanModule } from './actionPlan';
 
 // ============= ТИПЫ =============
 
