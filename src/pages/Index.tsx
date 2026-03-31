@@ -192,7 +192,6 @@ type ResultType =
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
   const [nameEnergyInput, setNameEnergyInput] = useState("");
-  const [isPro, setIsPro] = useState(false);
 
   // Life C⚙D compatibility handler
   const handleLifeCodCalculate = (
@@ -313,7 +312,7 @@ type ResultType =
   const handleReset = () => {
     setResult(null);
     setUserName("");
-    setIsPro(false);
+    
   };
 
   const handleTelegramClick = () => {
@@ -730,30 +729,12 @@ type ResultType =
                           
                           {type.available ? (
                             <div className="flex flex-wrap gap-2 md:gap-3">
-                              {type.hasPro && (
-                                <Button
-                                  variant="outline"
-                                  onClick={() => {
-                                    const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
-                                    const method = methodMap[type.id];
-                                    if (method) {
-                                      setSelectedMethod(method);
-                                      setIsPro(true);
-                                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    }
-                                  }}
-                                  className="btn-fill border-primary text-primary hover:text-white text-xs md:text-sm px-3 py-1 h-auto"
-                                >
-                                  {t("analysisTypes.professional")}
-                                </Button>
-                              )}
                               <Button
                                 onClick={() => {
                                   const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
                                   const method = methodMap[type.id];
                                   if (method) {
                                     setSelectedMethod(method);
-                                    setIsPro(false);
                                     window.scrollTo({ top: 0, behavior: 'smooth' });
                                   }
                                 }}
@@ -788,7 +769,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
             {result.type === "month" && (
@@ -796,7 +777,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
             {result.type === "purpose" && (
@@ -804,7 +785,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
             {result.type === "keyto" && (
@@ -874,7 +855,7 @@ type ResultType =
                 result={result.data}
                 personName={userName}
                 onReset={handleReset}
-                isPro={isPro}
+                isPro={false}
               />
             )}
           </div>
