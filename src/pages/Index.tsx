@@ -16,6 +16,8 @@ import { NameEnergyResultComponent } from "@/components/NameEnergyResult";
 import { ContractEnergyResultComponent } from "@/components/ContractEnergyResult";
 import { OnboardingFlow, ScenarioType } from "@/components/onboarding/OnboardingFlow";
 import { LifeCodInputForm, LifeCodResult, UnifiedPersonalResult } from "@/components/lifecod";
+import { TierSelector } from "@/components/TierSelector";
+import { analysisConfigs, getAnalysisConfig, type TierType } from "@/lib/analysisConfig";
 import { 
   calculateYearForecast, 
   calculateMonthForecast, 
@@ -35,68 +37,22 @@ import { calculateNameEnergy, NameEnergyResult as NameEnergyType } from "@/lib/n
 import { LifeCodPersonalResult } from "@/components/lifecod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Users, FileText, Building, Type, Wallet, Lock, ExternalLink, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check, Heart } from "lucide-react";
+import { Users, FileText, Building, Type, Wallet, Lock, Calendar, CalendarDays, Compass, Brain, Clock, Sparkles, Check, Heart } from "lucide-react";
 import { cn } from "@/lib/utils";
+
+// Icon mapping for config
+const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+  Compass, Users, CalendarDays, Calendar, Clock, Brain, Building, Type, Wallet, FileText,
+};
 
 const Index = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   
-  // Check if user has seen onboarding
   const [showOnboarding, setShowOnboarding] = useState(() => {
     const seen = localStorage.getItem("lifecod-onboarding-seen");
     return !seen;
   });
-  const analysisTypes = [
-    {
-      id: "full",
-      titleKey: "analysisTypes.fullAnalysis",
-      descKey: "analysisTypes.fullAnalysisDesc",
-      icon: FileText,
-      available: true,
-      hasPro: true,
-    },
-    {
-      id: "contract",
-      titleKey: "analysisTypes.contractEnergy",
-      descKey: "analysisTypes.contractEnergyDesc",
-      icon: Building,
-      available: true,
-      hasPro: true,
-    },
-    {
-      id: "month",
-      titleKey: "analysisTypes.monthForecast",
-      descKey: "analysisTypes.monthForecastDesc",
-      icon: Calendar,
-      available: true,
-      hasPro: true,
-    },
-    {
-      id: "year",
-      titleKey: "analysisTypes.yearForecast",
-      descKey: "analysisTypes.yearForecastDesc",
-      icon: CalendarDays,
-      available: true,
-      hasPro: true,
-    },
-    {
-      id: "name",
-      titleKey: "analysisTypes.nameEnergy",
-      descKey: "analysisTypes.nameEnergyDesc",
-      icon: Type,
-      available: true,
-      hasPro: false,
-    },
-    {
-      id: "finance",
-      titleKey: "analysisTypes.financialCode",
-      descKey: "analysisTypes.financialCodeDesc",
-      icon: Wallet,
-      available: true,
-      hasPro: false,
-    },
-  ];
 
   const marqueeWords = [
     t("marquee.transformation"),
@@ -104,95 +60,31 @@ const Index = () => {
     t("marquee.harmony")
   ];
 
-  // Methods for Methodology 1 (22 Arcana)
-  const arcanaMethodsList = [
-    {
-      id: "purpose",
-      name: t("methods.purpose"),
-      description: t("methods.purposeDesc"),
-      available: true,
-      icon: Compass,
-    },
-    {
-      id: "compatibility",
-      name: t("methods.compatibility"),
-      description: t("methods.compatibilityDesc"),
-      available: true,
-      icon: Users,
-    },
-    {
-      id: "year",
-      name: t("methods.yearForecast"),
-      description: t("methods.yearForecastDesc"),
-      available: true,
-      icon: CalendarDays,
-    },
-    {
-      id: "month",
-      name: t("methods.monthForecast"),
-      description: t("methods.monthForecastDesc"),
-      available: true,
-      icon: Calendar,
-    },
-    {
-      id: "day",
-      name: t("methods.dayForecast"),
-      description: t("methods.dayForecastDesc"),
-      available: true,
-      icon: Clock,
-    },
-    {
-      id: "ancestral",
-      name: t("methods.ancestral"),
-      description: t("methods.ancestralDesc"),
-      available: true,
-      icon: Brain,
-    },
-    {
-      id: "contract",
-      name: t("analysisTypes.contractEnergy"),
-      description: t("analysisTypes.contractEnergyDesc"),
-      available: true,
-      icon: Building,
-    },
-    {
-      id: "name",
-      name: t("analysisTypes.nameEnergy"),
-      description: t("analysisTypes.nameEnergyDesc"),
-      available: true,
-      icon: Type,
-    },
-    {
-      id: "finance",
-      name: t("analysisTypes.financialCode"),
-      description: t("analysisTypes.financialCodeDesc"),
-      available: true,
-      icon: Wallet,
-    },
-  ];
+  type ResultType = 
+    | { type: "year"; data: YearForecast }
+    | { type: "month"; data: MonthForecast }
+    | { type: "purpose"; data: PersonalMatrix }
+    | { type: "keyto"; data: KeyToResult }
+    | { type: "compatibility"; data: CompatibilityResult }
+    | { type: "ancestral"; data: AncestralResult }
+    | { type: "lifecod"; data: LifeCodCompatibilityResult }
+    | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
+    | { type: "unified-personal"; data: UnifiedPersonalAnalysis }
+    | { type: "day"; data: DailyForecastType }
+    | { type: "finance"; data: FinancialCodeType }
+    | { type: "name"; data: NameEnergyType }
+    | { type: "contract"; data: DailyForecastType }
+    | null;
 
-type ResultType = 
-  | { type: "year"; data: YearForecast }
-  | { type: "month"; data: MonthForecast }
-  | { type: "purpose"; data: PersonalMatrix }
-  | { type: "keyto"; data: KeyToResult }
-  | { type: "compatibility"; data: CompatibilityResult }
-  | { type: "ancestral"; data: AncestralResult }
-  | { type: "lifecod"; data: LifeCodCompatibilityResult }
-  | { type: "lifecod-personal"; data: { name: string; day: number; month: number; year: number } }
-  | { type: "unified-personal"; data: UnifiedPersonalAnalysis }
-  | { type: "day"; data: DailyForecastType }
-  | { type: "finance"; data: FinancialCodeType }
-  | { type: "name"; data: NameEnergyType }
-  | { type: "contract"; data: DailyForecastType }
-  | null;
-
-   const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
+  const [selectedMethodology, setSelectedMethodology] = useState<"1" | "2">("1");
   const [selectedMethod, setSelectedMethod] = useState("purpose");
+  const [selectedTier, setSelectedTier] = useState<TierType>("basic");
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
   const [nameEnergyInput, setNameEnergyInput] = useState("");
-  const [showPro, setShowPro] = useState(false);
+
+  // Get current analysis config
+  const currentConfig = getAnalysisConfig(selectedMethod);
 
   // Life C⚙D compatibility handler
   const handleLifeCodCalculate = (
@@ -215,7 +107,13 @@ type ResultType =
     } else {
       setSelectedMethod("purpose");
     }
+    setSelectedTier("basic");
   }, [selectedMethodology]);
+
+  // Reset tier when method changes
+  useEffect(() => {
+    setSelectedTier("basic");
+  }, [selectedMethod]);
 
   const handleCalculate = (
     day: number, 
@@ -313,11 +211,7 @@ type ResultType =
   const handleReset = () => {
     setResult(null);
     setUserName("");
-    setShowPro(false);
-  };
-
-  const handleTelegramClick = () => {
-    window.open("https://t.me/BisnessWomenN", "_blank");
+    setSelectedTier("basic");
   };
 
   const handleMethodSelect = (methodId: string) => {
@@ -328,7 +222,6 @@ type ResultType =
     localStorage.setItem("lifecod-onboarding-seen", "true");
     setShowOnboarding(false);
     
-    // Redirect based on scenario
     if (scenario === "crisis") {
       navigate("/crisis");
     } else if (scenario === "forecast") {
@@ -336,7 +229,6 @@ type ResultType =
     } else if (scenario === "period") {
       setSelectedMethod("purpose");
     }
-    // diagnosis -> stays on purpose (default)
   };
 
   const handleOnboardingSkip = () => {
@@ -344,7 +236,6 @@ type ResultType =
     setShowOnboarding(false);
   };
 
-  // Show onboarding flow for first-time visitors
   if (showOnboarding) {
     return (
       <div className="min-h-screen">
@@ -356,6 +247,15 @@ type ResultType =
       </div>
     );
   }
+
+  // Methodology 1 methods list from config
+  const arcanaMethodsList = analysisConfigs.map(cfg => ({
+    id: cfg.id,
+    name: cfg.title,
+    description: cfg.description,
+    available: true,
+    icon: iconMap[cfg.icon] || Compass,
+  }));
 
   return (
     <div className="min-h-screen">
@@ -371,15 +271,12 @@ type ResultType =
                   <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-display text-primary mb-4 md:mb-6 tracking-wide">
                     {t("hero.title")}
                   </h1>
-                  
                   <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-3 md:mb-4 leading-relaxed">
                     {t("hero.description1")}
                   </p>
-                  
                   <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-3 md:mb-4 leading-relaxed">
                     {t("hero.description2")}
                   </p>
-                  
                   <p className="text-sm md:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto mb-6 md:mb-8 leading-relaxed">
                     {t("hero.description3")} <span className="font-semibold text-foreground">{t("hero.welcome")}</span>
                   </p>
@@ -452,11 +349,9 @@ type ResultType =
                               {t("methodology.arcana22")}
                             </span>
                           </div>
-                          
                           <p className="text-xs md:text-sm text-muted-foreground mb-3">
                             {t("methodology.arcanaDescription")}
                           </p>
-                          
                           <div className="flex flex-wrap gap-1">
                             {[
                               t("methodology.features.purpose"),
@@ -464,10 +359,7 @@ type ResultType =
                               t("methodology.features.forecasts"),
                               t("methodology.features.lifePeriods"),
                             ].map((feature, i) => (
-                              <span 
-                                key={i}
-                                className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground"
-                              >
+                              <span key={i} className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground">
                                 {feature}
                               </span>
                             ))}
@@ -477,7 +369,7 @@ type ResultType =
                     </button>
 
                     {/* Methods grid - shown when Methodology 1 is selected */}
-                  {selectedMethodology === "1" && (
+                    {selectedMethodology === "1" && (
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 md:gap-3">
                         {arcanaMethodsList.map((method) => (
                           <button
@@ -499,9 +391,6 @@ type ResultType =
                                 {selectedMethod === method.id && method.available && (
                                   <Sparkles className="w-3 h-3 text-primary" />
                                 )}
-                                {!method.available && (
-                                  <span className="text-[10px] md:text-xs text-muted-foreground bg-secondary px-1.5 py-0.5 rounded">{t("methods.soon")}</span>
-                                )}
                               </div>
                               <div>
                                 <h4 className="font-display font-semibold text-foreground text-xs md:text-sm">
@@ -518,7 +407,7 @@ type ResultType =
                     )}
                   </div>
 
-                  {/* Methodology 2 - Classic with Life C⚙D Compatibility */}
+                  {/* Methodology 2 - Classic with Life C⚙D */}
                   <div className="mb-6 md:mb-8">
                     <button
                       onClick={() => setSelectedMethodology("2")}
@@ -540,7 +429,6 @@ type ResultType =
                             <Check className="w-3 h-3 md:w-4 md:h-4 text-primary-foreground" />
                           )}
                         </div>
-                        
                         <div className="flex-1">
                           <div className="flex items-center gap-2 mb-1 flex-wrap">
                             <h3 className="font-display font-semibold text-foreground text-base md:text-lg">
@@ -550,11 +438,9 @@ type ResultType =
                               {t("methodology.classic")}
                             </span>
                           </div>
-                          
                           <p className="text-xs md:text-sm text-muted-foreground mb-3">
                             {t("methodology.classicDescription")}
                           </p>
-                          
                           <div className="flex flex-wrap gap-1">
                             {[
                               t("methodology.features.mindNumber"),
@@ -562,10 +448,7 @@ type ResultType =
                               t("methodology.features.realizationNumber"),
                               t("methodology.features.outcomeNumber"),
                             ].map((feature, i) => (
-                              <span 
-                                key={i}
-                                className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground"
-                              >
+                              <span key={i} className="text-xs px-2 py-1 bg-secondary/50 rounded-full text-muted-foreground">
                                 {feature}
                               </span>
                             ))}
@@ -574,10 +457,8 @@ type ResultType =
                       </div>
                     </button>
 
-                    {/* Life C⚙D Compatibility Section for Methodology 2 */}
                     {selectedMethodology === "2" && (
                       <div className="mt-4 space-y-4">
-                        {/* Personal Analysis */}
                         <button
                           onClick={() => setSelectedMethod("lifecod-personal")}
                           className={cn(
@@ -588,10 +469,7 @@ type ResultType =
                           )}
                         >
                           <div className="flex items-center gap-3">
-                            <Brain className={cn(
-                              "w-5 h-5",
-                              selectedMethod === "lifecod-personal" ? "text-primary" : "text-muted-foreground"
-                            )} />
+                            <Brain className={cn("w-5 h-5", selectedMethod === "lifecod-personal" ? "text-primary" : "text-muted-foreground")} />
                             <div>
                               <h4 className="font-medium text-sm">Персональный разбор</h4>
                               <p className="text-xs text-muted-foreground">Сознание, действия, пиннакли, кризисы, помесячный прогноз</p>
@@ -599,7 +477,6 @@ type ResultType =
                           </div>
                         </button>
 
-                        {/* Extended Compatibility Option */}
                         <button
                           onClick={() => setSelectedMethod("lifecod-compatibility")}
                           className={cn(
@@ -610,10 +487,7 @@ type ResultType =
                           )}
                         >
                           <div className="flex items-center gap-3">
-                            <Heart className={cn(
-                              "w-5 h-5",
-                              selectedMethod === "lifecod-compatibility" ? "text-pink-500 fill-pink-500" : "text-muted-foreground"
-                            )} />
+                            <Heart className={cn("w-5 h-5", selectedMethod === "lifecod-compatibility" ? "text-pink-500 fill-pink-500" : "text-muted-foreground")} />
                             <div>
                               <h4 className="font-medium text-sm">{t("lifecod.methodSelector.title")}</h4>
                               <p className="text-xs text-muted-foreground">{t("lifecod.methodSelector.description")}</p>
@@ -631,10 +505,7 @@ type ResultType =
                           )}
                         >
                           <div className="flex items-center gap-3">
-                            <FileText className={cn(
-                              "w-5 h-5",
-                              selectedMethod === "classic-full" ? "text-primary" : "text-muted-foreground"
-                            )} />
+                            <FileText className={cn("w-5 h-5", selectedMethod === "classic-full" ? "text-primary" : "text-muted-foreground")} />
                             <div>
                               <h4 className="font-medium text-sm">{t("methods.fullAnalysis")}</h4>
                               <p className="text-xs text-muted-foreground">{t("methods.fullAnalysisDesc")}</p>
@@ -645,10 +516,24 @@ type ResultType =
                     )}
                   </div>
 
-                  {/* Date Input Form - conditional based on method */}
+                  {/* Tier Selector — only for Methodology 1 methods that have config */}
+                  {selectedMethodology === "1" && currentConfig && (
+                    <div className="max-w-xl mx-auto mb-2">
+                      <h3 className="text-sm font-medium text-foreground text-center mb-3">
+                        Выберите тариф для «{currentConfig.title}»
+                      </h3>
+                      <TierSelector 
+                        config={currentConfig}
+                        selectedTier={selectedTier}
+                        onSelectTier={setSelectedTier}
+                      />
+                    </div>
+                  )}
+
+                  {/* Date Input Form */}
                   {selectedMethodology === "1" && selectedMethod === "name" ? (
                     <div className="w-full max-w-xl mx-auto">
-                    <div className="gradient-card rounded-2xl p-5 sm:p-8 border border-border">
+                      <div className="gradient-card rounded-2xl p-5 sm:p-8 border border-border">
                         <div className="space-y-5">
                           <div className="space-y-2">
                             <label className="text-sm font-medium text-foreground">Название для проверки</label>
@@ -685,90 +570,6 @@ type ResultType =
                     />
                   )}
                 </div>
-
-                {/* Analysis Types Grid */}
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 max-w-5xl mx-auto mt-8 md:mt-12">
-                  {analysisTypes.map((type) => (
-                    <div
-                      key={type.id}
-                      className={cn(
-                        "gradient-card rounded-xl md:rounded-2xl p-4 md:p-6 border transition-all duration-300",
-                        type.available 
-                          ? "border-border hover:border-primary/30 cursor-pointer" 
-                          : "border-border/50 opacity-70"
-                      )}
-                    >
-                      <div className="flex items-start gap-3 md:gap-4">
-                        <div className={cn(
-                          "w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl flex items-center justify-center flex-shrink-0",
-                          type.available ? "bg-primary/10" : "bg-muted"
-                        )}>
-                          <type.icon className={cn(
-                            "w-5 h-5 md:w-6 md:h-6",
-                            type.available ? "text-primary" : "text-muted-foreground"
-                          )} />
-                        </div>
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h3 className="text-base md:text-lg font-display text-foreground">
-                              {t(type.titleKey)}
-                            </h3>
-                            {!type.available && <Lock className="w-4 h-4 text-muted-foreground" />}
-                          </div>
-                          <p className="text-xs md:text-sm text-muted-foreground mb-3 md:mb-4">
-                            {t(type.descKey)}
-                          </p>
-                          
-                          {type.available ? (
-                            <div className="flex flex-wrap gap-2 md:gap-3">
-                              {type.hasPro && (
-                                <Button
-                                  variant="outline"
-                                  onClick={() => {
-                                    const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
-                                    const method = methodMap[type.id];
-                                    if (method) {
-                                      setSelectedMethod(method);
-                                      setShowPro(true);
-                                      window.scrollTo({ top: 0, behavior: 'smooth' });
-                                    }
-                                  }}
-                                  className="btn-fill border-primary text-primary hover:text-white text-xs md:text-sm px-3 py-1 h-auto"
-                                >
-                                  {t("analysisTypes.professional")}
-                                </Button>
-                              )}
-                              <Button
-                                onClick={() => {
-                                  const methodMap: Record<string, string> = { full: 'purpose', contract: 'contract', month: 'month', year: 'year', name: 'name', finance: 'finance' };
-                                  const method = methodMap[type.id];
-                                  if (method) {
-                                    setSelectedMethod(method);
-                                    setShowPro(false);
-                                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                                  }
-                                }}
-                                className="btn-fill animate-gentle-shake bg-primary text-primary-foreground border-2 border-primary text-xs md:text-sm px-3 py-1 h-auto"
-                              >
-                                {t("analysisTypes.basic")}
-                              </Button>
-                            </div>
-                          ) : (
-                            <div className="flex gap-3">
-                              <Button
-                                variant="outline"
-                                disabled
-                                className="border-border text-xs md:text-sm"
-                              >
-                                {t("analysisTypes.soon")}
-                              </Button>
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </section>
           </>
@@ -779,8 +580,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={showPro}
-                showProSections={showPro}
+                tier={selectedTier}
               />
             )}
             {result.type === "month" && (
@@ -788,8 +588,7 @@ type ResultType =
                 forecast={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={showPro}
-                showProSections={showPro}
+                tier={selectedTier}
               />
             )}
             {result.type === "purpose" && (
@@ -797,8 +596,7 @@ type ResultType =
                 matrix={result.data}
                 name={userName}
                 onReset={handleReset}
-                isPro={showPro}
-                showProSections={showPro}
+                tier={selectedTier}
               />
             )}
             {result.type === "keyto" && (
@@ -812,6 +610,7 @@ type ResultType =
               <CompatibilityResultComponent
                 result={result.data}
                 onReset={handleReset}
+                tier={selectedTier}
               />
             )}
             {result.type === "ancestral" && (
@@ -819,6 +618,7 @@ type ResultType =
                 result={result.data}
                 name={userName}
                 onReset={handleReset}
+                tier={selectedTier}
               />
             )}
             {result.type === "lifecod" && (
@@ -848,6 +648,7 @@ type ResultType =
                 result={result.data}
                 name={userName}
                 onReset={handleReset}
+                tier={selectedTier}
               />
             )}
             {result.type === "finance" && (
@@ -855,6 +656,7 @@ type ResultType =
                 result={result.data}
                 name={userName}
                 onReset={handleReset}
+                tier={selectedTier}
               />
             )}
             {result.type === "name" && (
@@ -868,8 +670,7 @@ type ResultType =
                 result={result.data}
                 personName={userName}
                 onReset={handleReset}
-                isPro={showPro}
-                showProSections={showPro}
+                tier={selectedTier}
               />
             )}
           </div>
