@@ -3,10 +3,10 @@ import { MonthForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, ExternalLink } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
-import { PaidBlock } from "./PaidBlock";
+import { PaidBlock, InlinePaywall } from "./PaidBlock";
 import { cn } from "@/lib/utils";
 import type { TierType } from "@/lib/analysisConfig";
 
