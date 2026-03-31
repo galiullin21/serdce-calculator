@@ -50,17 +50,17 @@
     /* Custom tokens */
     --gold: 30 50% 45%;
     --gold-light: 35 55% 60%;
-    --gold-dark: 25 45% 35%;
-    --brown: 20 45% 32%;
-    --brown-light: 25 35% 45%;
-    --brown-dark: 18 50% 22%;
+    --gold-dark: 14 100% 4%;
+    --brown: 14 100% 4%;
+    --brown-light: 14 80% 15%;
+    --brown-dark: 14 100% 2%;
     --cream: 35 30% 95%;
     --cream-dark: 35 25% 88%;
     --warm-gray: 25 15% 55%;
     
-    --gradient-warm: linear-gradient(180deg, hsl(20 45% 32%) 0%, hsl(25 40% 42%) 50%, hsl(35 35% 55%) 100%);
+    --gradient-warm: linear-gradient(180deg, hsl(14 100% 4%) 0%, hsl(14 80% 12%) 50%, hsl(20 50% 25%) 100%);
     --gradient-warm-subtle: linear-gradient(180deg, hsl(35 30% 95%) 0%, hsl(32 28% 90%) 50%, hsl(30 25% 85%) 100%);
-    --gradient-brown: linear-gradient(135deg, hsl(20 45% 32%) 0%, hsl(25 40% 42%) 100%);
+    --gradient-brown: linear-gradient(135deg, hsl(14 100% 4%) 0%, hsl(14 80% 12%) 100%);
     --gradient-card: linear-gradient(145deg, hsl(35 25% 94%) 0%, hsl(32 22% 88%) 100%);
   }
 
