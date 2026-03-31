@@ -121,7 +121,8 @@ export function ContractEnergyResultComponent({ result, personName, onReset, isP
             </Accordion>
           </PaidBlock>
         )}
-      </div>
+
+      {!isPro && <ActivationBanner />}
     </div>
   );
 }
