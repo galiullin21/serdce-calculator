@@ -134,8 +134,14 @@ const Index = () => {
   ) => {
     setUserName(name);
     
-    // Methodology 2 - Unified personal analysis
-    if (selectedMethodology === "2") {
+    // If professional tier and not yet paid — save data and show payment screen
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingCalcArgs({ day, month, year, name, targetMonth, targetYear, gender, targetDay });
+      localStorage.setItem("pendingCalcData", JSON.stringify({ day, month, year, name, targetMonth, targetYear, gender, targetDay, method: selectedMethod, methodology: selectedMethodology }));
+      setPaymentStatus("pending");
+      return;
+    }
+    
       if (selectedMethod === "lifecod-personal") {
         const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year, targetYear || new Date().getFullYear());
         setResult({ type: "unified-personal", data: unifiedResult });
