@@ -350,7 +350,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ПРОГНОЗ (месяц/день) ===== */}
       {activeTab === 'forecast' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Помесячный прогноз — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Помесячный прогноз — уровень Стандарт" level="Стандарт">
             {/* Today */}
             <div className="bg-primary/5 rounded-xl border-2 border-primary p-4 md:p-6 space-y-3">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2">
@@ -410,7 +410,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ФИНАНСОВЫЙ КОД ===== */}
       {activeTab === 'finance' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Финансовый код — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Финансовый код — уровень Стандарт" level="Стандарт">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Wallet className="w-5 h-5 text-primary" /> Финансовый код</h3>
               <CalcTraceBlock trace={an.financialCode.calcTrace} isPaid={true} />
@@ -461,7 +461,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ПСИХОПРОФИЛЬ ===== */}
       {activeTab === 'psych' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isPremium || isPaid} label="Психопрофиль — уровень Премиум" level="Премиум">
+          <PaidBlock isPaid={showPaid} label="Психопрофиль — уровень Премиум" level="Премиум">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Brain className="w-5 h-5 text-primary" /> Психологическая расшифровка</h3>
               <CalcTraceBlock trace={an.psychProfile.calcTrace} isPaid={true} />
@@ -505,7 +505,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ЭНЕРГОКАРТА ===== */}
       {activeTab === 'energy' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isPremium || isPaid} label="Энергокарта — уровень Премиум" level="Премиум">
+          <PaidBlock isPaid={showPaid} label="Энергокарта — уровень Премиум" level="Премиум">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Zap className="w-5 h-5 text-primary" /> Энергетическая карта</h3>
               <CalcTraceBlock trace={an.energyMap.calcTrace} isPaid={true} />
@@ -564,7 +564,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ПИННАКЛИ ===== */}
       {activeTab === 'pinnacles' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Пиннакли — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Пиннакли — уровень Стандарт" level="Стандарт">
             <div className="bg-card rounded-xl border p-4">
               <CalcTraceBlock trace={an.pinnaclesCalcTrace} isPaid={true} />
             </div>
@@ -646,7 +646,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       {/* ===== ПЛАН ДЕЙСТВИЙ ===== */}
       {activeTab === 'plan' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="План действий — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="План действий — уровень Стандарт" level="Стандарт">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-200 dark:border-green-800 p-4 space-y-2">
                 <p className="font-display font-semibold text-green-700 dark:text-green-400 flex items-center gap-1"><Lightbulb className="w-4 h-4" /> Что делать сейчас</p>
