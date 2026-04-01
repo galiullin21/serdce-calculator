@@ -58,8 +58,8 @@ function CalcTraceBlock({ trace, isPaid }: { trace: CalcTrace; isPaid?: boolean 
   );
 }
 
-// Заблюренный блок
-function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNode; isPaid: boolean; label?: string; level?: string }) {
+// Заблюренный блок — если isPaid, показываем контент без замков
+function PaidBlock({ children, isPaid }: { children: React.ReactNode; isPaid: boolean; label?: string; level?: string }) {
   if (isPaid) return <>{children}</>;
   
   return (
@@ -70,11 +70,7 @@ function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNo
       <div className="absolute inset-0 flex items-center justify-center bg-background/60 rounded-xl">
         <div className="text-center space-y-2 p-4">
           <Lock className="w-6 h-6 text-primary mx-auto" />
-          <p className="text-sm font-medium">{label || 'Доступно в полном отчёте'}</p>
-          {level && <p className="text-xs text-muted-foreground">Уровень: {level}</p>}
-          <Button size="sm" variant="default" onClick={() => {/* будет подключена оплата */}}>
-            Получить полный разбор
-          </Button>
+          <p className="text-sm font-medium">Доступно в профессиональном разборе</p>
         </div>
       </div>
     </div>
