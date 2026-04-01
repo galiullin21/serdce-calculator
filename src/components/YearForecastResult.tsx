@@ -9,6 +9,7 @@ import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 import { cn } from "@/lib/utils";
 import { getYearProInterpretation } from "@/lib/proInterpretations";
 import { generateDetailedMonthlyForecasts, generateYearPeriods, generateYearResources } from "@/lib/yearForecastDetailed";
+import { getYearExtraSections } from "@/lib/yearForecastExtra";
 import { ProSectionBlock, ProTextBlock, ProListBlock, ProNumberedList } from "./ProSectionBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
