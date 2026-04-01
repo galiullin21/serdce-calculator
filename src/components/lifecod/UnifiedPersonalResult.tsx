@@ -113,7 +113,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
   const an = analysis;
 
   const tierBadge = (tier: 'free' | 'standard' | 'premium') => {
-    if (tier === 'free') return null;
+    if (tier === 'free' || isPaid) return null;
     return (
       <span className={cn("text-[9px] px-1 py-0.5 rounded-sm font-medium",
         tier === 'standard' ? "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400" 
