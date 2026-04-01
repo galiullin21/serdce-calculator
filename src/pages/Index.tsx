@@ -322,6 +322,8 @@ const Index = () => {
   const handlePaymentBack = () => {
     setPaymentStatus("idle");
     setPendingCalcArgs(null);
+    setPendingCompatArgs(null);
+    setPendingLifeCodArgs(null);
   };
 
   const handleMethodSelect = (methodId: string) => {
