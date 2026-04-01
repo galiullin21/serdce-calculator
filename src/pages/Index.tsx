@@ -125,7 +125,7 @@ const Index = () => {
   // Reset method when methodology changes
   useEffect(() => {
     if (selectedMethodology === "2") {
-      setSelectedMethod("lifecod-personal");
+      setSelectedMethod("classic-full");
     } else {
       setSelectedMethod("purpose");
     }
@@ -156,9 +156,9 @@ const Index = () => {
       setPaymentStatus("pending");
       return;
     }
-    // Methodology 2 - Unified personal analysis
+    // Methodology 2 - Classic numerology
     if (selectedMethodology === "2") {
-      if (selectedMethod === "lifecod-personal") {
+      if (selectedTier === 'professional') {
         const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year, targetYear || new Date().getFullYear());
         setResult({ type: "unified-personal", data: unifiedResult });
         return;
@@ -282,7 +282,7 @@ const Index = () => {
       setUserName(name);
       
       if (selectedMethodology === "2") {
-        if (selectedMethod === "lifecod-personal") {
+        if (selectedTier === 'professional') {
           const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year, targetYear || new Date().getFullYear());
           setResult({ type: "unified-personal", data: unifiedResult });
           return;
@@ -622,11 +622,6 @@ const Index = () => {
                     </div>
                   ) : selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
                     <LifeCodInputForm onCalculate={handleLifeCodCalculate} />
-                  ) : selectedMethodology === "2" && selectedMethod === "lifecod-personal" ? (
-                    <DateInput 
-                      selectedMethod="lifecod-personal"
-                      onCalculate={handleCalculate} 
-                    />
                   ) : selectedMethodology === "1" && selectedMethod === "compatibility" ? (
                     <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
                   ) : (
