@@ -108,6 +108,12 @@ const Index = () => {
     person2Name: string, person2Day: number, person2Month: number, person2Year: number,
     relationType: RelationType
   ) => {
+    // Gate professional tier behind payment
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingLifeCodArgs({ p1Name: person1Name, p1Day: person1Day, p1Month: person1Month, p1Year: person1Year, p2Name: person2Name, p2Day: person2Day, p2Month: person2Month, p2Year: person2Year, relationType });
+      setPaymentStatus("pending");
+      return;
+    }
     const lifecodResult = calculateLifeCodCompatibility(
       person1Name, person1Day, person1Month, person1Year,
       person2Name, person2Day, person2Month, person2Year,
