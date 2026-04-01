@@ -276,7 +276,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
             </div>
           </PaidBlock>
 
-          {!showPaid && <ActivationCTA accessLevel={accessLevel} />}
+          {!isPaid && <ActivationCTA />}
         </div>
       )}
 
