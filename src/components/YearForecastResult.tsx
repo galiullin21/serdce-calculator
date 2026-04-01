@@ -29,6 +29,7 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
   const detailedMonths = isPro ? generateDetailedMonthlyForecasts(forecast.arcana, forecast.targetYear) : [];
   const yearPeriods = isPro ? generateYearPeriods(forecast.arcana, forecast.targetYear) : [];
   const yearResources = isPro ? generateYearResources(forecast.arcana) : null;
+  const yearExtra = isPro ? getYearExtraSections(forecast.arcana) : null;
 
   const handleDownloadPDF = async () => {
     await generatePDF({
