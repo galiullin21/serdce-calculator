@@ -18,7 +18,6 @@ interface UnifiedPersonalResultProps {
   analysis: UnifiedPersonalAnalysis;
   onReset: () => void;
   isPaid?: boolean;
-  accessLevel?: 'free' | 'standard' | 'premium';
 }
 
 // Компонент calc_trace
