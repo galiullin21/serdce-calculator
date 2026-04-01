@@ -196,6 +196,26 @@ export const analysisConfigs: AnalysisTypeConfig[] = [
     },
     inputType: 'date',
   },
+  {
+    id: 'classic-full',
+    methodId: 'classic-full',
+    title: 'Полный разбор',
+    description: '4 главных числа вашей судьбы',
+    icon: 'FileText',
+    basic: {
+      available: true,
+      isFree: true,
+      label: 'Базовый',
+      description: 'Обзор базовой матрицы, краткий профиль',
+    },
+    professional: {
+      available: true,
+      isFree: false,
+      label: 'Профессиональный',
+      description: 'Полный 10-вкладочный отчёт: пиннакли, прогноз, финкод, психопрофиль, энергокарта, план действий',
+    },
+    inputType: 'date',
+  },
 ];
 
 export function getAnalysisConfig(id: string): AnalysisTypeConfig | undefined {
