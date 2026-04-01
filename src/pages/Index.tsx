@@ -89,6 +89,15 @@ const Index = () => {
     day: number; month: number; year: number; name: string;
     targetMonth?: number; targetYear?: number; gender?: 'male' | 'female'; targetDay?: number;
   } | null>(null);
+  const [pendingCompatArgs, setPendingCompatArgs] = useState<{
+    p1Day: number; p1Month: number; p1Year: number; p1Name: string;
+    p2Day: number; p2Month: number; p2Year: number; p2Name: string;
+  } | null>(null);
+  const [pendingLifeCodArgs, setPendingLifeCodArgs] = useState<{
+    p1Name: string; p1Day: number; p1Month: number; p1Year: number;
+    p2Name: string; p2Day: number; p2Month: number; p2Year: number;
+    relationType: RelationType;
+  } | null>(null);
 
   // Get current analysis config
   const currentConfig = getAnalysisConfig(selectedMethod);
