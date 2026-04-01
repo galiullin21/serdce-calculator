@@ -270,6 +270,7 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
             </div>
           </>
         )}
+      </div>
     </div>
   );
 }
