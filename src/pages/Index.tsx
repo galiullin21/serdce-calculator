@@ -637,8 +637,8 @@ const Index = () => {
                     )}
                   </div>
 
-                  {/* Tier Selector — only for Methodology 1 methods that have config */}
-                  {selectedMethodology === "1" && currentConfig && (
+                  {/* Tier Selector — shown for all methods that have a professional config */}
+                  {currentConfig && (
                     <div className="max-w-xl mx-auto mb-2">
                       <h3 className="text-sm font-medium text-foreground text-center mb-3">
                         Выберите тариф для «{currentConfig.title}»
