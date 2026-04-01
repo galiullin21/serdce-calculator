@@ -64,19 +64,18 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
       icon: Brain,
       row: 3,
     },
-    // Row 4: Полный разбор
+  ];
+
+  // Methods for Methodology 1 (Classic - numbers 1-9) - now shown second
+  const methodsMethodology1 = [
     {
       id: "classic-full",
       name: t("methods.fullAnalysis"),
       description: t("methods.fullAnalysisDesc"),
       available: true,
       icon: Brain,
-      row: 4,
     },
   ];
-
-  // Methods for Methodology 1 (Classic - numbers 1-9) - now shown second
-  const methodsMethodology1: typeof methodsMethodology2 = [];
 
   const methods = selectedMethodology === "1" ? methodsMethodology1 : methodsMethodology2;
   const isArcana = selectedMethodology === "2";
