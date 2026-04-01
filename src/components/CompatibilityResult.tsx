@@ -1,12 +1,13 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, TrendingUp, Shield, MessageCircle, Wallet, Flame, CheckCircle } from "lucide-react";
+import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, TrendingUp, Shield, MessageCircle, Wallet, Flame, CheckCircle, BookOpen, Zap, Brain, Target, ShieldAlert, Lightbulb } from "lucide-react";
 import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 import { getCompatibilityProInterpretation } from "@/lib/proInterpretations";
+import { ProSectionBlock, ProTextBlock, ProListBlock, ProNumberedList } from "./ProSectionBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface CompatibilityResultProps {
@@ -73,7 +74,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
           "inline-block px-3 py-1 rounded-full text-xs font-medium mb-2",
           isPro ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"
         )}>
-          {isPro ? "Профессиональный разбор" : "Базовый разбор"}
+          {isPro ? "✦ Профессиональный разбор" : "Базовый разбор"}
         </span>
         <div className="flex items-center justify-center gap-2 mb-2">
           <Heart className="w-6 h-6 text-primary" />
@@ -131,143 +132,170 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         </div>
       </div>
 
-      {/* ===== PRO CONTENT ===== */}
+      {/* ===== PRO CONTENT — 9-block standard ===== */}
       {isPro && proData && (
         <>
-          {/* Pair Dynamics */}
-          <div className="gradient-card rounded-2xl p-6 border border-primary/20 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-display text-foreground">Динамика пары</h2>
+          {/* 1. ВВОДНЫЙ БЛОК */}
+          <ProSectionBlock icon={BookOpen} title="Введение в анализ пары" variant="highlight" className="mb-6">
+            <ProTextBlock text={proData.intro} className="mb-4" />
+            <div className="p-4 bg-primary/5 rounded-xl border border-primary/10">
+              <h4 className="text-sm font-medium text-foreground mb-2">Энергия пары</h4>
+              <ProTextBlock text={proData.pairEnergy} />
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{proData.pairDynamics}</p>
+          </ProSectionBlock>
+
+          {/* 2. ОСНОВНОЙ РАЗБОР */}
+          <ProSectionBlock icon={Target} title="Глубокий разбор арканов пары" className="mb-6">
+            <ProTextBlock text={proData.pairDynamics} className="mb-4" />
+            
+            <div className="space-y-4">
+              <div className="bg-primary/5 rounded-xl p-4 border border-primary/10">
+                <h4 className="text-sm font-medium text-foreground mb-2">
+                  Аркан Союза ({result.unionArcana} — {unionArcana?.name})
+                </h4>
+                <ProTextBlock text={proData.unionDeepMeaning} />
+              </div>
+              
+              <div className="bg-accent/20 rounded-xl p-4 border border-border">
+                <h4 className="text-sm font-medium text-foreground mb-2">
+                  Аркан Гармонии ({result.harmonyArcana} — {harmonyArcana?.name})
+                </h4>
+                <ProTextBlock text={proData.harmonyDeepMeaning} />
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed whitespace-pre-line">
+                  {harmonyArcana?.compatibilityDescription || harmonyArcana?.personalDescription}
+                </p>
+              </div>
+              
+              <div className="bg-destructive/5 rounded-xl p-4 border border-destructive/20">
+                <h4 className="text-sm font-medium text-foreground mb-2">
+                  Аркан Кармы ({result.karmaArcana} — {karmaArcana?.name})
+                </h4>
+                <ProTextBlock text={proData.karmaDeepMeaning} />
+                <p className="text-sm text-muted-foreground mt-2 leading-relaxed whitespace-pre-line">
+                  {karmaArcana?.personalDescription}
+                </p>
+              </div>
+            </div>
+          </ProSectionBlock>
+
+          {/* 3. РАЗБОР ПО СФЕРАМ */}
+          <ProSectionBlock icon={Wallet} title="💰 Финансовая динамика пары" className="mb-6">
+            <ProTextBlock text={proData.financialDynamics} className="mb-4" />
+            <div className="grid md:grid-cols-2 gap-3">
+              <div className="bg-destructive/5 rounded-lg p-3 border border-destructive/10">
+                <h5 className="text-xs font-medium text-destructive mb-1">Финансовые риски</h5>
+                <p className="text-xs text-muted-foreground">{proData.financialRisks}</p>
+              </div>
+              <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+                <h5 className="text-xs font-medium text-primary mb-1">Рекомендации</h5>
+                <p className="text-xs text-muted-foreground">{proData.financialRecommendations}</p>
+              </div>
+            </div>
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={TrendingUp} title="💼 Карьерная совместимость" className="mb-6">
+            <ProTextBlock text={proData.careerDynamics} className="mb-3" />
+            <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+              <h5 className="text-xs font-medium text-primary mb-1">Рекомендации</h5>
+              <p className="text-xs text-muted-foreground">{proData.careerRecommendations}</p>
+            </div>
+          </ProSectionBlock>
+
+          <div className="grid md:grid-cols-2 gap-4 mb-6">
+            <ProSectionBlock icon={Flame} title="🔥 Сексуальная совместимость">
+              <ProTextBlock text={proData.sexualChemistry} className="mb-3" />
+              <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+                <h5 className="text-xs font-medium text-primary mb-1">Рекомендации</h5>
+                <p className="text-xs text-muted-foreground">{proData.sexualRecommendations}</p>
+              </div>
+            </ProSectionBlock>
+
+            <ProSectionBlock icon={Brain} title="💭 Эмоциональная связь">
+              <ProTextBlock text={proData.emotionalDynamics} className="mb-3" />
+              <div className="bg-primary/5 rounded-lg p-3 border border-primary/10">
+                <h5 className="text-xs font-medium text-primary mb-1">Рекомендации</h5>
+                <p className="text-xs text-muted-foreground">{proData.emotionalRecommendations}</p>
+              </div>
+            </ProSectionBlock>
           </div>
 
-          {/* Harmony */}
-          <div className="mb-8">
-            <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
-              <Sparkles className="w-4 h-4" />
-              {t("compatibility.harmonyArcana")}: {result.harmonyArcana} — {harmonyArcana?.name}
-            </h3>
-            <div className="gradient-card rounded-xl p-5 border border-border">
-              <p className="text-xs text-muted-foreground mb-3">{t("compatibility.emotionalConnection")}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                {harmonyArcana?.compatibilityDescription || harmonyArcana?.personalDescription}
-              </p>
-            </div>
-          </div>
-
-          {/* Karma */}
-          <div className="mb-8">
-            <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4" />
-              {t("compatibility.karmaArcana")}: {result.karmaArcana} — {karmaArcana?.name}
-            </h3>
-            <div className="gradient-card rounded-xl p-5 border border-destructive/30">
-              <p className="text-xs text-muted-foreground mb-3">{t("compatibility.karmicLesson")}</p>
-              <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">
-                {karmaArcana?.personalDescription}
-              </p>
-            </div>
-          </div>
-
-          {/* Conflict Zones & Growth Areas */}
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
+          {/* 4. СВЯЗКИ И ВЗАИМОДЕЙСТВИЕ */}
+          <div className="grid md:grid-cols-3 gap-4 mb-6">
             <div className="gradient-card rounded-xl p-5 border border-destructive/20">
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle className="w-5 h-5 text-destructive" />
-                <h3 className="font-display font-semibold text-foreground">Зоны конфликтов</h3>
+                <h3 className="font-display font-semibold text-foreground text-sm">Зоны конфликтов</h3>
               </div>
-              <ul className="space-y-2">
-                {proData.conflictZones.map((z, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="text-destructive mt-0.5 flex-shrink-0">⚠</span>
-                    <span>{z}</span>
-                  </li>
-                ))}
-              </ul>
+              <ProListBlock items={proData.conflictZones} icon="⚠" />
+            </div>
+            <div className="gradient-card rounded-xl p-5 border border-emerald-500/20">
+              <div className="flex items-center gap-2 mb-3">
+                <TrendingUp className="w-5 h-5 text-emerald-600" />
+                <h3 className="font-display font-semibold text-foreground text-sm">Зоны роста</h3>
+              </div>
+              <ProListBlock items={proData.growthAreas} icon="↑" />
             </div>
             <div className="gradient-card rounded-xl p-5 border border-primary/20">
               <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-5 h-5 text-primary" />
-                <h3 className="font-display font-semibold text-foreground">Зоны роста</h3>
+                <Zap className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-semibold text-foreground text-sm">Синергия</h3>
               </div>
-              <ul className="space-y-2">
-                {proData.growthAreas.map((a, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="text-primary mt-0.5 flex-shrink-0">↑</span>
-                    <span>{a}</span>
-                  </li>
-                ))}
-              </ul>
+              <ProListBlock items={proData.synergyPoints} icon="✦" />
             </div>
           </div>
 
-          {/* Sexual Chemistry & Financial Dynamics */}
-          <div className="grid md:grid-cols-2 gap-4 mb-8">
-            <div className="gradient-card rounded-xl p-5 border border-border">
-              <div className="flex items-center gap-2 mb-3">
-                <Flame className="w-5 h-5 text-primary" />
-                <h3 className="font-display font-semibold text-foreground">Сексуальная совместимость</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{proData.sexualChemistry}</p>
-            </div>
-            <div className="gradient-card rounded-xl p-5 border border-border">
-              <div className="flex items-center gap-2 mb-3">
-                <Wallet className="w-5 h-5 text-primary" />
-                <h3 className="font-display font-semibold text-foreground">Финансовая динамика</h3>
-              </div>
-              <p className="text-sm text-muted-foreground leading-relaxed">{proData.financialDynamics}</p>
-            </div>
-          </div>
-
-          {/* Scenarios */}
-          <div className="gradient-card rounded-2xl p-6 border border-border mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <TrendingUp className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-display text-foreground">Сценарии развития отношений</h2>
-            </div>
+          {/* 5. СЦЕНАРИИ */}
+          <ProSectionBlock icon={Sparkles} title="Сценарии развития отношений" className="mb-6">
             <div className="space-y-4">
               {proData.scenarios.map((s, i) => (
                 <div key={i} className={cn(
                   "p-4 rounded-xl border",
-                  i === 0 ? "bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800" :
+                  i === 0 ? "bg-emerald-500/5 border-emerald-500/20" :
                   i === 1 ? "bg-muted/30 border-border" :
-                  "bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800"
+                  "bg-destructive/5 border-destructive/20"
                 )}>
                   <h4 className="font-display font-semibold text-foreground text-sm mb-2">{s.title}</h4>
                   <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </ProSectionBlock>
 
-          {/* Daily Life Tips */}
-          <div className="gradient-card rounded-2xl p-6 border border-primary/20 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <MessageCircle className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-display text-foreground">Советы на каждый день</h2>
+          {/* 6. РИСКИ */}
+          <ProSectionBlock icon={ShieldAlert} title="Риски отношений" variant="warning" className="mb-6">
+            <ProListBlock items={proData.risks} icon="⚠" className="mb-4" />
+            <div className="bg-muted/30 rounded-xl p-4">
+              <h4 className="text-sm font-medium text-foreground mb-2">Повторяющиеся паттерны</h4>
+              <ProTextBlock text={proData.repeatingPatterns} />
             </div>
-            <ul className="space-y-3">
-              {proData.dailyLifeTips.map((tip, i) => (
-                <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
-                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-xs font-bold text-primary">{i + 1}</span>
-                  <span className="leading-relaxed">{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          </ProSectionBlock>
 
-          {/* Long-term outlook */}
-          <div className="gradient-card rounded-2xl p-6 border border-primary/30 bg-primary/5 mb-8">
-            <div className="flex items-center gap-2 mb-4">
-              <Shield className="w-5 h-5 text-primary" />
-              <h2 className="text-lg font-display text-foreground">Долгосрочный прогноз</h2>
+          {/* 7. ВОЗМОЖНОСТИ */}
+          <ProSectionBlock icon={Sparkles} title="Возможности пары" variant="success" className="mb-6">
+            <ProListBlock items={proData.opportunities} icon="★" />
+          </ProSectionBlock>
+
+          {/* 8. РЕКОМЕНДАЦИИ */}
+          <ProSectionBlock icon={CheckCircle} title="Рекомендации на каждый день" variant="highlight" className="mb-6">
+            <h4 className="text-sm font-medium text-foreground mb-3">Что делать</h4>
+            <ProNumberedList items={proData.dailyLifeTips} className="mb-6" />
+            
+            <h4 className="text-sm font-medium text-destructive mb-3">Чего избегать</h4>
+            <ProListBlock items={proData.whatToAvoid} icon="✗" />
+          </ProSectionBlock>
+
+          {/* 9. ИТОГ */}
+          <ProSectionBlock icon={Shield} title="Долгосрочный прогноз и итог" variant="highlight" className="mb-6">
+            <ProTextBlock text={proData.longTermOutlook} className="mb-4" />
+            <div className="border-t border-border pt-4">
+              <ProTextBlock text={proData.conclusion} className="mb-3" />
+              <div className="bg-primary/10 rounded-xl p-4 text-center">
+                <p className="text-sm text-foreground font-medium italic">«{proData.keyThought}»</p>
+              </div>
             </div>
-            <p className="text-sm text-muted-foreground leading-relaxed">{proData.longTermOutlook}</p>
-          </div>
+          </ProSectionBlock>
 
-          {/* Strengths & Challenges */}
+          {/* Full strengths & challenges */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="gradient-card rounded-xl p-5 border border-border">
               <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
@@ -299,7 +327,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         </>
       )}
 
-      {/* Basic tier: show basic strengths/challenges + upsell */}
+      {/* Basic tier */}
       {!isPro && (
         <>
           <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -332,8 +360,9 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
           </div>
           <div className="bg-muted/30 rounded-xl border border-border p-5 text-center space-y-2">
             <p className="text-sm text-muted-foreground">
-              В профессиональном разборе: динамика пары, зоны конфликтов, сексуальная совместимость, 
-              финансовая динамика, 3 сценария развития, советы на каждый день и долгосрочный прогноз.
+              В профессиональном разборе: глубокий анализ арканов пары (союз, гармония, карма), 
+              финансовая и сексуальная совместимость, эмоциональная связь, зоны конфликтов и синергии, 
+              3 сценария развития, повторяющиеся паттерны, рекомендации на каждый день и долгосрочный прогноз.
             </p>
           </div>
         </>
