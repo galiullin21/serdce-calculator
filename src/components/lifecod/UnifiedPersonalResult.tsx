@@ -670,7 +670,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
       )}
 
       {/* Life COD Club CTA (always at bottom) */}
-      <ActivationCTA accessLevel={accessLevel} />
+      {!isPaid && <ActivationCTA />}
     </div>
   );
 }
