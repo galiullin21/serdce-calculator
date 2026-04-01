@@ -629,7 +629,7 @@ const Index = () => {
                     <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
                   ) : (
                     <DateInput 
-                      selectedMethod={selectedMethodology === "1" ? selectedMethod : "classic-full"}
+                      selectedMethod={selectedMethod}
                       onCalculate={handleCalculate} 
                     />
                   )}
