@@ -79,12 +79,11 @@ function PaidBlock({ children, isPaid }: { children: React.ReactNode; isPaid: bo
 
 type TabId = 'overview' | 'destiny' | 'ly' | 'forecast' | 'finance' | 'psych' | 'energy' | 'pinnacles' | 'risk' | 'plan';
 
-export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, accessLevel = 'free' }: UnifiedPersonalResultProps) {
+export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: UnifiedPersonalResultProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
-  const isStandard = accessLevel === 'standard' || accessLevel === 'premium';
-  const isPremium = accessLevel === 'premium';
-  const showPaid = isPaid || isStandard;
+  // Простая логика: isPaid = true → все блоки открыты
+  const showPaid = isPaid;
 
   const tabs: { id: TabId; label: string; icon: typeof Activity; tier: 'free' | 'standard' | 'premium' }[] = [
     { id: 'overview', label: 'Обзор', icon: Activity, tier: 'free' },
