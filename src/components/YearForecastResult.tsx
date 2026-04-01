@@ -306,6 +306,56 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             </>
           )}
 
+          {/* ===== EXTRA: HEALING THEMES, BIRTHDAY RITUAL, MAIN EXAM, YEAR TASKS ===== */}
+          {yearExtra && (
+            <>
+              <ProSectionBlock icon={Lightbulb} title="🩹 Исцеляющие темы года" variant="highlight">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Темы, которые год приглашает вас проработать для глубинного исцеления.
+                </p>
+                <ProListBlock items={yearExtra.healingThemes} icon="💚" />
+              </ProSectionBlock>
+
+              <ProSectionBlock icon={Sparkles} title="🎂 Ритуал дня рождения">
+                <p className="text-sm text-muted-foreground mb-4">
+                  Практики для входа в новый годовой цикл с максимальной осознанностью.
+                </p>
+                <ProNumberedList items={yearExtra.birthdayRitual} />
+              </ProSectionBlock>
+
+              <ProSectionBlock icon={Target} title="📋 Главный экзамен года" variant="warning">
+                <div className="bg-muted/30 rounded-xl p-4 mb-4">
+                  <h4 className="text-sm font-medium text-foreground mb-2">Ключевой вопрос:</h4>
+                  <p className="text-sm text-primary font-medium italic">«{yearExtra.mainExam.question}»</p>
+                </div>
+                <div className="grid md:grid-cols-2 gap-4">
+                  <div className="bg-emerald-500/5 border border-emerald-500/20 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-emerald-600 mb-3 flex items-center gap-1.5">
+                      <CheckCircle className="w-4 h-4" /> Положительные проявления
+                    </h4>
+                    <ProListBlock items={yearExtra.mainExam.plusAnswers} icon="✦" />
+                  </div>
+                  <div className="bg-destructive/5 border border-destructive/20 rounded-xl p-4">
+                    <h4 className="text-sm font-medium text-destructive mb-3 flex items-center gap-1.5">
+                      <AlertTriangle className="w-4 h-4" /> Отрицательные проявления
+                    </h4>
+                    <ProListBlock items={yearExtra.mainExam.minusAnswers} icon="⚠" />
+                  </div>
+                </div>
+              </ProSectionBlock>
+
+              <ProSectionBlock icon={BookOpen} title="📝 Задачи года" variant="success">
+                <ProNumberedList items={yearExtra.yearTasks} />
+              </ProSectionBlock>
+
+              {yearExtra.lifeSphereThemes.length > 0 && (
+                <ProSectionBlock icon={Heart} title="💡 Тематики сфер жизни">
+                  <ProListBlock items={yearExtra.lifeSphereThemes} icon="→" />
+                </ProSectionBlock>
+              )}
+            </>
+          )}
+
           {/* 6. РИСКИ */}
           <ProSectionBlock icon={ShieldAlert} title="Риски года" variant="warning">
             <ProListBlock items={proData.risks} icon="⚠" className="mb-4" />
