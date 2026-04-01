@@ -578,27 +578,6 @@ const Index = () => {
                       </div>
                     </button>
 
-                    {selectedMethodology === "2" && (
-                      <div className="mt-4 space-y-4">
-                        <button
-                          onClick={() => setSelectedMethod("classic-full")}
-                          className={cn(
-                            "w-full p-4 rounded-xl border transition-all duration-300 text-left",
-                            selectedMethod === "classic-full"
-                              ? "bg-primary/10 border-primary"
-                              : "bg-card border-border hover:border-primary/50"
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <FileText className={cn("w-5 h-5", selectedMethod === "classic-full" ? "text-primary" : "text-muted-foreground")} />
-                            <div>
-                              <h4 className="font-medium text-sm">{t("methods.fullAnalysis")}</h4>
-                              <p className="text-xs text-muted-foreground">{t("methods.fullAnalysisDesc")}</p>
-                            </div>
-                          </div>
-                        </button>
-                      </div>
-                    )}
                   </div>
 
                   {/* Tier Selector — shown for all methods that have a professional config */}
