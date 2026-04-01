@@ -1,11 +1,12 @@
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle } from "lucide-react";
+import { ArrowLeft, Heart, Users, Sparkles, AlertTriangle, TrendingUp, Shield, MessageCircle, Wallet, Flame, CheckCircle } from "lucide-react";
 import { CompatibilityResult, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { getCompatibilityProInterpretation } from "@/lib/proInterpretations";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface CompatibilityResultProps {
@@ -23,6 +24,10 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
   const karmaArcana = getArcana(result.karmaArcana);
   const person1DestinyArcana = getArcana(result.person1.destinyArcana);
   const person2DestinyArcana = getArcana(result.person2.destinyArcana);
+  
+  const proData = isPro ? getCompatibilityProInterpretation(
+    result.unionArcana, result.harmonyArcana, result.karmaArcana, result.compatibilityPercent
+  ) : null;
 
   const getCompatibilityColor = (percent: number) => {
     if (percent >= 80) return "text-green-600";
@@ -113,7 +118,7 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         })}
       </div>
 
-      {/* Union Arcana */}
+      {/* Union Arcana — always shown */}
       <div className="mb-8">
         <h2 className="text-xl font-display text-primary mb-4 flex items-center gap-2">
           <Heart className="w-5 h-5" />
@@ -126,9 +131,18 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
         </div>
       </div>
 
-      {/* Pro sections — shown directly (pro gets here only after payment) */}
-      {isPro && (
+      {/* ===== PRO CONTENT ===== */}
+      {isPro && proData && (
         <>
+          {/* Pair Dynamics */}
+          <div className="gradient-card rounded-2xl p-6 border border-primary/20 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-display text-foreground">Динамика пары</h2>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">{proData.pairDynamics}</p>
+          </div>
+
           {/* Harmony */}
           <div className="mb-8">
             <h3 className="text-lg font-display text-primary mb-3 flex items-center gap-2">
@@ -157,11 +171,107 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
             </div>
           </div>
 
+          {/* Conflict Zones & Growth Areas */}
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <div className="gradient-card rounded-xl p-5 border border-destructive/20">
+              <div className="flex items-center gap-2 mb-3">
+                <AlertTriangle className="w-5 h-5 text-destructive" />
+                <h3 className="font-display font-semibold text-foreground">Зоны конфликтов</h3>
+              </div>
+              <ul className="space-y-2">
+                {proData.conflictZones.map((z, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="text-destructive mt-0.5 flex-shrink-0">⚠</span>
+                    <span>{z}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="gradient-card rounded-xl p-5 border border-primary/20">
+              <div className="flex items-center gap-2 mb-3">
+                <Sparkles className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-semibold text-foreground">Зоны роста</h3>
+              </div>
+              <ul className="space-y-2">
+                {proData.growthAreas.map((a, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="text-primary mt-0.5 flex-shrink-0">↑</span>
+                    <span>{a}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          {/* Sexual Chemistry & Financial Dynamics */}
+          <div className="grid md:grid-cols-2 gap-4 mb-8">
+            <div className="gradient-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <Flame className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-semibold text-foreground">Сексуальная совместимость</h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{proData.sexualChemistry}</p>
+            </div>
+            <div className="gradient-card rounded-xl p-5 border border-border">
+              <div className="flex items-center gap-2 mb-3">
+                <Wallet className="w-5 h-5 text-primary" />
+                <h3 className="font-display font-semibold text-foreground">Финансовая динамика</h3>
+              </div>
+              <p className="text-sm text-muted-foreground leading-relaxed">{proData.financialDynamics}</p>
+            </div>
+          </div>
+
+          {/* Scenarios */}
+          <div className="gradient-card rounded-2xl p-6 border border-border mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <TrendingUp className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-display text-foreground">Сценарии развития отношений</h2>
+            </div>
+            <div className="space-y-4">
+              {proData.scenarios.map((s, i) => (
+                <div key={i} className={cn(
+                  "p-4 rounded-xl border",
+                  i === 0 ? "bg-green-50 border-green-200 dark:bg-green-950/20 dark:border-green-800" :
+                  i === 1 ? "bg-muted/30 border-border" :
+                  "bg-red-50 border-red-200 dark:bg-red-950/20 dark:border-red-800"
+                )}>
+                  <h4 className="font-display font-semibold text-foreground text-sm mb-2">{s.title}</h4>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{s.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Daily Life Tips */}
+          <div className="gradient-card rounded-2xl p-6 border border-primary/20 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <MessageCircle className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-display text-foreground">Советы на каждый день</h2>
+            </div>
+            <ul className="space-y-3">
+              {proData.dailyLifeTips.map((tip, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-xs font-bold text-primary">{i + 1}</span>
+                  <span className="leading-relaxed">{tip}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Long-term outlook */}
+          <div className="gradient-card rounded-2xl p-6 border border-primary/30 bg-primary/5 mb-8">
+            <div className="flex items-center gap-2 mb-4">
+              <Shield className="w-5 h-5 text-primary" />
+              <h2 className="text-lg font-display text-foreground">Долгосрочный прогноз</h2>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">{proData.longTermOutlook}</p>
+          </div>
+
           {/* Strengths & Challenges */}
           <div className="grid md:grid-cols-2 gap-6">
             <div className="gradient-card rounded-xl p-5 border border-border">
               <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
-                <Sparkles className="w-4 h-4" />
+                <CheckCircle className="w-4 h-4" />
                 {t("compatibility.strengths")}
               </h3>
               <ul className="space-y-2">
@@ -185,6 +295,46 @@ export function CompatibilityResultComponent({ result, onReset, tier = 'basic' }
                 ))}
               </ul>
             </div>
+          </div>
+        </>
+      )}
+
+      {/* Basic tier: show basic strengths/challenges + upsell */}
+      {!isPro && (
+        <>
+          <div className="grid md:grid-cols-2 gap-6 mb-8">
+            <div className="gradient-card rounded-xl p-5 border border-border">
+              <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
+                <CheckCircle className="w-4 h-4" />
+                {t("compatibility.strengths")}
+              </h3>
+              <ul className="space-y-2">
+                {result.strengths.slice(0, 3).map((s, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="text-primary mt-0.5">✓</span>{s}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="gradient-card rounded-xl p-5 border border-border">
+              <h3 className="text-lg font-display text-primary mb-4 flex items-center gap-2">
+                <AlertTriangle className="w-4 h-4" />
+                {t("compatibility.challenges")}
+              </h3>
+              <ul className="space-y-2">
+                {result.challenges.slice(0, 3).map((c, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm text-muted-foreground">
+                    <span className="text-accent mt-0.5">!</span>{c}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className="bg-muted/30 rounded-xl border border-border p-5 text-center space-y-2">
+            <p className="text-sm text-muted-foreground">
+              В профессиональном разборе: динамика пары, зоны конфликтов, сексуальная совместимость, 
+              финансовая динамика, 3 сценария развития, советы на каждый день и долгосрочный прогноз.
+            </p>
           </div>
         </>
       )}
