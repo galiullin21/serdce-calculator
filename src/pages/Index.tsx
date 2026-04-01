@@ -361,13 +361,15 @@ const Index = () => {
   }
 
   // Methodology 1 methods list from config
-  const arcanaMethodsList = analysisConfigs.map(cfg => ({
-    id: cfg.id,
-    name: cfg.title,
-    description: cfg.description,
-    available: true,
-    icon: iconMap[cfg.icon] || Compass,
-  }));
+  const arcanaMethodsList = analysisConfigs
+    .filter(cfg => cfg.id !== 'classic-full')
+    .map(cfg => ({
+      id: cfg.id,
+      name: cfg.title,
+      description: cfg.description,
+      available: true,
+      icon: iconMap[cfg.icon] || Compass,
+    }));
 
   return (
     <div className="min-h-screen">
