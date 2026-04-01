@@ -84,6 +84,11 @@ const Index = () => {
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
   const [nameEnergyInput, setNameEnergyInput] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState<"idle" | "pending" | "paid">("idle");
+  const [pendingCalcArgs, setPendingCalcArgs] = useState<{
+    day: number; month: number; year: number; name: string;
+    targetMonth?: number; targetYear?: number; gender?: 'male' | 'female'; targetDay?: number;
+  } | null>(null);
 
   // Get current analysis config
   const currentConfig = getAnalysisConfig(selectedMethod);
