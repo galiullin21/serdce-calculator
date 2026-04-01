@@ -125,7 +125,7 @@ const Index = () => {
   // Reset method when methodology changes
   useEffect(() => {
     if (selectedMethodology === "2") {
-      setSelectedMethod("lifecod-personal");
+      setSelectedMethod("classic-full");
     } else {
       setSelectedMethod("purpose");
     }
