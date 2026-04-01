@@ -141,7 +141,8 @@ const Index = () => {
       setPaymentStatus("pending");
       return;
     }
-    
+    // Methodology 2 - Unified personal analysis
+    if (selectedMethodology === "2") {
       if (selectedMethod === "lifecod-personal") {
         const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year, targetYear || new Date().getFullYear());
         setResult({ type: "unified-personal", data: unifiedResult });
