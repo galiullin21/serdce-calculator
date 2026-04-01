@@ -581,42 +581,6 @@ const Index = () => {
                     {selectedMethodology === "2" && (
                       <div className="mt-4 space-y-4">
                         <button
-                          onClick={() => setSelectedMethod("lifecod-personal")}
-                          className={cn(
-                            "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
-                            selectedMethod === "lifecod-personal"
-                              ? "bg-primary/10 border-primary"
-                              : "bg-card border-border hover:border-primary/50"
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Brain className={cn("w-5 h-5", selectedMethod === "lifecod-personal" ? "text-primary" : "text-muted-foreground")} />
-                            <div>
-                              <h4 className="font-medium text-sm">Персональный разбор</h4>
-                              <p className="text-xs text-muted-foreground">Сознание, действия, пиннакли, кризисы, помесячный прогноз</p>
-                            </div>
-                          </div>
-                        </button>
-
-                        <button
-                          onClick={() => setSelectedMethod("lifecod-compatibility")}
-                          className={cn(
-                            "w-full p-4 rounded-xl border-2 transition-all duration-300 text-left",
-                            selectedMethod === "lifecod-compatibility"
-                              ? "bg-pink-50 border-pink-400 dark:bg-pink-950/30 dark:border-pink-600"
-                              : "bg-card border-border hover:border-pink-200"
-                          )}
-                        >
-                          <div className="flex items-center gap-3">
-                            <Heart className={cn("w-5 h-5", selectedMethod === "lifecod-compatibility" ? "text-pink-500 fill-pink-500" : "text-muted-foreground")} />
-                            <div>
-                              <h4 className="font-medium text-sm">{t("lifecod.methodSelector.title")}</h4>
-                              <p className="text-xs text-muted-foreground">{t("lifecod.methodSelector.description")}</p>
-                            </div>
-                          </div>
-                        </button>
-
-                        <button
                           onClick={() => setSelectedMethod("classic-full")}
                           className={cn(
                             "w-full p-4 rounded-xl border transition-all duration-300 text-left",
