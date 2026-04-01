@@ -230,6 +230,12 @@ const Index = () => {
     person1Day: number, person1Month: number, person1Year: number, person1Name: string,
     person2Day: number, person2Month: number, person2Year: number, person2Name: string
   ) => {
+    // Gate professional tier behind payment
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingCompatArgs({ p1Day: person1Day, p1Month: person1Month, p1Year: person1Year, p1Name: person1Name, p2Day: person2Day, p2Month: person2Month, p2Year: person2Year, p2Name: person2Name });
+      setPaymentStatus("pending");
+      return;
+    }
     const compatResult = calculateCompatibility(
       person1Day, person1Month, person1Year, person1Name,
       person2Day, person2Month, person2Year, person2Name
