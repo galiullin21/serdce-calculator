@@ -89,6 +89,15 @@ const Index = () => {
     day: number; month: number; year: number; name: string;
     targetMonth?: number; targetYear?: number; gender?: 'male' | 'female'; targetDay?: number;
   } | null>(null);
+  const [pendingCompatArgs, setPendingCompatArgs] = useState<{
+    p1Day: number; p1Month: number; p1Year: number; p1Name: string;
+    p2Day: number; p2Month: number; p2Year: number; p2Name: string;
+  } | null>(null);
+  const [pendingLifeCodArgs, setPendingLifeCodArgs] = useState<{
+    p1Name: string; p1Day: number; p1Month: number; p1Year: number;
+    p2Name: string; p2Day: number; p2Month: number; p2Year: number;
+    relationType: RelationType;
+  } | null>(null);
 
   // Get current analysis config
   const currentConfig = getAnalysisConfig(selectedMethod);
@@ -99,6 +108,12 @@ const Index = () => {
     person2Name: string, person2Day: number, person2Month: number, person2Year: number,
     relationType: RelationType
   ) => {
+    // Gate professional tier behind payment
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingLifeCodArgs({ p1Name: person1Name, p1Day: person1Day, p1Month: person1Month, p1Year: person1Year, p2Name: person2Name, p2Day: person2Day, p2Month: person2Month, p2Year: person2Year, relationType });
+      setPaymentStatus("pending");
+      return;
+    }
     const lifecodResult = calculateLifeCodCompatibility(
       person1Name, person1Day, person1Month, person1Year,
       person2Name, person2Day, person2Month, person2Year,
@@ -215,6 +230,12 @@ const Index = () => {
     person1Day: number, person1Month: number, person1Year: number, person1Name: string,
     person2Day: number, person2Month: number, person2Year: number, person2Name: string
   ) => {
+    // Gate professional tier behind payment
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingCompatArgs({ p1Day: person1Day, p1Month: person1Month, p1Year: person1Year, p1Name: person1Name, p2Day: person2Day, p2Month: person2Month, p2Year: person2Year, p2Name: person2Name });
+      setPaymentStatus("pending");
+      return;
+    }
     const compatResult = calculateCompatibility(
       person1Day, person1Month, person1Year, person1Name,
       person2Day, person2Month, person2Year, person2Name
@@ -230,6 +251,8 @@ const Index = () => {
     setSelectedTier("basic");
     setPaymentStatus("idle");
     setPendingCalcArgs(null);
+    setPendingCompatArgs(null);
+    setPendingLifeCodArgs(null);
     localStorage.removeItem("pendingCalcData");
     lock(); // reset access state for new calculation
   };
@@ -237,9 +260,25 @@ const Index = () => {
   // After successful payment, run the pending calculation and show result
   const handlePaymentSuccess = () => {
     setPaymentStatus("paid");
+    
+    // Handle pending compatibility args
+    if (pendingCompatArgs) {
+      const { p1Day, p1Month, p1Year, p1Name, p2Day, p2Month, p2Year, p2Name } = pendingCompatArgs;
+      const compatResult = calculateCompatibility(p1Day, p1Month, p1Year, p1Name, p2Day, p2Month, p2Year, p2Name);
+      setResult({ type: "compatibility", data: compatResult });
+      return;
+    }
+    
+    // Handle pending lifecod args
+    if (pendingLifeCodArgs) {
+      const { p1Name, p1Day, p1Month, p1Year, p2Name, p2Day, p2Month, p2Year, relationType } = pendingLifeCodArgs;
+      const lifecodResult = calculateLifeCodCompatibility(p1Name, p1Day, p1Month, p1Year, p2Name, p2Day, p2Month, p2Year, relationType);
+      setResult({ type: "lifecod", data: lifecodResult });
+      return;
+    }
+    
     if (pendingCalcArgs) {
       const { day, month, year, name, targetMonth, targetYear, gender, targetDay } = pendingCalcArgs;
-      // Re-run calculation (now paymentStatus won't block because we call setResult directly)
       setUserName(name);
       
       if (selectedMethodology === "2") {
@@ -283,6 +322,8 @@ const Index = () => {
   const handlePaymentBack = () => {
     setPaymentStatus("idle");
     setPendingCalcArgs(null);
+    setPendingCompatArgs(null);
+    setPendingLifeCodArgs(null);
   };
 
   const handleMethodSelect = (methodId: string) => {
@@ -596,8 +637,8 @@ const Index = () => {
                     )}
                   </div>
 
-                  {/* Tier Selector — only for Methodology 1 methods that have config */}
-                  {selectedMethodology === "1" && currentConfig && (
+                  {/* Tier Selector — shown for all methods that have a professional config */}
+                  {currentConfig && (
                     <div className="max-w-xl mx-auto mb-2">
                       <h3 className="text-sm font-medium text-foreground text-center mb-3">
                         Выберите тариф для «{currentConfig.title}»
