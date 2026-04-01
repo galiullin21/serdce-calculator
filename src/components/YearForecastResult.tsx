@@ -3,11 +3,12 @@ import { YearForecast, formatBirthDate } from "@/lib/calculations";
 import { getArcana } from "@/lib/arcana";
 import { ArcanaCard } from "./ArcanaCard";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Calendar, TrendingUp, Heart, Briefcase, Activity, AlertTriangle, Sparkles, CheckCircle, Target, Brain, Zap, ShieldAlert, Lightbulb, BookOpen, MessageCircle } from "lucide-react";
+import { ArrowLeft, Calendar, TrendingUp, Heart, Briefcase, Activity, AlertTriangle, Sparkles, CheckCircle, Target, Brain, Zap, ShieldAlert, Lightbulb, BookOpen, MessageCircle, Battery, BatteryWarning, Star, Clock } from "lucide-react";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
 import { cn } from "@/lib/utils";
 import { getYearProInterpretation } from "@/lib/proInterpretations";
+import { generateDetailedMonthlyForecasts, generateYearPeriods, generateYearResources } from "@/lib/yearForecastDetailed";
 import { ProSectionBlock, ProTextBlock, ProListBlock, ProNumberedList } from "./ProSectionBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
@@ -24,6 +25,9 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
   const arcana = getArcana(forecast.arcana);
   const formattedDate = formatBirthDate(forecast.birthDate.day, forecast.birthDate.month, forecast.birthDate.year);
   const proData = isPro ? getYearProInterpretation(forecast.arcana) : null;
+  const detailedMonths = isPro ? generateDetailedMonthlyForecasts(forecast.arcana, forecast.targetYear) : [];
+  const yearPeriods = isPro ? generateYearPeriods(forecast.arcana, forecast.targetYear) : [];
+  const yearResources = isPro ? generateYearResources(forecast.arcana) : null;
 
   const handleDownloadPDF = async () => {
     await generatePDF({
@@ -82,7 +86,7 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
         <ArcanaCard number={forecast.arcana} showYearForecast={true} compact={false} />
       </div>
 
-      {/* ===== PRO CONTENT — 9-block standard ===== */}
+      {/* ===== PRO CONTENT ===== */}
       {isPro && proData && (
         <>
           {/* 1. ВВОДНЫЙ БЛОК */}
@@ -126,7 +130,6 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
           </ProSectionBlock>
 
           {/* 3. РАЗБОР ПО СФЕРАМ ЖИЗНИ */}
-          {/* Деньги */}
           <ProSectionBlock icon={Briefcase} title="💰 Деньги и финансы">
             <ProTextBlock text={proData.money} className="mb-4" />
             <div className="grid md:grid-cols-3 gap-3">
@@ -145,7 +148,6 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             </div>
           </ProSectionBlock>
 
-          {/* Карьера */}
           <ProSectionBlock icon={Briefcase} title="💼 Работа и реализация">
             <ProTextBlock text={proData.career} className="mb-4" />
             <div className="grid md:grid-cols-3 gap-3">
@@ -164,7 +166,6 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             </div>
           </ProSectionBlock>
 
-          {/* Отношения */}
           <ProSectionBlock icon={Heart} title="❤️ Отношения">
             <ProTextBlock text={proData.relationships} className="mb-4" />
             <div className="grid md:grid-cols-3 gap-3">
@@ -183,7 +184,6 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             </div>
           </ProSectionBlock>
 
-          {/* Здоровье + Внутреннее состояние */}
           <div className="grid md:grid-cols-2 gap-4">
             <ProSectionBlock icon={Activity} title="🏥 Здоровье">
               <ProTextBlock text={proData.health} className="mb-3" />
@@ -216,6 +216,94 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             <ProTextBlock text={proData.additionalInsight} />
           </ProSectionBlock>
 
+          {/* ===== ПОДРОБНЫЙ ПОМЕСЯЧНЫЙ ПРОГНОЗ ===== */}
+          <ProSectionBlock icon={Calendar} title="📅 Подробный прогноз по месяцам" variant="highlight">
+            <p className="text-sm text-muted-foreground mb-6">
+              Ниже — детальный разбор каждого месяца {forecast.targetYear} года. Каждый месяц имеет свою энергию, тему и рекомендации.
+            </p>
+            <div className="space-y-6">
+              {detailedMonths.map((m) => (
+                <div key={m.month} className="border border-border rounded-xl overflow-hidden">
+                  <div className="bg-primary/10 px-4 py-3 flex items-center justify-between">
+                    <div>
+                      <h3 className="text-base font-display font-semibold text-foreground">
+                        {m.name} {forecast.targetYear}
+                      </h3>
+                      <p className="text-xs text-muted-foreground">
+                        Аркан месяца: {m.arcanaInfluence} · Планета: {m.planet}
+                      </p>
+                    </div>
+                    <div className="bg-primary/20 text-primary text-xs font-medium px-2 py-1 rounded-md">
+                      «{m.theme}»
+                    </div>
+                  </div>
+                  <div className="p-4 space-y-3">
+                    <ProTextBlock text={m.description} />
+                    
+                    <div className="bg-muted/30 rounded-lg p-3">
+                      <h5 className="text-xs font-medium text-foreground mb-1 flex items-center gap-1.5">
+                        <AlertTriangle className="w-3.5 h-3.5 text-destructive" /> На что обратить внимание
+                      </h5>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{m.attention}</p>
+                    </div>
+                    
+                    <div className="bg-primary/5 rounded-lg p-3">
+                      <h5 className="text-xs font-medium text-primary mb-1 flex items-center gap-1.5">
+                        <CheckCircle className="w-3.5 h-3.5 text-primary" /> Рекомендации
+                      </h5>
+                      <p className="text-xs text-muted-foreground leading-relaxed">{m.recommendations}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ProSectionBlock>
+
+          {/* ===== ПЕРИОДЫ ВНУТРИ ГОДА ===== */}
+          <ProSectionBlock icon={Clock} title="📊 Периоды внутри года">
+            <p className="text-sm text-muted-foreground mb-4">
+              Год разделён на четыре ключевых периода, каждый со своей энергией и задачами.
+            </p>
+            <div className="space-y-4">
+              {yearPeriods.map((period, i) => (
+                <div key={i} className="border border-border rounded-xl p-4 space-y-3">
+                  <div className="flex items-center justify-between flex-wrap gap-2">
+                    <h4 className="text-sm font-semibold text-foreground">{period.title}</h4>
+                    <span className="text-xs bg-muted px-2 py-0.5 rounded text-muted-foreground">{period.dateRange}</span>
+                  </div>
+                  <ProTextBlock text={period.description} />
+                  <div className="grid md:grid-cols-2 gap-3">
+                    <div className="bg-destructive/5 rounded-lg p-3 border border-destructive/10">
+                      <h5 className="text-xs font-medium text-destructive mb-1">Риски периода</h5>
+                      <p className="text-xs text-muted-foreground">{period.risks}</p>
+                    </div>
+                    <div className="bg-emerald-500/5 rounded-lg p-3 border border-emerald-500/10">
+                      <h5 className="text-xs font-medium text-emerald-600 mb-1">Возможности</h5>
+                      <p className="text-xs text-muted-foreground">{period.opportunities}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </ProSectionBlock>
+
+          {/* ===== РЕСУРСЫ ГОДА ===== */}
+          {yearResources && (
+            <>
+              <ProSectionBlock icon={Battery} title="⚡ Что даёт энергию в этом году" variant="success">
+                <ProListBlock items={yearResources.givesEnergy} icon="✦" />
+              </ProSectionBlock>
+
+              <ProSectionBlock icon={BatteryWarning} title="🔻 Что забирает энергию" variant="warning">
+                <ProListBlock items={yearResources.takesEnergy} icon="⚠" />
+              </ProSectionBlock>
+
+              <ProSectionBlock icon={Star} title="🌟 Таланты и возможности года" variant="success">
+                <ProListBlock items={yearResources.talents} icon="★" />
+              </ProSectionBlock>
+            </>
+          )}
+
           {/* 6. РИСКИ */}
           <ProSectionBlock icon={ShieldAlert} title="Риски года" variant="warning">
             <ProListBlock items={proData.risks} icon="⚠" className="mb-4" />
@@ -237,21 +325,6 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
             
             <h4 className="text-sm font-medium text-destructive mb-3">Чего избегать</h4>
             <ProListBlock items={proData.whatToAvoid} icon="✗" />
-          </ProSectionBlock>
-
-          {/* Помесячный фокус */}
-          <ProSectionBlock icon={Calendar} title="Помесячный фокус">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              {Object.entries(proData.monthlyFocus).map(([month, focus]) => {
-                const monthNames = ["", "Янв", "Фев", "Мар", "Апр", "Май", "Июн", "Июл", "Авг", "Сен", "Окт", "Ноя", "Дек"];
-                return (
-                  <div key={month} className="bg-muted/30 rounded-lg p-3 text-center">
-                    <div className="text-xs font-medium text-primary mb-1">{monthNames[Number(month)]}</div>
-                    <div className="text-[11px] text-muted-foreground leading-tight">{focus}</div>
-                  </div>
-                );
-              })}
-            </div>
           </ProSectionBlock>
 
           {/* 9. ИТОГ */}
@@ -276,8 +349,9 @@ export function YearForecastResult({ forecast, name, onReset, tier = 'basic' }: 
         <div className="bg-muted/30 rounded-xl border border-border p-5 text-center space-y-2">
           <p className="text-sm text-muted-foreground">
             В профессиональном разборе: глубокий анализ аркана года, подробный разбор по всем сферам жизни 
-            (деньги, карьера, отношения, здоровье, внутреннее состояние), риски и возможности, 
-            помесячный фокус, связки энергий, дополнительная методика и персональные рекомендации.
+            (деньги, карьера, отношения, здоровье, внутреннее состояние), детальный помесячный прогноз на 12 месяцев,
+            периоды внутри года, ресурсы и энергия, риски и возможности, 
+            связки энергий, дополнительная методика и персональные рекомендации.
           </p>
         </div>
       )}
