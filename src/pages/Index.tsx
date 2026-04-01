@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAccess } from "@/lib/accessControl";
+import { PaymentScreen } from "@/components/PaymentScreen";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { CompatibilityDateInput } from "@/components/CompatibilityDateInput";
@@ -83,6 +84,11 @@ const Index = () => {
   const [result, setResult] = useState<ResultType>(null);
   const [userName, setUserName] = useState("");
   const [nameEnergyInput, setNameEnergyInput] = useState("");
+  const [paymentStatus, setPaymentStatus] = useState<"idle" | "pending" | "paid">("idle");
+  const [pendingCalcArgs, setPendingCalcArgs] = useState<{
+    day: number; month: number; year: number; name: string;
+    targetMonth?: number; targetYear?: number; gender?: 'male' | 'female'; targetDay?: number;
+  } | null>(null);
 
   // Get current analysis config
   const currentConfig = getAnalysisConfig(selectedMethod);
@@ -128,6 +134,13 @@ const Index = () => {
   ) => {
     setUserName(name);
     
+    // If professional tier and not yet paid — save data and show payment screen
+    if (selectedTier === 'professional' && paymentStatus !== 'paid') {
+      setPendingCalcArgs({ day, month, year, name, targetMonth, targetYear, gender, targetDay });
+      localStorage.setItem("pendingCalcData", JSON.stringify({ day, month, year, name, targetMonth, targetYear, gender, targetDay, method: selectedMethod, methodology: selectedMethodology }));
+      setPaymentStatus("pending");
+      return;
+    }
     // Methodology 2 - Unified personal analysis
     if (selectedMethodology === "2") {
       if (selectedMethod === "lifecod-personal") {
@@ -215,7 +228,61 @@ const Index = () => {
     setResult(null);
     setUserName("");
     setSelectedTier("basic");
+    setPaymentStatus("idle");
+    setPendingCalcArgs(null);
+    localStorage.removeItem("pendingCalcData");
     lock(); // reset access state for new calculation
+  };
+
+  // After successful payment, run the pending calculation and show result
+  const handlePaymentSuccess = () => {
+    setPaymentStatus("paid");
+    if (pendingCalcArgs) {
+      const { day, month, year, name, targetMonth, targetYear, gender, targetDay } = pendingCalcArgs;
+      // Re-run calculation (now paymentStatus won't block because we call setResult directly)
+      setUserName(name);
+      
+      if (selectedMethodology === "2") {
+        if (selectedMethod === "lifecod-personal") {
+          const unifiedResult = calculateUnifiedPersonalAnalysis(name || "Вы", day, month, year, targetYear || new Date().getFullYear());
+          setResult({ type: "unified-personal", data: unifiedResult });
+          return;
+        }
+        const classicResult = calculateKeyTo(day, month, year);
+        setResult({ type: "keyto", data: classicResult });
+        return;
+      }
+      
+      switch (selectedMethod) {
+        case "year":
+          setResult({ type: "year", data: calculateYearForecast(day, month, year, targetYear || new Date().getFullYear()) });
+          break;
+        case "month":
+          setResult({ type: "month", data: calculateMonthForecast(day, month, year, targetMonth || new Date().getMonth() + 1, targetYear || new Date().getFullYear()) });
+          break;
+        case "day":
+          setResult({ type: "day", data: calculateDailyForecast(day, month, year, targetDay || new Date().getDate(), targetMonth || new Date().getMonth() + 1, targetYear || new Date().getFullYear()) });
+          break;
+        case "contract":
+          setResult({ type: "contract", data: calculateDailyForecast(day, month, year, targetDay || new Date().getDate(), targetMonth || new Date().getMonth() + 1, targetYear || new Date().getFullYear()) });
+          break;
+        case "finance":
+          setResult({ type: "finance", data: calculateFinancialCode(day, month, year) });
+          break;
+        case "ancestral":
+          setResult({ type: "ancestral", data: calculateAncestralPrograms(day, month, year, gender || 'female') });
+          break;
+        case "purpose":
+        default:
+          setResult({ type: "purpose", data: calculatePersonalMatrix(day, month, year) });
+          break;
+      }
+    }
+  };
+
+  const handlePaymentBack = () => {
+    setPaymentStatus("idle");
+    setPendingCalcArgs(null);
   };
 
   const handleMethodSelect = (methodId: string) => {
@@ -266,7 +333,16 @@ const Index = () => {
       <Header />
       
       <main className="relative z-10">
-        {!result ? (
+        {paymentStatus === "pending" && !result ? (
+          /* Payment gate — shown when professional tier selected but not yet paid */
+          <div className="container mx-auto px-4 py-6 md:py-8">
+            <PaymentScreen
+              methodId={selectedMethod}
+              onPaid={handlePaymentSuccess}
+              onBack={handlePaymentBack}
+            />
+          </div>
+        ) : !result ? (
           <>
             {/* Hero Section */}
             <section className="relative py-8 md:py-16 lg:py-24 overflow-hidden">
