@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import { useNavigate } from "react-router-dom";
 import { useAccess } from "@/lib/accessControl";
+import { PaymentScreen } from "@/components/PaymentScreen";
 import { Header } from "@/components/Header";
 import { DateInput } from "@/components/DateInput";
 import { CompatibilityDateInput } from "@/components/CompatibilityDateInput";
