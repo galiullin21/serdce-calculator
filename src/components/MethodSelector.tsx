@@ -64,18 +64,19 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
       icon: Brain,
       row: 3,
     },
-  ];
-
-  // Methods for Methodology 1 (Classic - numbers 1-9) - now shown second
-  const methodsMethodology1 = [
+    // Row 4: Полный разбор
     {
       id: "classic-full",
       name: t("methods.fullAnalysis"),
       description: t("methods.fullAnalysisDesc"),
       available: true,
       icon: Brain,
+      row: 4,
     },
   ];
+
+  // Methods for Methodology 1 (Classic - numbers 1-9) - now shown second
+  const methodsMethodology1: typeof methodsMethodology2 = [];
 
   const methods = selectedMethodology === "1" ? methodsMethodology1 : methodsMethodology2;
   const isArcana = selectedMethodology === "2";
@@ -84,6 +85,7 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
   const row1 = isArcana ? methods.filter((m: any) => m.row === 1) : [];
   const row2 = isArcana ? methods.filter((m: any) => m.row === 2) : [];
   const row3 = isArcana ? methods.filter((m: any) => m.row === 3) : [];
+  const row4 = isArcana ? methods.filter((m: any) => m.row === 4) : [];
 
   const renderMethod = (method: typeof methods[0]) => (
     <button
@@ -140,6 +142,10 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
           {/* Row 3: День, Родовые программы */}
           <div className="grid grid-cols-2 gap-3">
             {row3.map(renderMethod)}
+          </div>
+          {/* Row 4: Полный разбор */}
+          <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
+            {row4.map(renderMethod)}
           </div>
         </div>
       ) : (
