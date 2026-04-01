@@ -622,11 +622,6 @@ const Index = () => {
                     </div>
                   ) : selectedMethodology === "2" && selectedMethod === "lifecod-compatibility" ? (
                     <LifeCodInputForm onCalculate={handleLifeCodCalculate} />
-                  ) : selectedMethodology === "2" && selectedMethod === "lifecod-personal" ? (
-                    <DateInput 
-                      selectedMethod="lifecod-personal"
-                      onCalculate={handleCalculate} 
-                    />
                   ) : selectedMethodology === "1" && selectedMethod === "compatibility" ? (
                     <CompatibilityDateInput onCalculate={handleCompatibilityCalculate} />
                   ) : (
