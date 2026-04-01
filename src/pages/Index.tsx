@@ -333,7 +333,16 @@ const Index = () => {
       <Header />
       
       <main className="relative z-10">
-        {!result ? (
+        {paymentStatus === "pending" && !result ? (
+          /* Payment gate — shown when professional tier selected but not yet paid */
+          <div className="container mx-auto px-4 py-6 md:py-8">
+            <PaymentScreen
+              methodId={selectedMethod}
+              onPaid={handlePaymentSuccess}
+              onBack={handlePaymentBack}
+            />
+          </div>
+        ) : !result ? (
           <>
             {/* Hero Section */}
             <section className="relative py-8 md:py-16 lg:py-24 overflow-hidden">
