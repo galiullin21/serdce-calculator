@@ -251,6 +251,8 @@ const Index = () => {
     setSelectedTier("basic");
     setPaymentStatus("idle");
     setPendingCalcArgs(null);
+    setPendingCompatArgs(null);
+    setPendingLifeCodArgs(null);
     localStorage.removeItem("pendingCalcData");
     lock(); // reset access state for new calculation
   };
