@@ -216,8 +216,8 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: Uni
             </div>
           </div>
 
-          {/* Activation CTA */}
-          <ActivationCTA accessLevel={accessLevel} score={37} />
+          {/* Show upsell only if NOT paid */}
+          {!isPaid && <ActivationCTA />}
         </div>
       )}
 
