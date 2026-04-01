@@ -260,9 +260,25 @@ const Index = () => {
   // After successful payment, run the pending calculation and show result
   const handlePaymentSuccess = () => {
     setPaymentStatus("paid");
+    
+    // Handle pending compatibility args
+    if (pendingCompatArgs) {
+      const { p1Day, p1Month, p1Year, p1Name, p2Day, p2Month, p2Year, p2Name } = pendingCompatArgs;
+      const compatResult = calculateCompatibility(p1Day, p1Month, p1Year, p1Name, p2Day, p2Month, p2Year, p2Name);
+      setResult({ type: "compatibility", data: compatResult });
+      return;
+    }
+    
+    // Handle pending lifecod args
+    if (pendingLifeCodArgs) {
+      const { p1Name, p1Day, p1Month, p1Year, p2Name, p2Day, p2Month, p2Year, relationType } = pendingLifeCodArgs;
+      const lifecodResult = calculateLifeCodCompatibility(p1Name, p1Day, p1Month, p1Year, p2Name, p2Day, p2Month, p2Year, relationType);
+      setResult({ type: "lifecod", data: lifecodResult });
+      return;
+    }
+    
     if (pendingCalcArgs) {
       const { day, month, year, name, targetMonth, targetYear, gender, targetDay } = pendingCalcArgs;
-      // Re-run calculation (now paymentStatus won't block because we call setResult directly)
       setUserName(name);
       
       if (selectedMethodology === "2") {
