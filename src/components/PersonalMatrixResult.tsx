@@ -112,31 +112,50 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
           <h2 className="text-xl font-display text-foreground">{t("results.personalMatrix")}</h2>
         </div>
 
-        <div className="flex flex-col items-center gap-3 mb-6">
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <MatrixCell position={10} value={matrix.positions[9]} />
-            <MatrixCell position={11} value={matrix.positions[10]} />
-            <MatrixCell position={12} value={matrix.positions[11]} isHighlight />
+        {isPro ? (
+          /* PROFESSIONAL: Full 12-position matrix */
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              <MatrixCell position={10} value={matrix.positions[9]} />
+              <MatrixCell position={11} value={matrix.positions[10]} />
+              <MatrixCell position={12} value={matrix.positions[11]} isHighlight />
+            </div>
+            <div className="w-full h-px bg-border/50 my-2" />
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              <MatrixCell position={1} value={matrix.positions[0]} isMirror={isMirrorPosition(1)} isReversed={isReversedPosition(1)} />
+              <MatrixCell position={2} value={matrix.positions[1]} isMirror={isMirrorPosition(2)} isReversed={isReversedPosition(2)} />
+              <MatrixCell position={4} value={matrix.positions[3]} isMirror={isMirrorPosition(4)} isReversed={isReversedPosition(4)} />
+            </div>
+            <div className="grid grid-cols-2 gap-2 md:gap-4">
+              <MatrixCell position={3} value={matrix.positions[2]} isMirror={isMirrorPosition(3)} isReversed={isReversedPosition(3)} />
+              <MatrixCell position={5} value={matrix.positions[4]} isMirror={isMirrorPosition(5)} isReversed={isReversedPosition(5)} />
+            </div>
+            <div className="flex justify-center">
+              <MatrixCell position={6} value={matrix.positions[5]} isMirror={isMirrorPosition(6)} isReversed={isReversedPosition(6)} />
+            </div>
+            <div className="grid grid-cols-3 gap-2 md:gap-4 mt-4">
+              <MatrixCell position={7} value={matrix.positions[6]} />
+              <MatrixCell position={8} value={matrix.positions[7]} />
+              <MatrixCell position={9} value={matrix.positions[8]} />
+            </div>
           </div>
-          <div className="w-full h-px bg-border/50 my-2" />
-          <div className="grid grid-cols-3 gap-2 md:gap-4">
-            <MatrixCell position={1} value={matrix.positions[0]} isMirror={isMirrorPosition(1)} isReversed={isReversedPosition(1)} />
-            <MatrixCell position={2} value={matrix.positions[1]} isMirror={isMirrorPosition(2)} isReversed={isReversedPosition(2)} />
-            <MatrixCell position={4} value={matrix.positions[3]} isMirror={isMirrorPosition(4)} isReversed={isReversedPosition(4)} />
+        ) : (
+          /* BASIC: Only 6 positions (main triangle) */
+          <div className="flex flex-col items-center gap-3 mb-6">
+            <div className="grid grid-cols-3 gap-2 md:gap-4">
+              <MatrixCell position={1} value={matrix.positions[0]} isMirror={isMirrorPosition(1)} isReversed={isReversedPosition(1)} />
+              <MatrixCell position={2} value={matrix.positions[1]} isMirror={isMirrorPosition(2)} isReversed={isReversedPosition(2)} />
+              <MatrixCell position={4} value={matrix.positions[3]} isMirror={isMirrorPosition(4)} isReversed={isReversedPosition(4)} />
+            </div>
+            <div className="grid grid-cols-2 gap-2 md:gap-4">
+              <MatrixCell position={3} value={matrix.positions[2]} isMirror={isMirrorPosition(3)} isReversed={isReversedPosition(3)} />
+              <MatrixCell position={5} value={matrix.positions[4]} isMirror={isMirrorPosition(5)} isReversed={isReversedPosition(5)} />
+            </div>
+            <div className="flex justify-center">
+              <MatrixCell position={6} value={matrix.positions[5]} isMirror={isMirrorPosition(6)} isReversed={isReversedPosition(6)} />
+            </div>
           </div>
-          <div className="grid grid-cols-2 gap-2 md:gap-4">
-            <MatrixCell position={3} value={matrix.positions[2]} isMirror={isMirrorPosition(3)} isReversed={isReversedPosition(3)} />
-            <MatrixCell position={5} value={matrix.positions[4]} isMirror={isMirrorPosition(5)} isReversed={isReversedPosition(5)} />
-          </div>
-          <div className="flex justify-center">
-            <MatrixCell position={6} value={matrix.positions[5]} isMirror={isMirrorPosition(6)} isReversed={isReversedPosition(6)} />
-          </div>
-          <div className="grid grid-cols-3 gap-2 md:gap-4 mt-4">
-            <MatrixCell position={7} value={matrix.positions[6]} />
-            <MatrixCell position={8} value={matrix.positions[7]} />
-            <MatrixCell position={9} value={matrix.positions[8]} />
-          </div>
-        </div>
+        )}
 
         <div className="flex flex-wrap gap-4 justify-center text-xs">
           <div className="flex items-center gap-1">
@@ -147,10 +166,12 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
             <div className="w-4 h-4 rounded bg-destructive/20 border border-destructive" />
             <span className="text-muted-foreground">{t("results.legend.reversed")}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500" />
-            <span className="text-muted-foreground">{t("results.legend.mainTask")}</span>
-          </div>
+          {isPro && (
+            <div className="flex items-center gap-1">
+              <div className="w-4 h-4 rounded bg-amber-500/20 border border-amber-500" />
+              <span className="text-muted-foreground">{t("results.legend.mainTask")}</span>
+            </div>
+          )}
         </div>
       </div>
 
