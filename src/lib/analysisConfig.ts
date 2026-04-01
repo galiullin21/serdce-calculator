@@ -196,46 +196,6 @@ export const analysisConfigs: AnalysisTypeConfig[] = [
     },
     inputType: 'date',
   },
-  {
-    id: 'lifecod-personal',
-    methodId: 'lifecod-personal',
-    title: 'Персональный разбор (Life C⚙D)',
-    description: 'Сознание, действия, пиннакли, кризисы, помесячный прогноз',
-    icon: 'Brain',
-    basic: {
-      available: true,
-      isFree: true,
-      label: 'Базовый',
-      description: 'Обзор базовой матрицы, краткий профиль',
-    },
-    professional: {
-      available: true,
-      isFree: false,
-      label: 'Профессиональный',
-      description: 'Полный 10-вкладочный отчёт: финансовый код, психопрофиль, энергетическая карта',
-    },
-    inputType: 'date',
-  },
-  {
-    id: 'lifecod-compatibility',
-    methodId: 'lifecod-compatibility',
-    title: 'Совместимость (Life C⚙D)',
-    description: '8 методик совместимости по системе Капустина',
-    icon: 'Users',
-    basic: {
-      available: true,
-      isFree: true,
-      label: 'Базовый',
-      description: 'Общий вердикт, метрики совместимости',
-    },
-    professional: {
-      available: true,
-      isFree: false,
-      label: 'Профессиональный',
-      description: 'Полный анализ: 81 матрица, прогноз на 5 лет, стабилизатор, детальные рекомендации',
-    },
-    inputType: 'compatibility',
-  },
 ];
 
 export function getAnalysisConfig(id: string): AnalysisTypeConfig | undefined {
