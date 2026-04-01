@@ -143,6 +143,10 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
           <div className="grid grid-cols-2 gap-3">
             {row3.map(renderMethod)}
           </div>
+          {/* Row 4: Полный разбор */}
+          <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
+            {row4.map(renderMethod)}
+          </div>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-3 max-w-md mx-auto">
