@@ -85,6 +85,7 @@ export function MethodSelector({ selectedMethod, selectedMethodology, onMethodCh
   const row1 = isArcana ? methods.filter((m: any) => m.row === 1) : [];
   const row2 = isArcana ? methods.filter((m: any) => m.row === 2) : [];
   const row3 = isArcana ? methods.filter((m: any) => m.row === 3) : [];
+  const row4 = isArcana ? methods.filter((m: any) => m.row === 4) : [];
 
   const renderMethod = (method: typeof methods[0]) => (
     <button
