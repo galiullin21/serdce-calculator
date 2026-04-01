@@ -2,8 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { DailyForecastResult as DailyForecastType } from "@/lib/dailyForecast";
 import { getArcana } from "@/lib/arcana";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, BookOpen, Target, AlertTriangle, CheckCircle, Shield, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { getContractProData } from "@/lib/proInterpretationsExtra";
+import { ProSectionBlock, ProTextBlock, ProListBlock } from "./ProSectionBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface Props {
@@ -39,7 +41,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
   const harmonyScore = keyPositions.filter(p => harmonious.includes(p.arcana)).length;
   const isGood = harmonyScore >= 3;
 
-  // Basic: first 4. Pro: all 12
+  const proData = isPro ? getContractProData(positions, contractDateStr, isGood) : null;
   const shownPositions = isPro ? positions : positions.slice(0, 4);
 
   return (
@@ -53,7 +55,7 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
           "inline-block px-3 py-1 rounded-full text-xs font-medium mb-2",
           isPro ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"
         )}>
-          {isPro ? "Профессиональный разбор" : "Базовый разбор"}
+          {isPro ? "✦ Профессиональный разбор" : "Базовый разбор"}
         </span>
       </div>
 
@@ -94,6 +96,52 @@ export function ContractEnergyResultComponent({ result, personName, onReset, tie
           })}
         </Accordion>
       </div>
+
+      {/* ===== PRO CONTENT ===== */}
+      {isPro && proData && (
+        <div className="space-y-6">
+          <ProSectionBlock icon={BookOpen} title="Энергетический анализ договора" variant="highlight">
+            <ProTextBlock text={proData.intro} className="mb-4" />
+            <ProTextBlock text={proData.overallEnergy} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={Target} title="Глубокий разбор ключевых позиций">
+            <ProTextBlock text={proData.keyPositionsDeep} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={AlertTriangle} title="Скрытые риски" variant="warning">
+            <ProTextBlock text={proData.hiddenRisks} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={Shield} title="Оптимальная стратегия">
+            <ProTextBlock text={proData.bestStrategy} className="mb-4" />
+            <div className="bg-muted/30 rounded-xl p-4">
+              <h4 className="text-sm font-medium text-foreground mb-2">Анализ тайминга</h4>
+              <ProTextBlock text={proData.timingAnalysis} />
+            </div>
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={CheckCircle} title="Рекомендации" variant="success">
+            <h4 className="text-sm font-medium text-foreground mb-3">Что делать</h4>
+            <ProListBlock items={proData.recommendations} icon="✦" className="mb-6" />
+            <h4 className="text-sm font-medium text-destructive mb-3">Чего избегать</h4>
+            <ProListBlock items={proData.avoidList} icon="✗" />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={MessageCircle} title="Итог" variant="highlight">
+            <ProTextBlock text={proData.conclusion} />
+          </ProSectionBlock>
+        </div>
+      )}
+
+      {!isPro && (
+        <div className="bg-muted/30 rounded-xl border border-border p-5 text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            В профессиональном разборе: все 12 позиций, глубокий анализ ключевых позиций, скрытые риски,
+            оптимальная стратегия, анализ тайминга и персональные рекомендации.
+          </p>
+        </div>
+      )}
     </div>
   );
 }

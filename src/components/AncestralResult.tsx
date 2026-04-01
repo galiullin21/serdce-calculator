@@ -2,10 +2,12 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { AncestralResult } from "@/lib/ancestral";
 import { KarmicStar } from "./KarmicStar";
-import { ArrowLeft, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users } from "lucide-react";
+import { ArrowLeft, Shield, Heart, Star, AlertTriangle, Crown, Sparkles, Users, BookOpen, Target, CheckCircle, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { PDFDownloadButton } from "./PDFDownloadButton";
 import { generatePDF, formatBirthDateForPDF } from "@/lib/pdfGenerator";
+import { getAncestralProData } from "@/lib/proInterpretationsExtra";
+import { ProSectionBlock, ProTextBlock, ProListBlock, ProNumberedList } from "./ProSectionBlock";
 import type { TierType } from "@/lib/analysisConfig";
 
 interface AncestralResultProps {
@@ -18,6 +20,7 @@ interface AncestralResultProps {
 export function AncestralResultComponent({ result, name, onReset, tier = 'basic' }: AncestralResultProps) {
   const { t } = useTranslation();
   const isPro = tier === 'professional';
+  const proData = isPro ? getAncestralProData(result.workingNumbers, result.starCounts) : null;
 
   const formatBirthDateStr = () => {
     const { day, month, year } = result.birthDate;
@@ -37,7 +40,6 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
     { digit: "7", count: result.starCounts.sevens, title: t("ancestral.digits.sevenTitle"), icon: Star },
   ];
 
-  // Basic: first 2 digits. Pro: all 5
   const shownDigits = isPro ? digitInfo : digitInfo.slice(0, 2);
 
   const handleDownloadPDF = async () => {
@@ -82,7 +84,7 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
           "inline-block px-3 py-1 rounded-full text-xs font-medium",
           isPro ? "bg-primary/10 text-primary" : "bg-secondary text-muted-foreground"
         )}>
-          {isPro ? "Профессиональный разбор" : "Базовый разбор"}
+          {isPro ? "✦ Профессиональный разбор" : "Базовый разбор"}
         </span>
         <h2 className="text-2xl md:text-3xl font-display text-primary">{t("ancestral.title")}</h2>
         {name && <p className="text-lg text-foreground">{name}</p>}
@@ -178,7 +180,7 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
         </div>
       )}
 
-      {/* Digit interpretations — shown based on tier */}
+      {/* Digit interpretations */}
       <div className="space-y-4">
         <h3 className="text-lg font-display text-foreground text-center">{t("ancestral.interpretationsTitle")}</h3>
         {shownDigits.map((info) => (
@@ -198,6 +200,66 @@ export function AncestralResultComponent({ result, name, onReset, tier = 'basic'
           </div>
         ))}
       </div>
+
+      {/* ===== PRO CONTENT ===== */}
+      {isPro && proData && (
+        <div className="space-y-6">
+          <ProSectionBlock icon={BookOpen} title="Введение в родовые программы" variant="highlight">
+            <ProTextBlock text={proData.intro} className="mb-4" />
+            <ProTextBlock text={proData.lineageOverview} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={AlertTriangle} title="Кармический долг рода" variant="warning">
+            <ProTextBlock text={proData.karmicDebt} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={Heart} title="Путь исцеления">
+            <ProTextBlock text={proData.healingPath} />
+          </ProSectionBlock>
+
+          <div className="grid md:grid-cols-2 gap-4">
+            <ProSectionBlock icon={Sparkles} title="Родовые дары" variant="success">
+              <ProListBlock items={proData.ancestralGifts} icon="★" />
+            </ProSectionBlock>
+            {proData.ancestralBlocks.length > 0 && (
+              <ProSectionBlock icon={Shield} title="Родовые блоки" variant="warning">
+                <ProListBlock items={proData.ancestralBlocks} icon="⚠" />
+              </ProSectionBlock>
+            )}
+          </div>
+
+          <ProSectionBlock icon={Target} title="Генерационные паттерны">
+            <ProTextBlock text={proData.generationalPatterns} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={Sparkles} title="🕯️ Ритуалы для работы с родом">
+            <ProNumberedList items={proData.rituals} />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={CheckCircle} title="Рекомендации" variant="highlight">
+            <h4 className="text-sm font-medium text-foreground mb-3">Что делать</h4>
+            <ProNumberedList items={proData.recommendations} className="mb-6" />
+            <h4 className="text-sm font-medium text-destructive mb-3">Чего избегать</h4>
+            <ProListBlock items={proData.avoidList} icon="✗" />
+          </ProSectionBlock>
+
+          <ProSectionBlock icon={MessageCircle} title="Итог" variant="highlight">
+            <ProTextBlock text={proData.conclusion} className="mb-4" />
+            <div className="bg-primary/10 rounded-xl p-4 text-center">
+              <p className="text-sm text-foreground font-medium italic">«{proData.keyThought}»</p>
+            </div>
+          </ProSectionBlock>
+        </div>
+      )}
+
+      {!isPro && (
+        <div className="bg-muted/30 rounded-xl border border-border p-5 text-center space-y-2">
+          <p className="text-sm text-muted-foreground">
+            В профессиональном разборе: все 5 цифр звезды, кармический долг рода, путь исцеления,
+            родовые дары и блоки, ритуалы, генерационные паттерны и персональные рекомендации.
+          </p>
+        </div>
+      )}
     </div>
   );
 }
