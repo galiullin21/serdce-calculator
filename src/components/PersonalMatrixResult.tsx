@@ -211,10 +211,20 @@ export function PersonalMatrixResult({ matrix, name, onReset, tier = 'basic' }: 
                   positionDescription={positionDescriptions[pos]?.description}
                   isMirror={isMirrorPosition(pos)}
                   isReversed={isReversedPosition(pos)}
-                  compact={true}
+                  compact={!isPro}
                 />
               ))}
             </div>
+            {!isPro && (
+              <div className="mt-6 p-4 rounded-xl border border-primary/20 bg-primary/5 text-center">
+                <p className="text-sm text-muted-foreground mb-1">
+                  Это базовый разбор — 6 из 12 позиций
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  Профессиональный разбор включает все 12 позиций, диагональ судьбы, кармический треугольник, код успеха и жизненные периоды
+                </p>
+              </div>
+            )}
           </>
         )}
 
