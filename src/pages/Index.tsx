@@ -740,7 +740,7 @@ const Index = () => {
               <UnifiedPersonalResult
                 analysis={result.data}
                 onReset={handleReset}
-                isPaid={false}
+                isPaid={selectedTier === 'professional'}
               />
             )}
             {result.type === "day" && (

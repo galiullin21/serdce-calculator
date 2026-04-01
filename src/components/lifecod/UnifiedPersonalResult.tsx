@@ -18,7 +18,6 @@ interface UnifiedPersonalResultProps {
   analysis: UnifiedPersonalAnalysis;
   onReset: () => void;
   isPaid?: boolean;
-  accessLevel?: 'free' | 'standard' | 'premium';
 }
 
 // Компонент calc_trace
@@ -59,8 +58,8 @@ function CalcTraceBlock({ trace, isPaid }: { trace: CalcTrace; isPaid?: boolean 
   );
 }
 
-// Заблюренный блок
-function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNode; isPaid: boolean; label?: string; level?: string }) {
+// Заблюренный блок — если isPaid, показываем контент без замков
+function PaidBlock({ children, isPaid }: { children: React.ReactNode; isPaid: boolean; label?: string; level?: string }) {
   if (isPaid) return <>{children}</>;
   
   return (
@@ -71,11 +70,7 @@ function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNo
       <div className="absolute inset-0 flex items-center justify-center bg-background/60 rounded-xl">
         <div className="text-center space-y-2 p-4">
           <Lock className="w-6 h-6 text-primary mx-auto" />
-          <p className="text-sm font-medium">{label || 'Доступно в полном отчёте'}</p>
-          {level && <p className="text-xs text-muted-foreground">Уровень: {level}</p>}
-          <Button size="sm" variant="default" onClick={() => {/* будет подключена оплата */}}>
-            Получить полный разбор
-          </Button>
+          <p className="text-sm font-medium">Доступно в профессиональном разборе</p>
         </div>
       </div>
     </div>
@@ -84,12 +79,11 @@ function PaidBlock({ children, isPaid, label, level }: { children: React.ReactNo
 
 type TabId = 'overview' | 'destiny' | 'ly' | 'forecast' | 'finance' | 'psych' | 'energy' | 'pinnacles' | 'risk' | 'plan';
 
-export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, accessLevel = 'free' }: UnifiedPersonalResultProps) {
+export function UnifiedPersonalResult({ analysis, onReset, isPaid = false }: UnifiedPersonalResultProps) {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
 
-  const isStandard = accessLevel === 'standard' || accessLevel === 'premium';
-  const isPremium = accessLevel === 'premium';
-  const showPaid = isPaid || isStandard;
+  // Простая логика: isPaid = true → все блоки открыты
+  const showPaid = isPaid;
 
   const tabs: { id: TabId; label: string; icon: typeof Activity; tier: 'free' | 'standard' | 'premium' }[] = [
     { id: 'overview', label: 'Обзор', icon: Activity, tier: 'free' },
@@ -119,7 +113,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
   const an = analysis;
 
   const tierBadge = (tier: 'free' | 'standard' | 'premium') => {
-    if (tier === 'free') return null;
+    if (tier === 'free' || isPaid) return null;
     return (
       <span className={cn("text-[9px] px-1 py-0.5 rounded-sm font-medium",
         tier === 'standard' ? "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-400" 
@@ -222,8 +216,8 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
             </div>
           </div>
 
-          {/* Activation CTA */}
-          <ActivationCTA accessLevel={accessLevel} score={37} />
+          {/* Show upsell only if NOT paid */}
+          {!isPaid && <ActivationCTA />}
         </div>
       )}
 
@@ -282,7 +276,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
             </div>
           </PaidBlock>
 
-          {!showPaid && <ActivationCTA accessLevel={accessLevel} />}
+          {!isPaid && <ActivationCTA />}
         </div>
       )}
 
@@ -356,7 +350,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ПРОГНОЗ (месяц/день) ===== */}
       {activeTab === 'forecast' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Помесячный прогноз — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Помесячный прогноз — уровень Стандарт" level="Стандарт">
             {/* Today */}
             <div className="bg-primary/5 rounded-xl border-2 border-primary p-4 md:p-6 space-y-3">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2">
@@ -416,7 +410,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ФИНАНСОВЫЙ КОД ===== */}
       {activeTab === 'finance' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Финансовый код — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Финансовый код — уровень Стандарт" level="Стандарт">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Wallet className="w-5 h-5 text-primary" /> Финансовый код</h3>
               <CalcTraceBlock trace={an.financialCode.calcTrace} isPaid={true} />
@@ -467,7 +461,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ПСИХОПРОФИЛЬ ===== */}
       {activeTab === 'psych' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isPremium || isPaid} label="Психопрофиль — уровень Премиум" level="Премиум">
+          <PaidBlock isPaid={showPaid} label="Психопрофиль — уровень Премиум" level="Премиум">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Brain className="w-5 h-5 text-primary" /> Психологическая расшифровка</h3>
               <CalcTraceBlock trace={an.psychProfile.calcTrace} isPaid={true} />
@@ -511,7 +505,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ЭНЕРГОКАРТА ===== */}
       {activeTab === 'energy' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isPremium || isPaid} label="Энергокарта — уровень Премиум" level="Премиум">
+          <PaidBlock isPaid={showPaid} label="Энергокарта — уровень Премиум" level="Премиум">
             <div className="bg-card rounded-xl border p-4 md:p-6 space-y-4">
               <h3 className="font-display font-semibold text-lg flex items-center gap-2"><Zap className="w-5 h-5 text-primary" /> Энергетическая карта</h3>
               <CalcTraceBlock trace={an.energyMap.calcTrace} isPaid={true} />
@@ -570,7 +564,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ПИННАКЛИ ===== */}
       {activeTab === 'pinnacles' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="Пиннакли — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="Пиннакли — уровень Стандарт" level="Стандарт">
             <div className="bg-card rounded-xl border p-4">
               <CalcTraceBlock trace={an.pinnaclesCalcTrace} isPaid={true} />
             </div>
@@ -652,7 +646,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       {/* ===== ПЛАН ДЕЙСТВИЙ ===== */}
       {activeTab === 'plan' && (
         <div className="space-y-4">
-          <PaidBlock isPaid={isStandard || isPremium || isPaid} label="План действий — уровень Стандарт" level="Стандарт">
+          <PaidBlock isPaid={showPaid} label="План действий — уровень Стандарт" level="Стандарт">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-200 dark:border-green-800 p-4 space-y-2">
                 <p className="font-display font-semibold text-green-700 dark:text-green-400 flex items-center gap-1"><Lightbulb className="w-4 h-4" /> Что делать сейчас</p>
@@ -676,7 +670,7 @@ export function UnifiedPersonalResult({ analysis, onReset, isPaid = false, acces
       )}
 
       {/* Life COD Club CTA (always at bottom) */}
-      <ActivationCTA accessLevel={accessLevel} />
+      {!isPaid && <ActivationCTA />}
     </div>
   );
 }
@@ -707,37 +701,20 @@ function DestinyCard({ label, value, name, desc }: { label: string; value: numbe
   );
 }
 
-function ActivationCTA({ accessLevel = 'free', score = 37 }: { accessLevel?: string; score?: number }) {
+function ActivationCTA() {
   return (
     <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent border-2 border-primary/20 rounded-2xl p-6 text-center space-y-4">
       <div className="flex items-center justify-center gap-2">
         <Crown className="w-6 h-6 text-primary" />
-        <h3 className="font-display font-semibold text-xl text-primary">Life COD Club</h3>
+        <h3 className="font-display font-semibold text-xl text-primary">Профессиональный разбор</h3>
       </div>
-      <p className="text-foreground font-medium">
-        Ваш результат активирован на <span className="text-primary font-bold text-lg">{score}%</span>
-      </p>
       <p className="text-muted-foreground text-sm max-w-lg mx-auto">
-        Полная активация судьбы доступна в Life COD Club — получите все 6 блоков анализа, 
-        помесячный прогноз, финансовый код, психопрофиль и персональный план действий.
+        Получите полный доступ ко всем блокам анализа: помесячный прогноз, финансовый код, 
+        психопрофиль, энергокарту и персональный план действий.
       </p>
-      <div className="flex flex-col sm:flex-row gap-3 justify-center">
-        {accessLevel === 'free' && (
-          <>
-            <Button variant="outline" size="lg" onClick={() => {/* будет подключена оплата */}}>
-              Стандарт — полный разбор
-            </Button>
-            <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
-              <Crown className="w-4 h-4 mr-2" /> Премиум — Книга судьбы
-            </Button>
-          </>
-        )}
-        {accessLevel === 'standard' && (
-          <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
-            <Crown className="w-4 h-4 mr-2" /> Обновить до Премиум
-          </Button>
-        )}
-      </div>
+      <Button size="lg" className="bg-primary text-primary-foreground" onClick={() => {/* будет подключена оплата */}}>
+        <Crown className="w-4 h-4 mr-2" /> Получить профессиональный разбор
+      </Button>
     </div>
   );
 }
