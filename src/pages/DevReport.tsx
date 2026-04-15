@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { ChevronDown, Check, AlertTriangle, FileText, Code, Database, Layers, Palette, Globe, Shield, CreditCard, Brain } from "lucide-react";
+import { ChevronDown, Check, AlertTriangle, FileText, Code, Database, Layers, Palette, Globe, Shield, CreditCard, Brain, Compass } from "lucide-react";
 import { useState } from "react";
 
 function Section({ title, icon: Icon, children, defaultOpen = false }: { title: string; icon: React.ComponentType<{ className?: string }>; children: React.ReactNode; defaultOpen?: boolean }) {
